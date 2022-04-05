@@ -14,16 +14,19 @@ public class GamerUser {
 
     private String password;
 
+    private boolean isAdmin;
+
     public GamerUser(){
     }
 
-    public GamerUser(String userName, String password){
+    public GamerUser(String userName, String password, boolean isAdmin){
         this.userName = userName;
         this.password = password;
+        this.isAdmin = isAdmin;
     }
 
-    public static GamerUser create(String userName, String password){
-        return new GamerUser(userName, password);
+    public static GamerUser create(String userName, String password, boolean isAdmin){
+        return new GamerUser(userName, password, isAdmin);
     }
 
     public String getUserName() {
@@ -32,5 +35,9 @@ public class GamerUser {
 
     public String getPassword() {
         return password;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
     }
 }

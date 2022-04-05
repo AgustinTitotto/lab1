@@ -24,6 +24,7 @@ public class WebRoutes {
     public static final String SIGN_UP_TEMPLATE = "register.ftl";
     public static final String LOGIN_TEMPLATE = "login.ftl";
     public static final String HOME_TEMPLATE = "home.ftl";
+    public static final String ADMIN_HOME_TEMPLATE = "adminhome.html";
 
     /**
      * ROUTES
@@ -33,6 +34,7 @@ public class WebRoutes {
     public static final String REGISTER_ROUTE = "/register";
     public static final String LOGIN_ROUTE = "/login";
     public static final String LOGOUT_ROUTE = "/logout";
+    public static final String ADMIN_HOME_ROUTE = "/admin";
 
     final static private WebSystem system = new WebSystem();
 
@@ -80,8 +82,14 @@ public class WebRoutes {
 
                 if (validUser.isPresent()) {
                     setAuthenticatedGamerUser(req, validUser.get());
-                    res.redirect(HOME_ROUTE);
-                    return halt();
+                    if (validUser.get().isAdmin()){
+                        res.redirect(ADMIN_HOME_ROUTE);
+                        return halt();
+                    }
+                    else {
+                        res.redirect(HOME_ROUTE);
+                        return halt();
+                    }
                 } else {
                     final Map<String, Object> model = new HashMap<>();
                     model.put("message", "Invalid user or password");
@@ -100,6 +108,7 @@ public class WebRoutes {
         });
 
         authenticatedGet(HOME_ROUTE, (req, res) -> render(HOME_TEMPLATE));
+        authenticatedGet(ADMIN_HOME_ROUTE, (req, res) -> render(ADMIN_HOME_TEMPLATE));
     }
 
     private void authenticatedGet(String homeRoute, Route o) {

@@ -1,5 +1,6 @@
 package lab1.meetNGame;
 
+import com.google.common.base.Strings;
 import lab1.meetNGame.model.GamerUser;
 import lab1.meetNGame.model.LogInForm;
 import lab1.meetNGame.model.SignUpForm;
@@ -12,9 +13,10 @@ public class WebSystem {
     private Gamers gamers = new Gamers();
 
     public GamerUser registerGamer(SignUpForm form) {
+        if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()))
+            return null;
         return gamers.exists(form.getUserName()) ? null : gamers.createGamer(form);
     }
-
 
     public Optional<GamerUser> findUserByUserName(String userName) {
         return gamers.findByUserName(userName);

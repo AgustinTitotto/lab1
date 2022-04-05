@@ -23,7 +23,7 @@ public class Gamers{
     }
 
     public GamerUser createGamer(SignUpForm form) {
-        final GamerUser newGamer = GamerUser.create(form.getUserName(), form.getPassword());
+        final GamerUser newGamer = GamerUser.create(form.getUserName(), form.getPassword(), false);
 
         if (exists(newGamer.getUserName())) throw new IllegalStateException("UserName already exists.");
 
