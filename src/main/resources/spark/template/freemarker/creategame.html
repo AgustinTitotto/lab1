@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Game</title>
+</head>
+<style>
+    .container{
+        text-align: center;
+        margin-top: 100px;
+    }
+</style>
+<body>
+
+<form action = "/creategame" role="form" method="post">
+    <div class="container">
+        <label for="gameNameId" style="margin-right: 90px"> Game Name:</label><br>
+        <input type="text" id="gameNameId" name="gameName" required>
+        <br>
+        <label for="gameCategoryId" style="margin-right: 90px"> Game Category:</label><br>
+        <input type="text" id="gameCategoryId" name="gameCategory" required>
+        <br>
+        <label for="gameLvlMaxId" style="margin-right: 90px"> Game Max Lvl:</label><br>
+        <input type="number" min="1" id="gameLvlMaxId" name="gameLvlMax" required>
+    </div>
+
+    <button type="submit">
+        Create game
+    </button>
+    <!--onclick="createGame()"-->
+</form>
+
+
+</body>
+
+<script>
+    function createGame() {
+        const gameName = document.getElementById("gameNameId")
+
+        fetch("/game")
+            .then(response => response.json())
+            .then(data => console.log(data));
+    }
+
+</script>
+
+</html>

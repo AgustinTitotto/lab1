@@ -7,9 +7,9 @@ import java.util.function.Supplier;
 
 import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
 
-public class UsersTransactions {
+public class EntityTransactions {
 
-    private UsersTransactions(){
+    private EntityTransactions(){
 
     }
 

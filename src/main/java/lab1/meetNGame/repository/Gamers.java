@@ -2,17 +2,17 @@ package lab1.meetNGame.repository;
 
 import lab1.meetNGame.model.GamerUser;
 import lab1.meetNGame.model.SignUpForm;
-import lab1.meetNGame.persistence.UsersTransactions;
+import lab1.meetNGame.persistence.EntityTransactions;
 
 import java.util.Optional;
 
 import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
-import static lab1.meetNGame.persistence.UsersTransactions.tx;
+import static lab1.meetNGame.persistence.EntityTransactions.tx;
 
 public class Gamers{
 
-    public boolean exists(String email) {
-        return findByUserName(email).isPresent();
+    public boolean exists(String userName) {
+        return findByUserName(userName).isPresent();
     }
 
     public Optional<GamerUser> findByUserName(String userName) {
@@ -27,6 +27,6 @@ public class Gamers{
 
         if (exists(newGamer.getUserName())) throw new IllegalStateException("UserName already exists.");
 
-        return UsersTransactions.persist(newGamer);
+        return EntityTransactions.persist(newGamer);
     }
 }
