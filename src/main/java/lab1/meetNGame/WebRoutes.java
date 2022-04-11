@@ -75,7 +75,7 @@ public class WebRoutes {
             return halt();
         });
 
-        post(LOGIN_ROUTE, (req, res) ->{
+        post(LOGIN_ROUTE, (req, res) ->{ //chequeamos que no haya un usuario ya iniciado, vemos si es admin o no.
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
 
             if (authenticatedGamerUser.isEmpty()){
@@ -98,7 +98,7 @@ public class WebRoutes {
                     return render(model, LOGIN_TEMPLATE);
                 }
             } else {
-                res.redirect(LOGIN_ROUTE);
+                res.redirect(LOGIN_ROUTE);      //revisar esto, no deberia llevar al home ?
                 return halt();
             }
         });
@@ -125,11 +125,13 @@ public class WebRoutes {
                     return render(model, HOME_TEMPLATE);
                 }
             }
-            res.redirect(LOGIN_ROUTE);
-            return halt();
+            else {
+                res.redirect(LOGIN_ROUTE);
+                return halt();
+            }
         });
 
-        post(CREATE_GAME_ROUTE, (req, res) -> {
+        post(CREATE_GAME_ROUTE, (req, res) -> { //deberia chequear que es admin. Creamos Juegos con rangos, falta modificacion y borrar. Con base de datos lo completamos.
             CreateGameForm gameForm = CreateGameForm.createFromBody(req.body());
             final Game validGame = system.registerGame(gameForm);
             if (validGame != null){
@@ -155,8 +157,10 @@ public class WebRoutes {
                     return render(model, ADMIN_HOME_TEMPLATE);
                 }
             }
-            res.redirect(LOGIN_ROUTE);
-            return halt();
+            else {
+                res.redirect(LOGIN_ROUTE);
+                return halt();
+            }
         });
 
         /*post(CREATE_DESCRIPTION_ROUTE, (res, req) -> {

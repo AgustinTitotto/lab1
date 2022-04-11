@@ -7,21 +7,10 @@
 </head>
 <body>
 <div class="container">
-    <nav class="navbar navbar-default" role="navigation">
-        <div>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/logout">Sign Out</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container">
-        Content
-    </div>
-
-    <footer class="footer">
-        <p>Monolithic Application</p>
-    </footer>
+    <button>
+        <a href="createdescription.html">Create description</a>
+    </button>
+    <a href="/logout">Sign Out</a>
 </div>
 </body>
 
