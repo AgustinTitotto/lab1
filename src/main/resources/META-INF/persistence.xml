@@ -11,6 +11,7 @@
         <class>lab1.monolithic.model.User</class>
         <class>lab1.meetNGame.model.GamerUser</class>
         <class>lab1.meetNGame.model.Game</class>
+        <class>lab1.meetNGame.model.Rank</class>
 
 
         <properties>

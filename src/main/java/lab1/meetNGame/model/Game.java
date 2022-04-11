@@ -1,8 +1,10 @@
 package lab1.meetNGame.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.Cascade;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "GAMES")
@@ -14,6 +16,9 @@ public class Game {
     private String category;
 
     private String lvlMAX;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Rank> ranks = new ArrayList<>();
 
     public Game(){
     }
@@ -38,5 +43,9 @@ public class Game {
 
     public String getLvlMAX() {
         return lvlMAX;
+    }
+
+    public List<Rank> getRanks() {
+        return ranks;
     }
 }

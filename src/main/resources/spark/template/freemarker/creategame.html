@@ -12,8 +12,7 @@
 </style>
 <body>
 
-<form action = "/creategame" role="form" method="post">
-    <div class="container">
+<form class="container" action = "/creategame" role="form" method="post">
         <label for="gameNameId" style="margin-right: 90px"> Game Name:</label><br>
         <input type="text" id="gameNameId" name="gameName" required>
         <br>
@@ -22,25 +21,27 @@
         <br>
         <label for="gameLvlMaxId" style="margin-right: 90px"> Game Max Lvl:</label><br>
         <input type="number" min="1" id="gameLvlMaxId" name="gameLvlMax" required>
-    </div>
-
-    <button type="submit">
-        Create game
-    </button>
-    <!--onclick="createGame()"-->
+        <br>
+        <label for="gameRanks" style="margin-right: 90px"> Game Rank (insert a(,)between each rank without spaces)</label><br>
+        <input type="text" id="gameRanks" name="gameRanks">
+        <br>
+        <button type="submit">
+            Create game
+        </button>
+        <!--onclick="createGame()"-->
+        <!--poner todos en un div en ves de usar br-->
 </form>
 
 
 </body>
 
 <script>
-    function createGame() {
-        const gameName = document.getElementById("gameNameId")
-
-        fetch("/game")
-            .then(response => response.json())
-            .then(data => console.log(data));
-    }
+function createGame() {
+    const gameName = document.getElementById("gameRanks")
+    fetch("/game")
+        .then(response => response.json())
+        .then(data => console.log(data));
+}
 
 </script>
 

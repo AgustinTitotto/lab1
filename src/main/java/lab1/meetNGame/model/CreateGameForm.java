@@ -10,15 +10,17 @@ public class CreateGameForm {
     private final String gameName;
     private final String category;
     private final String lvlMax;
+    private final String ranks;
 
-    public CreateGameForm(String gameName, String category, String lvlMax) {
+    public CreateGameForm(String gameName, String category, String lvlMax, String ranks) {
         this.gameName = gameName;
         this.category = category;
         this.lvlMax = lvlMax;
+        this.ranks = ranks;
     }
 
-    public static CreateGameForm createGameForm(List<String> gameName, List<String> category, List<String> lvlMax) {
-        return new CreateGameForm(gameName.get(0), category.get(0), lvlMax.get(0));
+    public static CreateGameForm createGameForm(List<String> gameName, List<String> category, List<String> lvlMax, List<String> ranks) {
+        return new CreateGameForm(gameName.get(0), category.get(0), lvlMax.get(0), ranks.get(0));
     }
 
     public static CreateGameForm createFromBody(String body) {
@@ -28,7 +30,8 @@ public class CreateGameForm {
         return CreateGameForm.createGameForm(
                 params.getValues("gameName"),
                 params.getValues("gameCategory"),
-                params.getValues("gameLvlMax")
+                params.getValues("gameLvlMax"),
+                params.getValues("gameRanks")
         );
     }
 
@@ -42,5 +45,9 @@ public class CreateGameForm {
 
     public String getLvlMax() {
         return lvlMax;
+    }
+
+    public String getRanks() {
+        return ranks;
     }
 }

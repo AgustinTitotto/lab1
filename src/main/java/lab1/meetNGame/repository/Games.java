@@ -2,6 +2,7 @@ package lab1.meetNGame.repository;
 
 import lab1.meetNGame.model.CreateGameForm;
 import lab1.meetNGame.model.Game;
+import lab1.meetNGame.model.Rank;
 import lab1.meetNGame.persistence.EntityTransactions;
 
 import java.nio.channels.IllegalChannelGroupException;
@@ -23,7 +24,12 @@ public class Games {
 
     public Game createGame(CreateGameForm form){
         final Game newGame = Game.createGame(form.getGameName(), form.getCategory(), form.getLvlMax());
-        if (gameExists(newGame.getGameName())) throw new IllegalStateException("Game already exists");
+      //if (gameExists(newGame.getGameName())) throw new IllegalStateException("Game already exists");
+        String[] ranks = form.getRanks().split(",");
+        for (int i = 0; i < ranks.length; i++) {
+            Rank rank = Rank.createRank(ranks[i]);
+            newGame.getRanks().add(rank);
+        }
         return EntityTransactions.persist(newGame);
     }
 }

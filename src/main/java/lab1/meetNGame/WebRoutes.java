@@ -24,6 +24,7 @@ public class WebRoutes {
     public static final String HOME_TEMPLATE = "home.ftl";
     public static final String ADMIN_HOME_TEMPLATE = "adminhome.html";
     public static final String CREATE_GAME_TEMPLATE = "creategame.html";
+    public static final String CREATE_DESCRIPTION = "createdescription.html";
 
     /**
      * ROUTES
@@ -35,6 +36,7 @@ public class WebRoutes {
     public static final String LOGOUT_ROUTE = "/logout";
     public static final String ADMIN_HOME_ROUTE = "/admin";
     public static final String CREATE_GAME_ROUTE = "/creategame";
+    public static final String CREATE_DESCRIPTION_ROUTE = "/createdescription";
 
     final static private WebSystem system = new WebSystem();
 
@@ -119,8 +121,8 @@ public class WebRoutes {
                     return halt();
                 } else {
                     final Map<String, Object> model = new HashMap<>();
-                    model.put("message", "User is no Admin");
-                    return render(model, ADMIN_HOME_TEMPLATE);
+                    model.put("message", "User is not Admin");
+                    return render(model, HOME_TEMPLATE);
                 }
             }
             res.redirect(LOGIN_ROUTE);
@@ -140,6 +142,26 @@ public class WebRoutes {
             }
         });
 
+        get(CREATE_DESCRIPTION_ROUTE, (req, res) -> render(CREATE_DESCRIPTION));
+        post(HOME_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (authenticatedGamerUser.isPresent()) {
+                if (!authenticatedGamerUser.get().isAdmin()) {
+                    res.redirect(CREATE_DESCRIPTION);
+                    return halt();
+                } else {
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("message", "User is not client");
+                    return render(model, ADMIN_HOME_TEMPLATE);
+                }
+            }
+            res.redirect(LOGIN_ROUTE);
+            return halt();
+        });
+
+        /*post(CREATE_DESCRIPTION_ROUTE, (res, req) -> {
+
+        });*/
     }
 
     private void authenticatedGet(String route, Route o) {
