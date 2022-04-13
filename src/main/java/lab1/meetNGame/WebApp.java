@@ -1,7 +1,9 @@
 package lab1.meetNGame;
 
+import lab1.meetNGame.model.GamerUser;
 import lab1.meetNGame.persistence.DataBase;
 import lab1.meetNGame.persistence.EntityManagers;
+import lab1.meetNGame.persistence.EntityTransactions;
 import spark.Spark;
 
 import javax.persistence.EntityManagerFactory;
@@ -20,7 +22,14 @@ public class WebApp {
         startWebServer();
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("monolithic-db");
         EntityManagers.setFactory(entityManagerFactory);
+        initialData();
+    }
 
+    private void initialData() {
+        GamerUser admin = new GamerUser("meetngame", "meetngame123", true);
+        GamerUser gamer = new GamerUser("gamer1", "123", false);
+        EntityTransactions.persist(admin);
+        EntityTransactions.persist(gamer);
     }
 
     private void startDatabase() {
