@@ -15,8 +15,8 @@
         </div>
     </#if>
     <form action="/login" role="form" method="post">
-        <h1 style="color: lime";> Welcome to Meet-n-Game </h1>
-        <h2 class="h3 mb-3 fw-normal"; style="color: lime";>Sign in</h2>
+        <h1 style="color: lime";> <u>Welcome to Meet-n-Game</u> </h1>
+        <h2 class="h3 mb-3 fw-normal"; style="color: lime";><u>Sign in</u></h2>
         <p style="color: lime; font-size: 160%">Please enter your user name and your password</p>
 
         <div class="form-floating" style="margin-left: 400px; margin-right: 400px">

@@ -10,22 +10,25 @@
         margin-top: 100px;
     }
 </style>
-<body>
-
+<body style="background-color: black">
+<h1 style="color: lime; font-size: 300%; text-align: center">
+        <u>Welcome to the game creator</u>
+</h1>
 <form class="container" action = "/creategame" role="form" method="post">
-        <label for="gameNameId" style="margin-right: 90px"> Game Name:</label><br>
-        <input type="text" id="gameNameId" name="gameName" required>
+        <label for="gameNameId" style="color: lime; font-size: 150%"> Game Name:</label><br>
+        <input type="text" id="gameNameId" name="gameName" style="font-size: 120%" required>
         <br>
-        <label for="gameCategoryId" style="margin-right: 90px"> Game Category:</label><br>
-        <input type="text" id="gameCategoryId" name="gameCategory" required>
+        <label for="gameCategoryId" style="color: lime; font-size: 150%"> Game Category:</label><br>
+        <input type="text" id="gameCategoryId" name="gameCategory" style="font-size: 120%" required>
         <br>
-        <label for="gameLvlMaxId" style="margin-right: 90px"> Game Max Lvl:</label><br>
-        <input type="number" min="1" id="gameLvlMaxId" name="gameLvlMax" required>
+        <label for="gameLvlMaxId" style="color: lime; font-size: 150%"> Game Max Lvl:</label><br>
+        <input type="number" min="1" id="gameLvlMaxId" name="gameLvlMax" style="font-size: 120%" required>
         <br>
-        <label for="gameRanks" style="margin-right: 90px"> Game Rank (insert a(,)between each rank without spaces)</label><br>
-        <input type="text" id="gameRanks" name="gameRanks">
+        <label for="gameRanks" style="color: lime; font-size: 150%"> Game Rank <i>(insert a(,)between each rank without spaces):</i></label><br>
+        <input type="text" id="gameRanks" name="gameRanks" style="font-size: 120%">
         <br>
-        <button type="submit">
+        <br>
+        <button type="submit"; style="font-size: 150%; background-color: lime; border-color: lime">
             Create game
         </button>
         <!--onclick="createGame()"-->
