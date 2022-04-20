@@ -6,29 +6,30 @@
 </head>
 <style>
     .container{
+            color: #45cb85;
         text-align: center;
         margin-top: 100px;
     }
 </style>
-<body style="background-color: black">
-<h1 style="color: lime; font-size: 300%; text-align: center">
+<body style="background-color: #282e3a">
+<h1 style="color: white; font-size: 300%; text-align: center">
         <u>Welcome to the game creator</u>
 </h1>
 <form class="container" action = "/creategame" role="form" method="post">
-        <label for="gameNameId" style="color: lime; font-size: 150%"> Game Name:</label><br>
+        <label for="gameNameId" style="font-size: 200%"> Game Name:</label><br>
         <input type="text" id="gameNameId" name="gameName" style="font-size: 120%" required>
         <br>
-        <label for="gameCategoryId" style="color: lime; font-size: 150%"> Game Category:</label><br>
+        <label for="gameCategoryId" style="font-size: 200%"> Game Category:</label><br>
         <input type="text" id="gameCategoryId" name="gameCategory" style="font-size: 120%" required>
         <br>
-        <label for="gameLvlMaxId" style="color: lime; font-size: 150%"> Game Max Lvl:</label><br>
+        <label for="gameLvlMaxId" style="font-size: 200%"> Game Max Lvl:</label><br>
         <input type="number" min="1" id="gameLvlMaxId" name="gameLvlMax" style="font-size: 120%" required>
         <br>
-        <label for="gameRanks" style="color: lime; font-size: 150%"> Game Rank <i>(insert a(,)between each rank without spaces):</i></label><br>
+        <label for="gameRanks" style="font-size: 200%"> Game Rank <i>(insert a(,)between each rank without spaces):</i></label><br>
         <input type="text" id="gameRanks" name="gameRanks" style="font-size: 120%">
         <br>
         <br>
-        <button type="submit"; style="font-size: 150%; background-color: lime; border-color: lime">
+        <button type="submit"; style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;">
             Create game
         </button>
         <!--onclick="createGame()"-->

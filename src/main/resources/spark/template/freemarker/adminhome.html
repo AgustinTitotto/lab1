@@ -8,17 +8,29 @@
 
     h1{
         font-size: 300%;
-        color: lime;
+        color: white;
         text-align: center;
     }
     .container{
         text-align: left;
-        color: lime;
+        color: #45cb85;
         font-size: 150%;
         font-family: "Arial Rounded MT Bold";
     }
+
+    button{
+        background-color: #45cb85;
+        border-color: #45cb85;
+        font-size: 120%;
+    }
+
+    button1{
+        background-color: #ff4655;
+        border-color: #ff4655;
+        font-size: 120%;
+    }
 </style>
-<body style="background-color: black">
+<body style="background-color: #282e3a">
 
 <h1>
     <u>Welcome Administrator</u>
@@ -26,13 +38,13 @@
 
 <div class="container">
     <p>Create a new Game</p>
-    <button style="background-color: lime; border-color: lime; font-size: 120%;">
-        <a href="/creategame">Create game</a>
+    <button>
+        <a href="/creategame" style="color: green">Create game</a>
     </button>
     <p>Leave session</p>
-    <button style="background-color: red; border-color: red; font-size: 120%;">
-        <a href="/logout">Sign Out</a>
-    </button>
+    <button1>
+        <a href="/logout" style="color: red">Sign Out</a>
+    </button1>
 </div>
 
 
