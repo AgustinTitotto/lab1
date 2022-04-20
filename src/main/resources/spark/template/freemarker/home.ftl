@@ -40,7 +40,7 @@
     </button>
     <p>Leave session</p>
     <button1>
-        <a href="/logout" style="color: red">Sign Out</a>
+        <a href="/logout" style="color: darkred">Sign Out</a>
     </button1>
 </div>
 </body>
