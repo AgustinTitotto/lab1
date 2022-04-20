@@ -16,6 +16,7 @@ dependencies {
     implementation 'com.sparkjava:spark-template-freemarker:2.7.1'
     implementation 'org.hsqldb:hsqldb:2.6.1'
     implementation 'org.hibernate:hibernate-core:5.6.5.Final'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     testImplementation 'junit:junit:4.13.2'
 }

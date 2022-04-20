@@ -11,6 +11,7 @@ import java.util.List;
 public class Game {
 
     @Id
+    @Column(nullable = false)
     private String gameName;
 
     private String category;

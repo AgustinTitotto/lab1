@@ -1,14 +1,10 @@
 package lab1.meetNGame;
 
-
 import lab1.meetNGame.model.*;
 import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static spark.Spark.*;
 
@@ -24,7 +20,7 @@ public class WebRoutes {
     public static final String HOME_TEMPLATE = "home.ftl";
     public static final String ADMIN_HOME_TEMPLATE = "adminhome.html";
     public static final String CREATE_GAME_TEMPLATE = "creategame.html";
-    public static final String CREATE_DESCRIPTION = "createdescription.html";
+    public static final String CREATE_DESCRIPTION_TEMPLATE = "createdescription.html";
 
     /**
      * ROUTES
@@ -144,28 +140,34 @@ public class WebRoutes {
             }
         });
 
-        get(CREATE_DESCRIPTION_ROUTE, (req, res) -> render(CREATE_DESCRIPTION));
-        post(HOME_ROUTE, (req, res) -> {
+        get(CREATE_DESCRIPTION_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.isPresent()) {
-                if (!authenticatedGamerUser.get().isAdmin()) {
-                    res.redirect(CREATE_DESCRIPTION);
-                    return halt();
-                } else {
-                    final Map<String, Object> model = new HashMap<>();
-                    model.put("message", "User is not client");
-                    return render(model, ADMIN_HOME_TEMPLATE);
+                if (!authenticatedGamerUser.get().isAdmin()){
+                    return render(CREATE_DESCRIPTION_TEMPLATE);
                 }
-            }
-            else {
+                else {
+                    res.redirect(ADMIN_HOME_ROUTE);
+                    return halt();
+                }
+            } else {
                 res.redirect(LOGIN_ROUTE);
                 return halt();
             }
         });
 
-        /*post(CREATE_DESCRIPTION_ROUTE, (res, req) -> {
-
-        });*/
+        post(CREATE_DESCRIPTION_ROUTE, (req, res) -> {
+            CreateDescriptionForm descriptionForm = CreateDescriptionForm.createFromBody(req.body());
+            GamerDescription description = system.registerGamerDescription(descriptionForm);
+            if (description != null){
+                res.redirect("/home?ok");
+                return halt();
+            }
+            else {
+                final Map<String, Object> model = Map.of("message", "One or more parameter are wrong");
+                return render(model, CREATE_DESCRIPTION_TEMPLATE);
+            }
+        });
     }
 
     private void authenticatedGet(String route, Route o) {

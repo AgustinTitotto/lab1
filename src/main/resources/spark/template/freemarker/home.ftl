@@ -35,8 +35,8 @@
 <h1><u>Welcome back</u></h1>
 <div class="container">
     <p>Create a new game description</p>
-    <button>
-        <a href="createdescription.html" style="color: green">Create description</a>
+    <button style="background-color: lime; border-color: lime; font-size: 120%;">
+        <a href="/createdescription">Create description</a>
     </button>
     <p>Leave session</p>
     <button1>

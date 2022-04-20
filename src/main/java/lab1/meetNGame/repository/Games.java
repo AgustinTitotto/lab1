@@ -5,7 +5,6 @@ import lab1.meetNGame.model.Game;
 import lab1.meetNGame.model.Rank;
 import lab1.meetNGame.persistence.EntityTransactions;
 
-import java.nio.channels.IllegalChannelGroupException;
 import java.util.Optional;
 
 import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
