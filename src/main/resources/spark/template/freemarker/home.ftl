@@ -38,6 +38,10 @@
     <button>
         <a href="/createdescription" style="color: green">Create description</a>
     </button>
+    <p>Create a new gamer interest</p>
+    <button>
+        <a href="/createinterest" style="color: green">Create interest</a>
+    </button>
     <p>Leave session</p>
     <button1>
         <a href="/logout" style="color: darkred">Sign Out</a>

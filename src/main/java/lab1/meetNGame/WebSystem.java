@@ -3,6 +3,7 @@ package lab1.meetNGame;
 import com.google.common.base.Strings;
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.repository.GamerDescriptions;
+import lab1.meetNGame.repository.GamerInterests;
 import lab1.meetNGame.repository.Gamers;
 import lab1.meetNGame.repository.Games;
 
@@ -13,6 +14,7 @@ public class WebSystem {
     private final Gamers gamers = new Gamers();
     private final Games games = new Games();
     private final GamerDescriptions descriptions = new GamerDescriptions();
+    private final GamerInterests interests = new GamerInterests();
 
     public GamerUser registerGamer(SignUpForm form) {
         if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()))
@@ -55,6 +57,26 @@ public class WebSystem {
                     return null;
                 }
                 else return descriptions.createDescription(game1.get(), rankCheck.get(), form.getLvl());
+            }
+        }
+    }
+
+    public GamerInterest registerGamerInterest(CreateInterestForm form){
+        Optional<Game> game1 = games.findByGameName(form.getGameName());
+        if (game1.isEmpty()){
+            return null;
+        }
+        else {
+            boolean lvlCheck = interests.checkLevel(game1.get(), form.getLvl());
+            if (!lvlCheck){
+                return null;
+            }
+            else {
+                Optional<Rank> rankCheck = interests.checkRank(game1.get(), form.getRank());
+                if (rankCheck.isEmpty()){
+                    return null;
+                }
+                else return interests.createInterest(game1.get(), rankCheck.get(), form.getLvl());
             }
         }
     }

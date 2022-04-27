@@ -21,6 +21,7 @@ public class WebRoutes {
     public static final String ADMIN_HOME_TEMPLATE = "adminhome.html";
     public static final String CREATE_GAME_TEMPLATE = "creategame.html";
     public static final String CREATE_DESCRIPTION_TEMPLATE = "createdescription.html";
+    public static final String CREATE_INTEREST_TEMPLATE = "createinterest.html";
 
     /**
      * ROUTES
@@ -33,6 +34,7 @@ public class WebRoutes {
     public static final String ADMIN_HOME_ROUTE = "/admin";
     public static final String CREATE_GAME_ROUTE = "/creategame";
     public static final String CREATE_DESCRIPTION_ROUTE = "/createdescription";
+    public static final String CREATE_INTEREST_ROUTE = "/createinterest";
 
     final static private WebSystem system = new WebSystem();
 
@@ -166,6 +168,35 @@ public class WebRoutes {
             else {
                 final Map<String, Object> model = Map.of("message", "One or more parameter are wrong");
                 return render(model, CREATE_DESCRIPTION_TEMPLATE);
+            }
+        });
+
+        get(CREATE_INTEREST_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (authenticatedGamerUser.isPresent()) {
+                if (!authenticatedGamerUser.get().isAdmin()){
+                    return render(CREATE_INTEREST_TEMPLATE);
+                }
+                else {
+                    res.redirect(ADMIN_HOME_ROUTE);
+                    return halt();
+                }
+            } else {
+                res.redirect(LOGIN_ROUTE);
+                return halt();
+            }
+        });
+
+        post(CREATE_INTEREST_ROUTE, (req, res) -> {
+            CreateInterestForm interestForm = CreateInterestForm.createFromBody(req.body());
+            GamerInterest interest = system.registerGamerInterest(interestForm);
+            if (interest != null){
+                res.redirect("/home?ok");
+                return halt();
+            }
+            else {
+                final Map<String, Object> model = Map.of("message", "One or more parameter are wrong");
+                return render(model, CREATE_INTEREST_TEMPLATE);
             }
         });
     }

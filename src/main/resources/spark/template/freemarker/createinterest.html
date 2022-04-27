@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to the description creator</title>
+    <title>Welcome to the interest creator</title>
 </head>
 <style>
     .container{
@@ -13,10 +13,10 @@
 </style>
 <body style="background-color: #282e3a">
     <h1 style="color: white; font-size: 300%; text-align: center">
-        <u>Create A Game Description</u>
+        <u>Create A Interest</u>
     </h1>
-    <p style="color: #45cb85; font-size: 250%; text-align: center">What game do you play?</p>
-    <form class="container" action = "/createdescription" role="form" method="post">
+    <p style="color: #45cb85; font-size: 250%; text-align: center">What do you seek in a player?</p>
+    <form class="container" action = "/createinterest" role="form" method="post">
         <label for="gameNameId" style="font-size: 200%"> Select Game:</label>
         <input type="text" id="gameNameId" name="gameName" style="font-size: 120%" required>
         <br>
@@ -28,7 +28,7 @@
         <br>
         <br>
         <button type="submit" style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;">
-            Create description
+            Create interest
         </button>
     </form>
 </body>
