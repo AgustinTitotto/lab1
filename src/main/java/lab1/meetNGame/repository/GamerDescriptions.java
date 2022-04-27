@@ -1,10 +1,7 @@
 package lab1.meetNGame.repository;
 
 
-import lab1.meetNGame.model.CreateDescriptionForm;
-import lab1.meetNGame.model.Game;
-import lab1.meetNGame.model.GamerDescription;
-import lab1.meetNGame.model.Rank;
+import lab1.meetNGame.model.*;
 import lab1.meetNGame.persistence.EntityTransactions;
 
 import java.util.List;
@@ -18,7 +15,7 @@ public class GamerDescriptions {
     public boolean checkLevel(Game game, String userLvl){
         String a = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u WHERE u.lvlMAX LIKE: lvlMax",
                 Game.class).setParameter("lvlMax", game.getLvlMAX()).getResultList()).stream().findFirst().get().getLvlMAX();
-        if (Integer.parseInt(a) > Integer.parseInt(userLvl)){
+        if (Integer.parseInt(a) >= Integer.parseInt(userLvl)){
             return true;
         }
         else return false;
@@ -36,10 +33,11 @@ public class GamerDescriptions {
         return rank;
     }
 
-    public GamerDescription createDescription(Game game, Rank rank, String gamerLvl){
+    public GamerDescription createDescription(GamerUser gamer, Game game, Rank rank, String gamerLvl){
         GamerDescription description = GamerDescription.createDescription(gamerLvl);
         description.setGame(game);
         description.setRank(rank);
+        description.setGamerUser(gamer);
         return EntityTransactions.persist(description);
     }
 }

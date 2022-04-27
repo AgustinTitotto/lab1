@@ -158,9 +158,10 @@ public class WebRoutes {
             }
         });
 
-        post(CREATE_DESCRIPTION_ROUTE, (req, res) -> {
+        authenticatedPost(CREATE_DESCRIPTION_ROUTE, (req, res) -> {
             CreateDescriptionForm descriptionForm = CreateDescriptionForm.createFromBody(req.body());
-            GamerDescription description = system.registerGamerDescription(descriptionForm);
+            GamerUser gamer = getAuthenticatedGamerUser(req).get();
+            GamerDescription description = system.registerGamerDescription(gamer, descriptionForm);
             if (description != null){
                 res.redirect("/home?ok");
                 return halt();
@@ -187,9 +188,10 @@ public class WebRoutes {
             }
         });
 
-        post(CREATE_INTEREST_ROUTE, (req, res) -> {
+        authenticatedPost(CREATE_INTEREST_ROUTE, (req, res) -> {
             CreateInterestForm interestForm = CreateInterestForm.createFromBody(req.body());
-            GamerInterest interest = system.registerGamerInterest(interestForm);
+            GamerUser gamer = getAuthenticatedGamerUser(req).get();
+            GamerInterest interest = system.registerGamerInterest(gamer, interestForm);
             if (interest != null){
                 res.redirect("/home?ok");
                 return halt();
@@ -213,6 +215,20 @@ public class WebRoutes {
             }
         });
     }
+
+    private void authenticatedPost(String route, Route o) {
+        post(route, (request, response) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(request);
+
+            if (authenticatedGamerUser.isPresent()) {
+                return o.handle(request, response);
+            } else {
+                response.redirect(LOGIN_ROUTE);
+                return halt();
+            }
+        });
+    }
+
 
     private void clearAuthenticatedGamerUser(Request req) {
         req.session().invalidate();

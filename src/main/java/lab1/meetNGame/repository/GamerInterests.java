@@ -2,6 +2,7 @@ package lab1.meetNGame.repository;
 
 import lab1.meetNGame.model.Game;
 import lab1.meetNGame.model.GamerInterest;
+import lab1.meetNGame.model.GamerUser;
 import lab1.meetNGame.model.Rank;
 import lab1.meetNGame.persistence.EntityTransactions;
 
@@ -16,7 +17,7 @@ public class GamerInterests {
     public boolean checkLevel(Game game, String userLvl){
         String a = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u WHERE u.lvlMAX LIKE: lvlMax",
                 Game.class).setParameter("lvlMax", game.getLvlMAX()).getResultList()).stream().findFirst().get().getLvlMAX();
-        if (Integer.parseInt(a) > Integer.parseInt(userLvl)){
+        if (Integer.parseInt(a) >= Integer.parseInt(userLvl)){
             return true;
         }
         else return false;
@@ -34,10 +35,11 @@ public class GamerInterests {
         return rank;
     }
 
-    public GamerInterest createInterest(Game game, Rank rank, String gamerLvl){
+    public GamerInterest createInterest(GamerUser gamer, Game game, Rank rank, String gamerLvl){
         GamerInterest interest = GamerInterest.createInterest(gamerLvl);
         interest.setGame(game);
         interest.setRank(rank);
+        interest.setGamerUser(gamer);
         return EntityTransactions.persist(interest);
     }
 }

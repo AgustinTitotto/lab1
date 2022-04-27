@@ -41,7 +41,7 @@ public class WebSystem {
         return games.gameExists(form.getGameName()) ? null : games.createGame(form);
     }
 
-    public GamerDescription registerGamerDescription(CreateDescriptionForm form){
+    public GamerDescription registerGamerDescription(GamerUser gamer, CreateDescriptionForm form){
         Optional<Game> game1 = games.findByGameName(form.getGameName());
         if (game1.isEmpty()){
             return null;
@@ -56,12 +56,12 @@ public class WebSystem {
                 if (rankCheck.isEmpty()){
                     return null;
                 }
-                else return descriptions.createDescription(game1.get(), rankCheck.get(), form.getLvl());
+                else return descriptions.createDescription(gamer, game1.get(), rankCheck.get(), form.getLvl());
             }
         }
     }
 
-    public GamerInterest registerGamerInterest(CreateInterestForm form){
+    public GamerInterest registerGamerInterest(GamerUser gamer, CreateInterestForm form){
         Optional<Game> game1 = games.findByGameName(form.getGameName());
         if (game1.isEmpty()){
             return null;
@@ -76,7 +76,7 @@ public class WebSystem {
                 if (rankCheck.isEmpty()){
                     return null;
                 }
-                else return interests.createInterest(game1.get(), rankCheck.get(), form.getLvl());
+                else return interests.createInterest(gamer, game1.get(), rankCheck.get(), form.getLvl());
             }
         }
     }
