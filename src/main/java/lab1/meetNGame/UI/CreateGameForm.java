@@ -1,4 +1,4 @@
-package lab1.meetNGame.model;
+package lab1.meetNGame.UI;
 
 import org.eclipse.jetty.util.MultiMap;
 import org.eclipse.jetty.util.UrlEncoded;

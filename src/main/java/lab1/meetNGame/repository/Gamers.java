@@ -1,7 +1,7 @@
 package lab1.meetNGame.repository;
 
 import lab1.meetNGame.model.GamerUser;
-import lab1.meetNGame.model.SignUpForm;
+import lab1.meetNGame.UI.SignUpForm;
 import lab1.meetNGame.persistence.EntityTransactions;
 
 import java.util.Optional;

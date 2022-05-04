@@ -1,6 +1,6 @@
 package lab1.meetNGame.repository;
 
-import lab1.meetNGame.model.CreateGameForm;
+import lab1.meetNGame.UI.CreateGameForm;
 import lab1.meetNGame.model.Game;
 import lab1.meetNGame.model.Rank;
 import lab1.meetNGame.persistence.EntityTransactions;

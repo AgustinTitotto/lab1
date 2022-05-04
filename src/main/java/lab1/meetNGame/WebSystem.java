@@ -1,6 +1,7 @@
 package lab1.meetNGame;
 
 import com.google.common.base.Strings;
+import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.repository.GamerDescriptions;
 import lab1.meetNGame.repository.GamerInterests;

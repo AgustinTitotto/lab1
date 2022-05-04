@@ -1,31 +1,30 @@
-package lab1.meetNGame.model;
+package lab1.meetNGame.UI;
 
 import org.eclipse.jetty.util.MultiMap;
 import org.eclipse.jetty.util.UrlEncoded;
 
 import java.util.List;
 
-public class CreateDescriptionForm {
-
+public class CreateInterestForm {
     private final String gameName;
     private final String lvl;
     private final String rank;
 
-    public CreateDescriptionForm(String gameName, String lvl, String rank){
+    public CreateInterestForm(String gameName, String lvl, String rank){
         this.gameName = gameName;
         this.lvl = lvl;
         this.rank = rank;
     }
 
-    private static CreateDescriptionForm createDescriptionForm(List<String> gameName, List<String> gamerLvl, List<String> gamerRank) {
-        return new CreateDescriptionForm(gameName.get(0), gamerLvl.get(0), gamerRank.get(0));
+    private static CreateInterestForm createInterestForm(List<String> gameName, List<String> gamerLvl, List<String> gamerRank) {
+        return new CreateInterestForm(gameName.get(0), gamerLvl.get(0), gamerRank.get(0));
     }
 
-    public static CreateDescriptionForm createFromBody(String body){
+    public static CreateInterestForm createFromBody(String body){
         final MultiMap<String> params = new MultiMap<>();
         UrlEncoded.decodeTo(body, params, "UTF-8");
 
-        return CreateDescriptionForm.createDescriptionForm(
+        return CreateInterestForm.createInterestForm(
                 params.getValues("gameName"),
                 params.getValues("gamerLvl"),
                 params.get("gamerRank")
