@@ -8,7 +8,6 @@
             Persistence unit for the JPA tutorial of the Hibernate Getting Started Guide
         </description>
 
-        <class>lab1.monolithic.model.User</class>
         <class>lab1.meetNGame.model.GamerUser</class>
         <class>lab1.meetNGame.model.Game</class>
         <class>lab1.meetNGame.model.Rank</class>
