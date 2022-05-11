@@ -8,6 +8,7 @@ import lab1.meetNGame.repository.GamerInterests;
 import lab1.meetNGame.repository.Gamers;
 import lab1.meetNGame.repository.Games;
 
+import java.util.List;
 import java.util.Optional;
 
 public class WebSystem {
@@ -82,4 +83,8 @@ public class WebSystem {
         }
     }
 
+    public List<GamerUser> getInterestPlayers(GamerUser gamerUser) {
+        List<GamerInterest> interestGamers = interests.gamersInterest(gamerUser);
+        return gamers.getGamersWithInterest(interestGamers);
+    }
 }

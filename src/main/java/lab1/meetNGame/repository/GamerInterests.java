@@ -42,4 +42,8 @@ public class GamerInterests {
         interest.setGamerUser(gamer);
         return EntityTransactions.persist(interest);
     }
+    public List<GamerInterest> gamersInterest(GamerUser gamerUser) {
+        return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerInterest u WHERE u.gamerUser.userName LIKE:userName", GamerInterest.class)
+                .setParameter("userName", gamerUser.getUserName()).getResultList());
+    }
 }

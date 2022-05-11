@@ -42,6 +42,10 @@
     <button>
         <a href="/createinterest" style="color: green">Create interest</a>
     </button>
+    <p>Find Players</p>
+    <button>
+        <a href="/findplayers" style="color: green">Find players</a>
+    </button>
     <p>Leave session</p>
     <button1>
         <a href="/logout" style="color: darkred">Sign Out</a>

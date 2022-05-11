@@ -37,6 +37,22 @@ public class GamerInterest {
         return id;
     }
 
+    public GamerUser getGamerUser() {
+        return gamerUser;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public String getLvl() {
+        return lvl;
+    }
+
+    public Rank getRank() {
+        return rank;
+    }
+
     public void setGamerUser(GamerUser gamerUser) {
         this.gamerUser = gamerUser;
     }

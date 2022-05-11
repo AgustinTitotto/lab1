@@ -23,6 +23,7 @@ public class WebRoutes {
     public static final String CREATE_GAME_TEMPLATE = "creategame.html";
     public static final String CREATE_DESCRIPTION_TEMPLATE = "createdescription.html";
     public static final String CREATE_INTEREST_TEMPLATE = "createinterest.html";
+    public static final String FIND_PLAYERS_TEMPLATE = "findplayers.ftl";
 
     /**
      * ROUTES
@@ -36,6 +37,7 @@ public class WebRoutes {
     public static final String CREATE_GAME_ROUTE = "/creategame";
     public static final String CREATE_DESCRIPTION_ROUTE = "/createdescription";
     public static final String CREATE_INTEREST_ROUTE = "/createinterest";
+    public static final String FIND_PLAYERS_ROUTE = "/findplayers";
 
     final static private WebSystem system = new WebSystem();
 
@@ -201,6 +203,30 @@ public class WebRoutes {
                 final Map<String, Object> model = Map.of("message", "One or more parameter are wrong");
                 return render(model, CREATE_INTEREST_TEMPLATE);
             }
+        });
+
+        get(FIND_PLAYERS_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (authenticatedGamerUser.isPresent()) {
+                if (!authenticatedGamerUser.get().isAdmin()){
+                    GamerUser gamerUser = authenticatedGamerUser.get();
+                    List<GamerUser> gamers = system.getInterestPlayers(gamerUser);
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("gamers", gamers);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, FIND_PLAYERS_TEMPLATE));
+                }
+                else {
+                    res.redirect(ADMIN_HOME_ROUTE);
+                    return halt();
+                }
+            } else {
+                res.redirect(LOGIN_ROUTE);
+                return halt();
+            }
+        });
+
+        post(FIND_PLAYERS_ROUTE, (req, res) -> {
+            return halt();
         });
     }
 

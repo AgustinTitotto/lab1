@@ -49,4 +49,8 @@ public class Game {
     public List<Rank> getRanks() {
         return ranks;
     }
+
+    public void setRanks(List<Rank> ranks) {
+        this.ranks = ranks;
+    }
 }
