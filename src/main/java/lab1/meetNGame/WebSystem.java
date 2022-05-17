@@ -83,7 +83,7 @@ public class WebSystem {
         }
     }
 
-    public List<GamerUser> getInterestPlayers(GamerUser gamerUser) {
+    public List<GamerDescription> getInterestPlayers(GamerUser gamerUser) {
         List<GamerInterest> interestGamers = interests.gamersInterest(gamerUser);
         return gamers.getGamersWithInterest(interestGamers);
     }

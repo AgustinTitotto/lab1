@@ -1,17 +1,32 @@
-<#-- @ftlvariable name="gamers" type="java.util.List<GamerUser>" -->
+<#-- @ftlvariable name="descriptions" type="java.util.List<GamerDescription>" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Find players</title>
 </head>
+
 <body>
 
-    <select name="gamers" id="gamers">
-        <#list gamers as gamerUser>
-            <option value="${gamerUser.userName}">${gamerUser.userName}</option>
-        </#list>
-    </select>
+    <#list descriptions as description>
+        <p>${description.gamerUser.userName}
+    </#list>
+
+    <#list descriptions>
+        <table>
+            <#items as description>
+            <tr class="${description.gamerUser.userName}Row">
+                <td>${description?counter}
+                <td>${description.gamerUser.userName}
+            </#items>
+        </table>
+    </#list>
+
+    <#if >
+        <#assign description = descriptions[0]>
+        <p>${description.gamerUser.userName}</p>
+    </#if>
+
 
 </body>
 </html>

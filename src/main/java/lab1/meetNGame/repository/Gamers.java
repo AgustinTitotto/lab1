@@ -35,8 +35,8 @@ public class Gamers{
         return EntityTransactions.persist(newGamer);
     }
 
-    public List<GamerUser> getGamersWithInterest(List<GamerInterest> interestGamers) {
-        List<GamerUser> gamers = new ArrayList<>();
+    public List<GamerDescription> getGamersWithInterest(List<GamerInterest> interestGamers) {
+        List<GamerDescription> finalDescriptions = new ArrayList<>();
         String userName = interestGamers.get(0).getGamerUser().getUserName();
         List<GamerDescription> descriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription u",
                 GamerDescription.class).getResultList());
@@ -50,10 +50,10 @@ public class Gamers{
                 if (interestGamers.get(i).getGame().getGameName().equals(descriptions.get(j).getGame().getGameName())
                         && Integer.parseInt(interestGamers.get(i).getLvl()) < Integer.parseInt(descriptions.get(j).getLvl())
                         && interestGamers.get(i).getRank().getRankName().equals(descriptions.get(j).getRank().getRankName())){
-                    gamers.add(descriptions.get(j).getGamerUser());
+                    finalDescriptions.add(descriptions.get(j));
                 }
             }
         }
-        return gamers;
+        return finalDescriptions;
     }
 }

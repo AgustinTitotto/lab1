@@ -210,9 +210,9 @@ public class WebRoutes {
             if (authenticatedGamerUser.isPresent()) {
                 if (!authenticatedGamerUser.get().isAdmin()){
                     GamerUser gamerUser = authenticatedGamerUser.get();
-                    List<GamerUser> gamers = system.getInterestPlayers(gamerUser);
+                    List<GamerDescription> descriptions = system.getInterestPlayers(gamerUser);
                     final Map<String, Object> model = new HashMap<>();
-                    model.put("gamers", gamers);
+                    model.put("descriptions", descriptions);
                     return new FreeMarkerEngine().render(new ModelAndView(model, FIND_PLAYERS_TEMPLATE));
                 }
                 else {
