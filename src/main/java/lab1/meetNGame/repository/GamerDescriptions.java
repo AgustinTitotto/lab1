@@ -40,4 +40,15 @@ public class GamerDescriptions {
         description.setGamerUser(gamer);
         return EntityTransactions.persist(description);
     }
+
+    public GamerDescription getDescriptionByUserNameAndGame(GamerUser gamerUser, Game game) {
+        List<GamerDescription> descriptions = currentEntityManager().createQuery("SELECT u FROM GamerDescription u WHERE u.gamerUser.userName LIKE: userName",
+                GamerDescription.class).setParameter("userName", gamerUser.getUserName()).getResultList();
+        for (int i = 0; i < descriptions.size(); i++) {
+            if (descriptions.get(i).getGame().getGameName().equals(game.getGameName())){
+                return descriptions.get(i);
+            }
+        }
+        return null;
+    }
 }

@@ -3,10 +3,7 @@ package lab1.meetNGame;
 import com.google.common.base.Strings;
 import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
-import lab1.meetNGame.repository.GamerDescriptions;
-import lab1.meetNGame.repository.GamerInterests;
-import lab1.meetNGame.repository.Gamers;
-import lab1.meetNGame.repository.Games;
+import lab1.meetNGame.repository.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +14,7 @@ public class WebSystem {
     private final Games games = new Games();
     private final GamerDescriptions descriptions = new GamerDescriptions();
     private final GamerInterests interests = new GamerInterests();
+    private final Likes likes = new Likes();
 
     public GamerUser registerGamer(SignUpForm form) {
         if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()))
@@ -86,5 +84,13 @@ public class WebSystem {
     public List<GamerDescription> getInterestPlayers(GamerUser gamerUser) {
         List<GamerInterest> interestGamers = interests.gamersInterest(gamerUser);
         return gamers.getGamersWithInterest(interestGamers);
+    }
+
+    public Like registerLike(LikeForm likedUser, GamerUser gamer) {
+        String[] description = likedUser.getLikedUser().split(", ");
+        Optional<GamerUser> likedGamer = gamers.findByUserName(description[0]);
+        Optional<Game> likedGame = games.findByGameName(description[1]);
+        GamerDescription likedDescription = descriptions.getDescriptionByUserNameAndGame(likedGamer.get(), likedGame.get());
+        return likes.createLike(gamer, likedDescription);
     }
 }

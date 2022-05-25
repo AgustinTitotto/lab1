@@ -13,6 +13,7 @@
         <class>lab1.meetNGame.model.Rank</class>
         <class>lab1.meetNGame.model.GamerDescription</class>
         <class>lab1.meetNGame.model.GamerInterest</class>
+        <class>lab1.meetNGame.model.Like</class>
 
 
         <properties>

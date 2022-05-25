@@ -31,4 +31,9 @@ public class Games {
         }
         return EntityTransactions.persist(newGame);
     }
+
+    public Optional<Rank> findRankByName(String rankName){
+        return tx(() -> currentEntityManager().createQuery("SELECT u FROM Rank u WHERE u.rankName LIKE: rankName",
+                Rank.class).setParameter("rankName", rankName).getResultList()).stream().findFirst();
+    }
 }

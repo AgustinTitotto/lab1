@@ -225,8 +225,18 @@ public class WebRoutes {
             }
         });
 
-        post(FIND_PLAYERS_ROUTE, (req, res) -> {
-            return halt();
+        authenticatedPost(FIND_PLAYERS_ROUTE, (req, res) -> {
+            LikeForm likedUser = LikeForm.createFromBody(req.body());
+            GamerUser gamer = getAuthenticatedGamerUser(req).get();
+            Like like = system.registerLike(likedUser, gamer);
+            if (like != null){
+                res.redirect("/home?ok");
+                return halt();
+            }
+            else {
+                final Map<String, Object> model = Map.of("message", "Select a User");
+                return render(model, FIND_PLAYERS_TEMPLATE);
+            }
         });
     }
 
@@ -246,7 +256,6 @@ public class WebRoutes {
     private void authenticatedPost(String route, Route o) {
         post(route, (request, response) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(request);
-
             if (authenticatedGamerUser.isPresent()) {
                 return o.handle(request, response);
             } else {

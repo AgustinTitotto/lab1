@@ -24,19 +24,17 @@
 
 </style>
 <body style="background-color: #282e3a">
-<h1><u>Meet players who match your interests</u></h1>
 
-<div class="container">
-    <p1><u>User Name</u></p1>
-    <p>${descriptions[0].gamerUser.userName}</p>
-    <p1><u>Game</u></p1>
-    <p>${descriptions[0].game.gameName}</p>
-    <p1><u>Level</u></p1>
-    <p>${descriptions[0].lvl}</p>
-    <p1><u>Rank</u></p1>
-    <p>${descriptions[0].rank.rankName}</p>
-</div>
-
+    <form class="container" action="/findplayers" role="form" method="post">
+        <select name="gamers" id="gamers">
+            <#list descriptions as description>
+                <option value="${description.gamerUser.userName}, ${description.game.gameName}, ${description.lvl}, ${description.rank.rankName}">
+                    ${description.gamerUser.userName} - ${description.game.gameName} - ${description.lvl} - ${description.rank.rankName}</option>
+            </#list>
+        </select>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>
 
