@@ -46,6 +46,10 @@
     <button>
         <a href="/findplayers" style="color: green">Find players</a>
     </button>
+    <p>View Matches</p>
+    <button>
+        <a href="/viewmatch" style="color: green">View Matches</a>
+    </button>
     <p>Leave session</p>
     <button1>
         <a href="/logout" style="color: darkred">Sign Out</a>

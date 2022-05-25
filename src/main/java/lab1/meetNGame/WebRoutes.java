@@ -24,6 +24,7 @@ public class WebRoutes {
     public static final String CREATE_DESCRIPTION_TEMPLATE = "createdescription.html";
     public static final String CREATE_INTEREST_TEMPLATE = "createinterest.html";
     public static final String FIND_PLAYERS_TEMPLATE = "findplayers.ftl";
+    public static final String VIEW_MATCH_TEMPLATE = "viewmatch.ftl";
 
     /**
      * ROUTES
@@ -38,6 +39,7 @@ public class WebRoutes {
     public static final String CREATE_DESCRIPTION_ROUTE = "/createdescription";
     public static final String CREATE_INTEREST_ROUTE = "/createinterest";
     public static final String FIND_PLAYERS_ROUTE = "/findplayers";
+    public static final String VIEW_MATCH_ROUTE = "/viewmatch";
 
     final static private WebSystem system = new WebSystem();
 
@@ -236,6 +238,21 @@ public class WebRoutes {
             else {
                 final Map<String, Object> model = Map.of("message", "Select a User");
                 return render(model, FIND_PLAYERS_TEMPLATE);
+            }
+        });
+
+        authenticatedGet(VIEW_MATCH_ROUTE, (req, res) -> {
+            final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
+            if (!currentUser.get().isAdmin()){
+                List<Match> matches = system.getMatches(currentUser.get());
+                final Map<String, Object> model = new HashMap<>();
+                model.put("matches", matches);
+                return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
     }

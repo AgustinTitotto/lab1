@@ -15,6 +15,7 @@ public class WebSystem {
     private final GamerDescriptions descriptions = new GamerDescriptions();
     private final GamerInterests interests = new GamerInterests();
     private final Likes likes = new Likes();
+    private final Matches matches = new Matches();
 
     public GamerUser registerGamer(SignUpForm form) {
         if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()))
@@ -92,5 +93,9 @@ public class WebSystem {
         Optional<Game> likedGame = games.findByGameName(description[1]);
         GamerDescription likedDescription = descriptions.getDescriptionByUserNameAndGame(likedGamer.get(), likedGame.get());
         return likes.createLike(gamer, likedDescription);
+    }
+
+    public List<Match> getMatches(GamerUser currentUser) {
+        return matches.match(currentUser);
     }
 }

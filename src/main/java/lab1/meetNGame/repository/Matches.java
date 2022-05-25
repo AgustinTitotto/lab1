@@ -26,7 +26,7 @@ public class Matches {
                 && user.get(i).getLikedUser().getGame().getGameName().equals(likedDescriptions.get(j).getLikedUser().getGame().getGameName())){
                     Match match = Match.createMatch();
                     match.setUser1(user.get(i).getMainUser());
-                    match.setUser2(likedDescriptions.get(j).getLikedUser().getGamerUser());
+                    match.setUser2(likedDescriptions.get(j).getMainUser());
                     match.setCommonGame(likedDescriptions.get(j).getLikedUser().getGame());
                     EntityTransactions.persist(match);
                     matches.add(match);

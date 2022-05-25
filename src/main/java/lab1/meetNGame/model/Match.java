@@ -8,6 +8,7 @@ import javax.persistence.*;
 public class Match {
 
     @Id
+    @GeneratedValue
     @Column(name = "id", nullable = false)
     private Long id;
 
