@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="matches" type="java.util.List<Match>" -->
+<#-- @ftlvariable name="matches" type="java.util.List<GamerUser>" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +8,7 @@
 <body>
     <p>View who you match with</p>
     <#list matches as match>
-        <option value="${match.user2.userName}">${match.user2.userName}</option>
+        <option value="${match.userName}">${match.userName}</option>
     </#list>
 
 </body>

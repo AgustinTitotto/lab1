@@ -84,7 +84,10 @@ public class WebSystem {
 
     public List<GamerDescription> getInterestPlayers(GamerUser gamerUser) {
         List<GamerInterest> interestGamers = interests.gamersInterest(gamerUser);
-        return gamers.getGamersWithInterest(interestGamers);
+        if (interestGamers.size() != 0){
+            return descriptions.getGamersWithInterest(interestGamers);
+        }
+        else return null;
     }
 
     public Like registerLike(LikeForm likedUser, GamerUser gamer) {
@@ -95,7 +98,11 @@ public class WebSystem {
         return likes.createLike(gamer, likedDescription);
     }
 
-    public List<Match> getMatches(GamerUser currentUser) {
+    public List<Match> createMatch(GamerUser currentUser) {
         return matches.match(currentUser);
+    }
+
+    public List<GamerUser> showMatch(GamerUser gamerUser) {
+        return matches.showMatches(gamerUser);
     }
 }

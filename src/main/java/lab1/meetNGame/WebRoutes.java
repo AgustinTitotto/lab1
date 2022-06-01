@@ -207,30 +207,32 @@ public class WebRoutes {
             }
         });
 
-        get(FIND_PLAYERS_ROUTE, (req, res) -> {
+        authenticatedGet(FIND_PLAYERS_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if (authenticatedGamerUser.isPresent()) {
-                if (!authenticatedGamerUser.get().isAdmin()){
+                if (!authenticatedGamerUser.get().isAdmin()) {
                     GamerUser gamerUser = authenticatedGamerUser.get();
                     List<GamerDescription> descriptions = system.getInterestPlayers(gamerUser);
-                    final Map<String, Object> model = new HashMap<>();
-                    model.put("descriptions", descriptions);
-                    return new FreeMarkerEngine().render(new ModelAndView(model, FIND_PLAYERS_TEMPLATE));
+                    if (descriptions != null){
+                        final Map<String, Object> model = new HashMap<>();
+                        model.put("descriptions", descriptions);
+                        return new FreeMarkerEngine().render(new ModelAndView(model, FIND_PLAYERS_TEMPLATE));
+                    }
+                    else{
+                        final Map<String, Object> model = Map.of("message", "You dont have interests");
+                        return render(model, HOME_TEMPLATE);
+                    }
                 }
                 else {
                     res.redirect(ADMIN_HOME_ROUTE);
                     return halt();
                 }
-            } else {
-                res.redirect(LOGIN_ROUTE);
-                return halt();
-            }
         });
 
         authenticatedPost(FIND_PLAYERS_ROUTE, (req, res) -> {
             LikeForm likedUser = LikeForm.createFromBody(req.body());
             GamerUser gamer = getAuthenticatedGamerUser(req).get();
             Like like = system.registerLike(likedUser, gamer);
+            system.createMatch(gamer);
             if (like != null){
                 res.redirect("/home?ok");
                 return halt();
@@ -244,7 +246,7 @@ public class WebRoutes {
         authenticatedGet(VIEW_MATCH_ROUTE, (req, res) -> {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
-                List<Match> matches = system.getMatches(currentUser.get());
+                List<GamerUser> matches = system.showMatch(currentUser.get());
                 final Map<String, Object> model = new HashMap<>();
                 model.put("matches", matches);
                 return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));

@@ -35,4 +35,20 @@ public class Matches {
         }
         return matches;
     }
+
+
+    public List<GamerUser> showMatches(GamerUser gamer){
+        List<GamerUser> finalList = new ArrayList<>();
+        List<Match> gamers1 = tx(() -> currentEntityManager().createQuery("SELECT u FROM Match u WHERE u.user1.userName LIKE: userName",
+                Match.class).setParameter("userName", gamer.getUserName()).getResultList());
+        List<Match> gamers2 = tx(() -> currentEntityManager().createQuery("SELECT u FROM Match u WHERE u.user2.userName LIKE: userName",
+                Match.class).setParameter("userName", gamer.getUserName()).getResultList());
+        for (int i = 0; i < gamers1.size(); i++) {
+            finalList.add(gamers1.get(i).getUser2());
+        }
+        for (int i = 0; i < gamers2.size(); i++) {
+            finalList.add(gamers2.get(i).getUser1());
+        }
+        return finalList;
+    }
 }

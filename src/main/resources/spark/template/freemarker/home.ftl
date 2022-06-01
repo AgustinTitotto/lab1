@@ -33,6 +33,13 @@
 </style>
 <body style="background-color: #282e3a">
 <h1><u>Welcome back</u></h1>
+
+<#if message??>
+    <div class="alert alert-success">
+        ${message}
+    </div>
+</#if>
+
 <div class="container">
     <p>Create a new game description</p>
     <button>
