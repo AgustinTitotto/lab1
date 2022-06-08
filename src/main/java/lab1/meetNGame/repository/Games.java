@@ -5,6 +5,9 @@ import lab1.meetNGame.model.Game;
 import lab1.meetNGame.model.Rank;
 import lab1.meetNGame.persistence.EntityTransactions;
 
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Optional;
 
 import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
@@ -35,5 +38,20 @@ public class Games {
     public Optional<Rank> findRankByName(String rankName){
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM Rank u WHERE u.rankName LIKE: rankName",
                 Rank.class).setParameter("rankName", rankName).getResultList()).stream().findFirst();
+    }
+
+    public List<Game> allGames(){
+        return tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u", Game.class).getResultList());
+
+    }
+
+    public void updateByLvl(String gameName, String newMaxLvl) {
+        tx(() -> currentEntityManager().createQuery("UPDATE Game u SET u.lvlMAX = ?1 WHERE u.gameName LIKE: gameName")
+                .setParameter("gameName", gameName).setParameter(1, newMaxLvl).executeUpdate());
+    }
+
+    public void updateByCategory(String gameName, String category) {
+        tx(() -> currentEntityManager().createQuery("UPDATE Game u SET u.category = ?1 WHERE u.gameName LIKE: gameName")
+                .setParameter("gameName", gameName).setParameter(1, category).executeUpdate());
     }
 }

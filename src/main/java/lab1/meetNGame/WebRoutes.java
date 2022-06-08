@@ -6,6 +6,7 @@ import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static spark.Spark.*;
 
@@ -25,6 +26,7 @@ public class WebRoutes {
     public static final String CREATE_INTEREST_TEMPLATE = "createinterest.html";
     public static final String FIND_PLAYERS_TEMPLATE = "findplayers.ftl";
     public static final String VIEW_MATCH_TEMPLATE = "viewmatch.ftl";
+    public static final String UPDATE_GAME_TEMPLATE = "updategame.ftl";
 
     /**
      * ROUTES
@@ -40,6 +42,7 @@ public class WebRoutes {
     public static final String CREATE_INTEREST_ROUTE = "/createinterest";
     public static final String FIND_PLAYERS_ROUTE = "/findplayers";
     public static final String VIEW_MATCH_ROUTE = "/viewmatch";
+    public static final String UPDATE_GAME_ROUTE = "/updategame";
 
     final static private WebSystem system = new WebSystem();
 
@@ -62,7 +65,6 @@ public class WebRoutes {
                 return render(model, SIGN_UP_TEMPLATE);
             }
         });
-        // get(LOGIN_ROUTE, (req, res) -> render(LOGIN_TEMPLATE));
         get(LOGIN_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
 
@@ -113,24 +115,19 @@ public class WebRoutes {
         });
 
         authenticatedGet(HOME_ROUTE, (req, res) -> render(HOME_TEMPLATE));
+
         authenticatedGet(ADMIN_HOME_ROUTE, (req, res) -> render(ADMIN_HOME_TEMPLATE));
 
-        get(CREATE_GAME_ROUTE, (req, res) -> render(CREATE_GAME_TEMPLATE));
-        post(ADMIN_HOME_ROUTE, (req, res) -> {
+        authenticatedGet(CREATE_GAME_ROUTE, (req, res) -> render(CREATE_GAME_TEMPLATE));
+
+        authenticatedGet(CREATE_GAME_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if (authenticatedGamerUser.isPresent()) {
-                if (authenticatedGamerUser.get().isAdmin()) {
-                    res.redirect(CREATE_GAME_ROUTE);
-                    return halt();
-                } else {
-                    final Map<String, Object> model = new HashMap<>();
-                    model.put("message", "User is not Admin");
-                    return render(model, HOME_TEMPLATE);
-                }
-            }
-            else {
-                res.redirect(LOGIN_ROUTE);
-                return halt();
+            if (authenticatedGamerUser.get().isAdmin()) {
+                return render(CREATE_GAME_TEMPLATE);
+            } else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is not Admin");
+                return render(model, HOME_TEMPLATE);
             }
         });
 
@@ -146,6 +143,48 @@ public class WebRoutes {
                 return render(model, CREATE_GAME_TEMPLATE);
             }
         });
+
+        authenticatedGet(UPDATE_GAME_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (authenticatedGamerUser.get().isAdmin()) {
+                List<Game> games = system.getGames();
+                final Map<String, Object> model = new HashMap<>();
+                model.put("games", games);
+                return new FreeMarkerEngine().render(new ModelAndView(model, UPDATE_GAME_TEMPLATE));
+            } else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is not Admin");
+                return render(model, HOME_TEMPLATE);
+            }
+        });
+
+        post(UPDATE_GAME_ROUTE, (req, res) -> {
+            UpdateGameForm updateGameForm = UpdateGameForm.createFromBody(req.body());
+             if (updateGameForm.getGameName() != null && (updateGameForm.getCategory() != null || updateGameForm.getLvlMax() != null)){
+                if (updateGameForm.getCategory() == null){
+                    system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
+                    res.redirect("/admin?ok");
+                    return halt();
+                }
+                else if (updateGameForm.getLvlMax() == null){
+                    system.updateGameCategory(updateGameForm.getGameName(), updateGameForm.getCategory());
+                    res.redirect("/admin?ok");
+                    return halt();
+                }
+                else {
+                    system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
+                    system.updateGameCategory(updateGameForm.getGameName(), updateGameForm.getCategory());
+                    res.redirect("/admin?ok");
+                    return halt();
+                }
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "Select a game and attribute to update");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+
 
         get(CREATE_DESCRIPTION_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
@@ -213,8 +252,10 @@ public class WebRoutes {
                     GamerUser gamerUser = authenticatedGamerUser.get();
                     List<GamerDescription> descriptions = system.getInterestPlayers(gamerUser);
                     if (descriptions != null){
+                        List<String> userNames = userNameQuoted(descriptions);
                         final Map<String, Object> model = new HashMap<>();
                         model.put("descriptions", descriptions);
+                        model.put("userNames", userNames);
                         return new FreeMarkerEngine().render(new ModelAndView(model, FIND_PLAYERS_TEMPLATE));
                     }
                     else{
@@ -305,6 +346,15 @@ public class WebRoutes {
 
     private Object render(Map<String, Object> model, String signUptemplate) {
         return new FreeMarkerEngine().render(new ModelAndView(model, signUptemplate));
+    }
+
+    private List<String> userNameQuoted(List<GamerDescription> descriptions){
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < descriptions.size(); i++) {
+            list.add(descriptions.get(i).getGamerUser().getUserName());
+        }
+        //list.stream().collect(Collectors.joining("','", "'", "'"));
+        return list;
     }
 
 }

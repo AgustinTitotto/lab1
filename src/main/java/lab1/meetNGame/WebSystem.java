@@ -105,4 +105,16 @@ public class WebSystem {
     public List<GamerUser> showMatch(GamerUser gamerUser) {
         return matches.showMatches(gamerUser);
     }
+
+    public List<Game> getGames() {
+        return games.allGames();
+    }
+
+    public void updateGameLvl(String gameName, String newMaxLvl) {
+        games.updateByLvl(gameName, newMaxLvl);
+    }
+
+    public void updateGameCategory(String gameName, String category) {
+        games.updateByCategory(gameName, category);
+    }
 }
