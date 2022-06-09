@@ -117,4 +117,8 @@ public class WebSystem {
     public void updateGameCategory(String gameName, String category) {
         games.updateByCategory(gameName, category);
     }
+
+    public void deleteGame(String game) {
+        games.deleteGame(game);
+    }
 }

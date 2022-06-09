@@ -27,6 +27,7 @@ public class WebRoutes {
     public static final String FIND_PLAYERS_TEMPLATE = "findplayers.ftl";
     public static final String VIEW_MATCH_TEMPLATE = "viewmatch.ftl";
     public static final String UPDATE_GAME_TEMPLATE = "updategame.ftl";
+    public static final String DELETE_GAME_TEMPLATE = "deletegame.ftl";
 
     /**
      * ROUTES
@@ -43,6 +44,7 @@ public class WebRoutes {
     public static final String FIND_PLAYERS_ROUTE = "/findplayers";
     public static final String VIEW_MATCH_ROUTE = "/viewmatch";
     public static final String UPDATE_GAME_ROUTE = "/updategame";
+    public static final String DELETE_GAME_ROUTE = "/deletegame";
 
     final static private WebSystem system = new WebSystem();
 
@@ -185,6 +187,27 @@ public class WebRoutes {
             }
         });
 
+        authenticatedGet(DELETE_GAME_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (authenticatedGamerUser.get().isAdmin()){
+                List<Game> games = system.getGames();
+                final Map<String, Object> model = new HashMap<>();
+                model.put("games", games);
+                return new FreeMarkerEngine().render(new ModelAndView(model, DELETE_GAME_TEMPLATE));
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is not Admin");
+                return render(model, HOME_TEMPLATE);
+            }
+        });
+
+        post(DELETE_GAME_ROUTE, (req, res) -> {
+            DeleteGameForm deleteGameForm = DeleteGameForm.createFromBody(req.body());
+            system.deleteGame(deleteGameForm.getGame());
+            res.redirect("/admin?ok");
+            return halt();
+        });
 
         get(CREATE_DESCRIPTION_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);

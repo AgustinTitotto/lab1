@@ -54,4 +54,15 @@ public class Games {
         tx(() -> currentEntityManager().createQuery("UPDATE Game u SET u.category = ?1 WHERE u.gameName LIKE: gameName")
                 .setParameter("gameName", gameName).setParameter(1, category).executeUpdate());
     }
+
+    public void deleteGame(String game) { //no se borran los rangos.
+        tx(() -> currentEntityManager().createQuery("DELETE FROM GamerDescription u WHERE u.game.gameName LIKE:gameName")
+                .setParameter("gameName", game).executeUpdate());
+        tx(() -> currentEntityManager().createQuery("DELETE FROM GamerInterest u WHERE u.game.gameName LIKE:gameName")
+                .setParameter("gameName", game).executeUpdate());
+        tx(() -> currentEntityManager().createQuery("DELETE FROM Match u WHERE u.commonGame.gameName LIKE:gameName")
+                .setParameter("gameName", game).executeUpdate());
+        tx(() -> currentEntityManager().createQuery("DELETE FROM Game u WHERE u.gameName LIKE: gameName")
+                .setParameter("gameName", game).executeUpdate());
+    }
 }
