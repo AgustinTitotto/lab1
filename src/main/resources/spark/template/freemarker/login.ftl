@@ -5,7 +5,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
-<body class="text-center" style="margin-top: 150px; background-color: #282e3a">
+<body class="text-center" style="margin-top: 150px; background-color: #282e3a; background-image: url(/img/Background1.jpg); background-repeat: no-repeat;
+ background-position: center; background-size: 95%">
 
 <main>
 

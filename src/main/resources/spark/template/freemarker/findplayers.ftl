@@ -23,7 +23,8 @@
     }
 
 </style>
-<body style="background-color: #282e3a">
+<body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
+background-position: center">
 
     <form class="container" action="/findplayers" role="form" method="post">
         <select name="gamers" id="gamers">

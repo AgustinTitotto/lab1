@@ -10,27 +10,39 @@
         font-size: 300%;
         color: white;
         text-align: center;
+        font-family: "Cooper Black";
     }
     .container{
         text-align: center;
         color: #45cb85;
-        font-size: 150%;
-        font-family: "Arial Rounded MT Bold";
+        font-size: 180%;
+        font-family: "Cooper Black";
     }
 
     button{
         background-color: #45cb85;
         border-color: #45cb85;
-        font-size: 120%;
+        font-size: 80%;
     }
 
     button1{
         background-color: #ff4655;
         border-color: #ff4655;
-        font-size: 120%;
+        font-size: 80%;
+    }
+
+    .hpl{
+        color: green;
+        font-family: "Cooper Black";
+    }
+
+    .hpl1{
+        color: darkred;
+        font-family: "Cooper Black";
     }
 </style>
-<body style="background-color: #282e3a">
+<body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
+ background-position: center; background-size: 85%">
 
 <h1>
     <u>Welcome Administrator</u>
@@ -39,19 +51,19 @@
 <div class="container" >
     <p>Create a new Game</p>
     <button>
-        <a href="/creategame" style="color: green">Create Game</a>
+        <a href="/creategame" class="hpl">Create Game</a>
     </button>
     <p>Update Game</p>
     <button>
-        <a href="/updategame" style="color: green">Update Game</a>
+        <a href="/updategame" class="hpl">Update Game</a>
     </button>
     <p>Delete Game</p>
     <button>
-        <a href="/deletegame" style="color: green">Delete Game</a>
+        <a href="/deletegame" class="hpl">Delete Game</a>
     </button>
     <p>Leave session</p>
     <button1>
-        <a href="/logout" style="color: darkred">Sign Out</a>
+        <a href="/logout" class="hpl1">Sign Out</a>
     </button1>
 </div>
 
