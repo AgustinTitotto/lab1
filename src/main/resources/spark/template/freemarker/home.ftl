@@ -54,9 +54,9 @@
 </#if>
 
 <div class="container">
-    <p>Create a new game description</p>
+    <p>View your profile</p>
     <button>
-        <a href="/createdescription" class="hpl">Create description</a>
+        <a href="/profile" class="hpl">View Profile</a>
     </button>
     <p>Create a new gamer interest</p>
     <button>
