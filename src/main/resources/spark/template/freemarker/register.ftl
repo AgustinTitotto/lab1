@@ -15,9 +15,9 @@
         </div>
     </#if>
     <form action="/register" role="form" method="post">
-        <h1 style="color: white";> <u>Welcome to Meet-n-Game</u> </h1>
-        <h2 class="h3 mb-3 fw-normal"; style="color: white";><u>Sign up</u></h2>
-        <p style="color: #45cb85; font-size: 160%">Please create a user name and a password</p>
+        <h1 style="color: white; font-family: 'LEMON MILK'"> <u>Welcome to Meet-n-Game</u> </h1>
+        <h2 class="h3 mb-3 fw-normal"; style="color: white; font-family: 'LEMON MILK'"><u>Sign up</u></h2>
+        <p style="color: #45cb85; font-size: 160%; font-family: 'LEMON MILK'">Please create a user name and a password</p>
 
         <div class="form-floating" style="margin-left: 400px; margin-right: 400px">
             <input type="text" class="form-control" id="floatingInput" placeholder="User Name" name="userName" required>

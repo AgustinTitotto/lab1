@@ -10,14 +10,14 @@
         color: white;
         font-size: 300%;
         text-align: center;
-        font-family: "Cooper Black"
+        font-family: "LEMON MILK";
     }
 
     .container{
         text-align: center;
         font-size: 150%;
         color: #45cb85;
-        font-family: "Cooper Black"
+        font-family: "LEMON MILK";
     }
 
     button{
@@ -34,12 +34,14 @@
 
     .hpl{
         color: green;
-        font-family: "Cooper Black";
+        font-family: "LEMON MILK";
+        text-decoration: none;
     }
 
     .hpl1{
         color: darkred;
-        font-family: "Cooper Black";
+        font-family: "LEMON MILK";
+        text-decoration: none;
     }
 
 </style>
