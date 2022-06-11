@@ -6,7 +6,6 @@ import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static spark.Spark.*;
 
@@ -28,6 +27,8 @@ public class WebRoutes {
     public static final String VIEW_MATCH_TEMPLATE = "viewmatch.ftl";
     public static final String UPDATE_GAME_TEMPLATE = "updategame.ftl";
     public static final String DELETE_GAME_TEMPLATE = "deletegame.ftl";
+    public static final String PROFILE_TEMPLATE = "profile.ftl";
+    public static final String MANAGE_DESCRIPTION_TEMPLATE = "managedescription.ftl";
 
     /**
      * ROUTES
@@ -45,6 +46,8 @@ public class WebRoutes {
     public static final String VIEW_MATCH_ROUTE = "/viewmatch";
     public static final String UPDATE_GAME_ROUTE = "/updategame";
     public static final String DELETE_GAME_ROUTE = "/deletegame";
+    public static final String PROFILE_ROUTE = "/profile";
+    public static final String MANAGE_DESCRIPTION_ROUTE = "/managedescription";
 
     final static private WebSystem system = new WebSystem();
 
@@ -163,12 +166,12 @@ public class WebRoutes {
         post(UPDATE_GAME_ROUTE, (req, res) -> {
             UpdateGameForm updateGameForm = UpdateGameForm.createFromBody(req.body());
              if (updateGameForm.getGameName() != null && (updateGameForm.getCategory() != null || updateGameForm.getLvlMax() != null)){
-                if (updateGameForm.getCategory() == null){
+                if (updateGameForm.getCategory().equals("")){
                     system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
                     res.redirect("/admin?ok");
                     return halt();
                 }
-                else if (updateGameForm.getLvlMax() == null){
+                else if (updateGameForm.getLvlMax().equals("")){
                     system.updateGameCategory(updateGameForm.getGameName(), updateGameForm.getCategory());
                     res.redirect("/admin?ok");
                     return halt();
@@ -209,6 +212,8 @@ public class WebRoutes {
             return halt();
         });
 
+        authenticatedGet(PROFILE_ROUTE, (req, res) -> render(PROFILE_TEMPLATE));
+
         get(CREATE_DESCRIPTION_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.isPresent()) {
@@ -237,6 +242,34 @@ public class WebRoutes {
                 final Map<String, Object> model = Map.of("message", "One or more parameter are wrong");
                 return render(model, CREATE_DESCRIPTION_TEMPLATE);
             }
+        });
+
+        authenticatedGet(MANAGE_DESCRIPTION_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()){
+                List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
+                final Map<String, Object> model = new HashMap<>();
+                if (gamerDescriptions != null){
+                    model.put("descriptions", gamerDescriptions);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, MANAGE_DESCRIPTION_TEMPLATE));
+                }
+                else {
+                    model.put("message", "You dont have descriptions, create one first");
+                    return render(model, PROFILE_TEMPLATE);
+                }
+            }
+            else {
+                res.redirect(ADMIN_HOME_ROUTE);
+                return halt();
+            }
+        });
+
+        authenticatedPost(MANAGE_DESCRIPTION_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            LikeForm description = LikeForm.createFromBody(req.body()); //uso LikeForm pq es igual
+            system.deleteDescription(description.getLikedUser(), authenticatedGamerUser.get());
+            res.redirect("/home?ok");
+            return halt();
         });
 
         get(CREATE_INTEREST_ROUTE, (req, res) -> {

@@ -121,4 +121,14 @@ public class WebSystem {
     public void deleteGame(String game) {
         games.deleteGame(game);
     }
+
+    public List<GamerDescription> getUserDescriptions(GamerUser gamerUser) {
+        return descriptions.getUserDescriptions(gamerUser);
+    }
+
+    public void deleteDescription(String likedUser, GamerUser gamerUser) {
+        String[] description = likedUser.split(", ");
+        String gameName = description[0];
+        descriptions.deleteDescription(gamerUser, gameName);
+    }
 }

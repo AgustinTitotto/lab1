@@ -83,4 +83,23 @@ public class GamerDescriptions {
         }
         return finalDescriptions;
     }
+
+    public List<GamerDescription> getUserDescriptions(GamerUser gamerUser) {
+        return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription u WHERE u.gamerUser.userName LIKE:userName",
+                GamerDescription.class).setParameter("userName", gamerUser.getUserName()).getResultList());
+    }
+
+    public void deleteDescription(GamerUser gamerUser, String gameName) {
+        Optional<GamerDescription> gamerDescription = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription u " +
+                "WHERE u.game.gameName LIKE:gameName and u.gamerUser.userName LIKE:userName", GamerDescription.class)
+                .setParameter("gameName", gameName).setParameter("userName", gamerUser.getUserName()).getResultList().stream().findFirst());
+        long id = gamerDescription.get().getId();
+        tx(() -> currentEntityManager().createQuery("DELETE FROM Like u WHERE u.likedUser.id = ?1")
+                    .setParameter(1, id).executeUpdate());
+        tx(() -> currentEntityManager().createQuery("DELETE FROM Match u WHERE (u.user1.userName LIKE:userName OR u.user2.userName LIKE:userName) AND " +
+                 "u.commonGame.gameName LIKE:gameName").setParameter("userName", gamerUser.getUserName())
+                .setParameter("gameName", gameName).executeUpdate());
+        tx(() -> currentEntityManager().createQuery("DELETE FROM GamerDescription u WHERE u.gamerUser.userName LIKE:userName AND u.game.gameName LIKE:gameName")
+                .setParameter("userName", gamerUser.getUserName()).setParameter("gameName", gameName).executeUpdate());
+    }
 }

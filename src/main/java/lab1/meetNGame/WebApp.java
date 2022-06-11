@@ -1,13 +1,9 @@
 package lab1.meetNGame;
 
-import lab1.meetNGame.model.Game;
-import lab1.meetNGame.model.GamerDescription;
-import lab1.meetNGame.model.GamerUser;
-import lab1.meetNGame.model.Rank;
+import lab1.meetNGame.model.*;
 import lab1.meetNGame.persistence.DataBase;
 import lab1.meetNGame.persistence.EntityManagers;
 import lab1.meetNGame.persistence.EntityTransactions;
-import spark.Spark;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -33,9 +29,9 @@ public class WebApp {
 
     private void initialData() {
         GamerUser admin = new GamerUser("meetngame", "meetngame123", true);
-        GamerUser gamer = new GamerUser("gamer1", "123", false);
+        GamerUser gamer1 = new GamerUser("gamer1", "123", false);
         EntityTransactions.persist(admin);
-        EntityTransactions.persist(gamer);
+        EntityTransactions.persist(gamer1);
 
         final GamerUser gamer2 = GamerUser.create("gamer2", "456", false);
         final GamerUser gamer3 = GamerUser.create("gamer3", "789", false);
@@ -69,10 +65,10 @@ public class WebApp {
         final GamerDescription description2 = GamerDescription.createDescription("2"); //gamer2
         final GamerDescription description3 = GamerDescription.createDescription("22"); //gamer2
         final GamerDescription description4 = GamerDescription.createDescription("25"); //gamer3
-        description1.setGamerUser(gamer);
+        description1.setGamerUser(gamer1);
         description1.setGame(game1);
         description1.setRank(rank2);
-        description12.setGamerUser(gamer);
+        description12.setGamerUser(gamer1);
         description12.setGame(game2);
         description12.setRank(rank3);
 
@@ -91,6 +87,17 @@ public class WebApp {
         EntityTransactions.persist(description2);
         EntityTransactions.persist(description3);
         EntityTransactions.persist(description4);
+
+        final GamerInterest interest1 = GamerInterest.createInterest("20");
+        interest1.setGamerUser(gamer1);
+        interest1.setGame(game2);
+        interest1.setRank(rank4);
+        final GamerInterest interest2 = GamerInterest.createInterest("10");
+        interest2.setGamerUser(gamer3);
+        interest2.setGame(game2);
+        interest2.setRank(rank3);
+        EntityTransactions.persist(interest1);
+        EntityTransactions.persist(interest2);
     }
 
     private void startDatabase() {

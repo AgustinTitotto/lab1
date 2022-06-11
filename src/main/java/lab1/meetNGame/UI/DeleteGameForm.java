@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DeleteGameForm {
 
-    String game;
+    private final String game;
 
     public DeleteGameForm(String game) {
         this.game = game;
