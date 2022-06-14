@@ -24,9 +24,8 @@
     }
 </style>
 <body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
-background-position: center">
-    <p>HOLAAAAA</p>
-    <a id="user"></a>
+background-position: top">
+<!-- <a id="user"></a>-->
     <form class="container" action="/findplayers" role="form" method="post" id="number">
         <select name="gamers" id="gamers">
             <#list descriptions as description>
@@ -38,12 +37,12 @@ background-position: center">
         <input type="submit" value="Submit">
     </form>
 </body>
-<script>
+<!--<script>
     let arr = [<#list userNames as userName>"${userName}", </#list>]
     let desc = [<#list descriptions as description>"${description.game.gameName}", </#list>]
     let a = arr[0]
     document.write(a)
     document.getElementById("user").innerHTML = a;
-</script>
+</script> -->
 </html>
-<! --  -->
+<!--  -->

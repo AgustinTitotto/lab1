@@ -14,12 +14,13 @@
     }
 </style>
 <body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
- background-position: center; background-size: 95%">
+ background-position: top; background-size: 95%">
 <h1 style="color: white; font-size: 300%; text-align: center; font-family: 'LEMON MILK'">
-    <u>What game do you like to change?</u>
+    <u>What game would you </u><br>
+    <u>like to change?</u>
 </h1>
     <form class="container" action="/updategame" role="form" method="post">
-        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;" name="gameName" id="gameName">
+        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
             <#list games as game>
                 <option value="${game.gameName}">${game.gameName}</option>
             </#list>
@@ -28,14 +29,14 @@
         <br>
         <label for="newCategory" style="font-size: 200%"> New Category:</label>
         <br>
-        <input type="text" id="newCategory" name="newCategory" style="font-size: 120%">
+        <input type="text" id="newCategory" name="newCategory" style="font-size: 120%; font-family: 'LEMON MILK'">
         <br>
         <label for="newLvlId" style="font-size: 200%"> New Max Lvl:</label>
         <br>
-        <input type="text" min="1" id="newLvlId" name="newMaxLvl" style="font-size: 120%">
+        <input type="text" min="1" id="newLvlId" name="newMaxLvl" style="font-size: 120%; font-family: 'LEMON MILK'">
         <br>
         <br>
-        <input style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;" type="submit" value="Update">
+        <input style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" type="submit" value="Update">
     </form>
 </body>
 </html>

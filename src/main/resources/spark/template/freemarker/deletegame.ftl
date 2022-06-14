@@ -13,19 +13,22 @@
     }
 </style>
 <body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
- background-position: center; background-size: 85%">
+ background-position: top; background-size: 85%">
 <h1 style="color: white; font-size: 300%; text-align: center; font-family: 'LEMON MILK'">
-    <u>What game do you like to delete?</u>
+    <u>What game would you </u><br>
+    <u>like to delete?</u>
 </h1>
     <form class="container" action="/deletegame" role="form" method="post">
-        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;" name="gameName" id="gameName">
+        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
             <#list games as game>
                 <option value="${game.gameName}">${game.gameName}</option>
             </#list>
         </select>
         <br>
         <br>
-        <input style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;" type="submit" value="Delete">
+        <br>
+        <br>
+        <input style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" type="submit" value="Delete">
     </form>
 </body>
 </html>

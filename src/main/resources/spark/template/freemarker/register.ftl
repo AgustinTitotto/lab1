@@ -6,7 +6,7 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body class="text-center" style="margin-top: 150px; background-color: #282e3a; background-image: url(/img/Background1.jpg); background-repeat: no-repeat;
- background-position: center; background-size: 95%">
+ background-position: top; background-size: 95%">
 
 <main>
     <#if message??>
@@ -15,8 +15,12 @@
         </div>
     </#if>
     <form action="/register" role="form" method="post">
+        <br>
+        <br>
+        <br>
         <h1 style="color: white; font-family: 'LEMON MILK'"> <u>Welcome to Meet-n-Game</u> </h1>
-        <h2 class="h3 mb-3 fw-normal"; style="color: white; font-family: 'LEMON MILK'"><u>Sign up</u></h2>
+        <br>
+        <br>
         <p style="color: #45cb85; font-size: 160%; font-family: 'LEMON MILK'">Please create a user name and a password</p>
 
         <div class="form-floating" style="margin-left: 400px; margin-right: 400px">

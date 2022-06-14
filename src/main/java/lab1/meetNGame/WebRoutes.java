@@ -321,7 +321,7 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()){
                 List<GamerInterest> interests = system.getGamerInterest(authenticatedGamerUser.get());
-                if (interests != null){
+                if (interests.size() != 0){
                     final Map<String, Object> model = new HashMap<>();
                     model.put("interests", interests);
                     return new FreeMarkerEngine().render(new ModelAndView(model, DELETE_INTEREST_TEMPLATE));
@@ -386,9 +386,17 @@ public class WebRoutes {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
                 List<GamerUser> matches = system.showMatch(currentUser.get());
-                final Map<String, Object> model = new HashMap<>();
-                model.put("matches", matches);
-                return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
+                if(matches.size() != 0){
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("matches", matches);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
+                }
+                else {
+                    final Map<String, Object> model = new HashMap<>();
+                    String message = "You have no matches yet";
+                    model.put("message", message);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
+                }
             }
             else {
                 final Map<String, Object> model = new HashMap<>();

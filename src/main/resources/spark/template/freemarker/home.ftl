@@ -18,6 +18,7 @@
         font-size: 150%;
         color: #45cb85;
         font-family: "LEMON MILK";
+        margin-top: 50px;
     }
 
     button{
@@ -45,38 +46,38 @@
     }
 
 </style>
-<body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
+<body style="background-color: #282e3a; background-image: url(/img/Background2.jpg);
  background-position: center; background-size: 81%">
-<h1><u>Welcome back</u></h1>
+    <h1><u>Welcome back</u></h1>
 
-<#if message??>
-    <div class="alert alert-success">
-        ${message}
+    <#if message??>
+        <div class="alert alert-success">
+            ${message}
+        </div>
+    </#if>
+
+    <div class="container">
+        <p>View your profile</p>
+        <button>
+            <a href="/profile" class="hpl">View Profile</a>
+        </button>
+        <p>Create a new gamer interest</p>
+        <button>
+            <a href="/manageinterest" class="hpl">Manage interests</a>
+        </button>
+        <p>Find Players</p>
+        <button>
+            <a href="/findplayers" class="hpl">Find players</a>
+        </button>
+        <p>View Matches</p>
+        <button>
+            <a href="/viewmatch" class="hpl">View Matches</a>
+        </button>
+        <p>Leave session</p>
+        <button1>
+            <a href="/logout" class="hpl1">Sign Out</a>
+        </button1>
     </div>
-</#if>
-
-<div class="container">
-    <p>View your profile</p>
-    <button>
-        <a href="/profile" class="hpl">View Profile</a>
-    </button>
-    <p>Create a new gamer interest</p>
-    <button>
-        <a href="/manageinterest" class="hpl">Manage interests</a>
-    </button>
-    <p>Find Players</p>
-    <button>
-        <a href="/findplayers" class="hpl">Find players</a>
-    </button>
-    <p>View Matches</p>
-    <button>
-        <a href="/viewmatch" class="hpl">View Matches</a>
-    </button>
-    <p>Leave session</p>
-    <button1>
-        <a href="/logout" class="hpl1">Sign Out</a>
-    </button1>
-</div>
 </body>
 
 </html>
