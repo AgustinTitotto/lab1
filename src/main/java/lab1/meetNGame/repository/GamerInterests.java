@@ -46,4 +46,9 @@ public class GamerInterests {
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerInterest u WHERE u.gamerUser.userName LIKE:userName", GamerInterest.class)
                 .setParameter("userName", gamerUser.getUserName()).getResultList());
     }
+
+    public void deleteInterest(GamerUser gamerUser, String gameName) {
+        tx(() -> currentEntityManager().createQuery("DELETE FROM GamerInterest u WHERE u.gamerUser.userName LIKE: userName and u.game.gameName LIKE:gameName")
+                .setParameter("userName", gamerUser.getUserName()).setParameter("gameName", gameName).executeUpdate());
+    }
 }

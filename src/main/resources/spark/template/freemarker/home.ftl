@@ -62,7 +62,7 @@
     </button>
     <p>Create a new gamer interest</p>
     <button>
-        <a href="/createinterest" class="hpl">Create interest</a>
+        <a href="/manageinterest" class="hpl">Manage interests</a>
     </button>
     <p>Find Players</p>
     <button>

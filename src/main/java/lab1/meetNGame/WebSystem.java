@@ -126,9 +126,19 @@ public class WebSystem {
         return descriptions.getUserDescriptions(gamerUser);
     }
 
-    public void deleteDescription(String likedUser, GamerUser gamerUser) {
-        String[] description = likedUser.split(", ");
+    public void deleteDescription(String gamerDescription, GamerUser gamerUser) {
+        String[] description = gamerDescription.split(", ");
         String gameName = description[0];
         descriptions.deleteDescription(gamerUser, gameName);
+    }
+
+    public List<GamerInterest> getGamerInterest(GamerUser gamerUser) {
+        return interests.gamersInterest(gamerUser);
+    }
+
+    public void deleteInterest(String gamerInterest, GamerUser gamerUser) {
+        String[] interest = gamerInterest.split(", ");
+        String gameName = interest[0];
+        interests.deleteInterest(gamerUser, gameName);
     }
 }

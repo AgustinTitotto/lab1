@@ -29,6 +29,8 @@ public class WebRoutes {
     public static final String DELETE_GAME_TEMPLATE = "deletegame.ftl";
     public static final String PROFILE_TEMPLATE = "profile.ftl";
     public static final String MANAGE_DESCRIPTION_TEMPLATE = "managedescription.ftl";
+    public static final String MANAGE_INTEREST_TEMPLATE = "manageinterest.ftl";
+    public static final String DELETE_INTEREST_TEMPLATE = "deleteinterest.ftl";
 
     /**
      * ROUTES
@@ -48,6 +50,8 @@ public class WebRoutes {
     public static final String DELETE_GAME_ROUTE = "/deletegame";
     public static final String PROFILE_ROUTE = "/profile";
     public static final String MANAGE_DESCRIPTION_ROUTE = "/managedescription";
+    public static final String MANAGE_INTEREST_ROUTE = "/manageinterest";
+    public static final String DELETE_INTEREST_ROUTE = "/deleteinterest";
 
     final static private WebSystem system = new WebSystem();
 
@@ -272,6 +276,17 @@ public class WebRoutes {
             return halt();
         });
 
+        authenticatedGet(MANAGE_INTEREST_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()){
+                return render(MANAGE_INTEREST_TEMPLATE);
+            }
+            else {
+                res.redirect(ADMIN_HOME_ROUTE);
+                return halt();
+            }
+        });
+
         get(CREATE_INTEREST_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.isPresent()) {
@@ -302,6 +317,33 @@ public class WebRoutes {
             }
         });
 
+        authenticatedGet(DELETE_INTEREST_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()){
+                List<GamerInterest> interests = system.getGamerInterest(authenticatedGamerUser.get());
+                if (interests != null){
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("interests", interests);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, DELETE_INTEREST_TEMPLATE));
+                }
+                else {
+                    res.redirect(MANAGE_INTEREST_ROUTE);
+                    return halt();
+                }
+            }
+            else {
+                res.redirect(ADMIN_HOME_ROUTE);
+                return halt();
+            }
+        });
+
+        authenticatedPost(DELETE_INTEREST_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            LikeForm description = LikeForm.createFromBody(req.body()); //uso LikeForm pq es igual
+            system.deleteInterest(description.getLikedUser(), authenticatedGamerUser.get());
+            res.redirect("/home?ok");
+            return halt();
+        });
         authenticatedGet(FIND_PLAYERS_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
                 if (!authenticatedGamerUser.get().isAdmin()) {
