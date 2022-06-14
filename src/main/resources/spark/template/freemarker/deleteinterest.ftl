@@ -5,15 +5,30 @@
     <meta charset="UTF-8">
     <title>Profile</title>
 </head>
-<body>
+<style>
+    .container{
+        color: #45cb85;
+        text-align: center;
+        margin-top: 100px;
+        font-family: "LEMON MILK";
+    }
+</style>
+<body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
+ background-position: top; background-size: 85%">
+<h1 style="color: white; font-size: 300%; text-align: center; font-family: 'LEMON MILK'">
+    <u>What interest would you</u><br>
+    <u>like to delete?</u>
+</h1>
     <form class="container" action="/deleteinterest" role="form" method="post">
-        <select name="gamers" id="interestId">
+        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gamers" id="interestId">
             <#list interests as interest>
                 <option value="${interest.game.gameName}, ${interest.lvl}, ${interest.rank.rankName}">
                     ${interest.game.gameName}, ${interest.lvl}, ${interest.rank.rankName}</option>
             </#list>
         </select>
-        <input type="submit" value="Submit">
+        <br>
+        <br>
+        <input style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" type="submit" value="Submit">
     </form>
 </body>
 </html>

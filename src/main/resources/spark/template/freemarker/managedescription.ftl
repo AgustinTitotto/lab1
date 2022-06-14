@@ -16,7 +16,7 @@
 <body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
  background-position: top; background-size: 85%">
 <h1 style="color: white; font-size: 300%; text-align: center; font-family: 'LEMON MILK'">
-    <u>What game would you</u><br>
+    <u>What dsecription would you</u><br>
     <u>like to delete?</u>
 </h1>
     <form class="container" action="/managedescription" role="form" method="post">

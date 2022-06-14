@@ -31,7 +31,7 @@
 <body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
  background-position: top; background-size: 85%">
 <h1 style="color: white; font-size: 300%; text-align: center; font-family: 'LEMON MILK'">
-    <u>Welcome to your profile</u>
+    <u>Welcome to your descriptions profile</u>
 </h1>
 <#if message??>
     <div class="alert alert-success">
