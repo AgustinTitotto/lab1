@@ -327,6 +327,8 @@ public class WebRoutes {
                     return new FreeMarkerEngine().render(new ModelAndView(model, DELETE_INTEREST_TEMPLATE));
                 }
                 else {
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("message", "You don't have interests");
                     res.redirect(MANAGE_INTEREST_ROUTE);
                     return halt();
                 }
