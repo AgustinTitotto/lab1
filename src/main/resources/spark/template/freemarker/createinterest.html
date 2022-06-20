@@ -92,6 +92,12 @@
     <h1>
         <u>Create An Interest</u>
     </h1>
+    <#if message??>
+    <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
+     background-color: lightblue">
+        ${message}
+    </div>
+    </#if>
     <div class="sidebar">
         <a href="/home">Home</a>
         <a href="/profile" class="hpl">Profile</a>

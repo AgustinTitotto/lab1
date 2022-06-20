@@ -89,18 +89,24 @@
     }
 </style>
 <body>
-    <h1>
-        <u>Create A Game Description</u>
-    </h1>
+<#if message??>
+<div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
+     background-color: lightblue">
+    ${message}
+</div>
+</#if>
+<h1>
+<u>Create A Game Description</u>
+</h1>
 
-    <div class="sidebar">
+<div class="sidebar">
         <a href="/home">Home</a>
         <a class="active" href="/profile" class="hpl">Profile</a>
         <a a href="/manageinterest">Interests</a>
         <a href="/findplayers">Players</a>
         <a href="/viewmatch" class="hpl">Matches</a>
         <a class="leave" href="/logout" class="hpl">Sign Out</a>
-    </div>
+</div>
 
     <p style="color: #45cb85; font-size: 250%; text-align: center; font-family: 'LEMON MILK'">What game do you play?</p>
     <form class="container" action = "/createdescription" role="form" method="post">

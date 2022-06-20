@@ -51,4 +51,15 @@ public class GamerInterests {
         tx(() -> currentEntityManager().createQuery("DELETE FROM GamerInterest u WHERE u.gamerUser.userName LIKE: userName and u.game.gameName LIKE:gameName")
                 .setParameter("userName", gamerUser.getUserName()).setParameter("gameName", gameName).executeUpdate());
     }
+
+    public boolean checkGame(List<GamerInterest> myInterests, String gameName) {
+        boolean value = true;
+        for (int i = 0; i < myInterests.size(); i++) {
+            if (myInterests.get(i).getGame().getGameName().equals(gameName)){
+                value = false;
+                break;
+            }
+        }
+        return value;
+    }
 }

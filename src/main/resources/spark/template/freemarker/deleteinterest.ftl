@@ -111,7 +111,7 @@
         </select>
         <br>
         <br>
-        <input style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" type="submit" value="Submit">
+        <input style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" type="submit" value="Delete">
     </form>
 </body>
 </html>

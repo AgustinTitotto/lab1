@@ -13,6 +13,16 @@ import static lab1.meetNGame.persistence.EntityTransactions.tx;
 
 public class GamerDescriptions {
 
+    public boolean checkGame(List<GamerDescription> myDescriptions, String gameName){
+        boolean value = true;
+        for (int i = 0; i < myDescriptions.size(); i++) {
+            if (myDescriptions.get(i).getGame().getGameName().equals(gameName)){
+                value = false;
+                break;
+            }
+        }
+        return value;
+    }
     public boolean checkLevel(Game game, String userLvl){
         String a = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u WHERE u.lvlMAX LIKE: lvlMax",
                 Game.class).setParameter("lvlMax", game.getLvlMAX()).getResultList()).stream().findFirst().get().getLvlMAX();

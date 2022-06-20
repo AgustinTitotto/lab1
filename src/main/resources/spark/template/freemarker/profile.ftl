@@ -108,6 +108,14 @@
 <h1>
     <u>Welcome to your descriptions profile</u>
 </h1>
+
+<#if message??>
+    <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
+     background-color: lightblue">
+        ${message}
+    </div>
+</#if>
+
 <div class="sidebar">
     <a href="/home">Home</a>
     <a class="active" href="#profile" class="hpl">Profile</a>
@@ -116,11 +124,6 @@
     <a href="/viewmatch" class="hpl">Matches</a>
     <a class="leave" href="/logout" class="hpl">Sign Out</a>
 </div>
-<#if message??>
-    <div class="alert alert-success">
-        ${message}
-    </div>
-</#if>
 
     <p>Create a new game description</p>
     <button>

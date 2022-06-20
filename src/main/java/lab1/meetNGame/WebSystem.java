@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public class WebSystem {
 
+    private String errorMessage = null;
     private final Gamers gamers = new Gamers();
     private final Games games = new Games();
     private final GamerDescriptions descriptions = new GamerDescriptions();
@@ -42,42 +43,58 @@ public class WebSystem {
         return games.gameExists(form.getGameName()) ? null : games.createGame(form);
     }
 
-    public GamerDescription registerGamerDescription(GamerUser gamer, CreateDescriptionForm form){
+    public GamerDescription registerGamerDescription(GamerUser gamer, List<GamerDescription> myDescriptions, CreateDescriptionForm form){
         Optional<Game> game1 = games.findByGameName(form.getGameName());
         if (game1.isEmpty()){
+            setErrorMessage("This game doesn't exists");
             return null;
         }
         else {
-            boolean lvlCheck = descriptions.checkLevel(game1.get(), form.getLvl());
-            if (!lvlCheck){
+            boolean gamecheck = descriptions.checkGame(myDescriptions, form.getGameName());
+            if (!gamecheck){
+                setErrorMessage("You already have a description for this game");
                 return null;
-            }
-            else {
-                Optional<Rank> rankCheck = descriptions.checkRank(game1.get(), form.getRank());
-                if (rankCheck.isEmpty()){
+            }else{
+                boolean lvlCheck = descriptions.checkLevel(game1.get(), form.getLvl());
+                if (!lvlCheck){
+                    setErrorMessage("This level is not between the parameters of the game's levels");
                     return null;
                 }
-                else return descriptions.createDescription(gamer, game1.get(), rankCheck.get(), form.getLvl());
+                else {
+                    Optional<Rank> rankCheck = descriptions.checkRank(game1.get(), form.getRank());
+                    if (rankCheck.isEmpty()){
+                        setErrorMessage("This game doesn't have this rank");
+                        return null;
+                    }
+                    else return descriptions.createDescription(gamer, game1.get(), rankCheck.get(), form.getLvl());
+                }
             }
         }
     }
 
-    public GamerInterest registerGamerInterest(GamerUser gamer, CreateInterestForm form){
+    public GamerInterest registerGamerInterest(GamerUser gamer, List<GamerInterest> myInterests, CreateInterestForm form){
         Optional<Game> game1 = games.findByGameName(form.getGameName());
         if (game1.isEmpty()){
+            setErrorMessage("This game doesn't exists");
             return null;
         }
         else {
-            boolean lvlCheck = interests.checkLevel(game1.get(), form.getLvl());
-            if (!lvlCheck){
+            boolean gamecheck = interests.checkGame(myInterests, form.getGameName());
+            if (!gamecheck){
+                setErrorMessage("You already have an interest for this game");
                 return null;
-            }
-            else {
-                Optional<Rank> rankCheck = interests.checkRank(game1.get(), form.getRank());
-                if (rankCheck.isEmpty()){
+            }else {
+                boolean lvlCheck = interests.checkLevel(game1.get(), form.getLvl());
+                if (!lvlCheck) {
+                    setErrorMessage("This level is not between the parameters of the game's levels");
                     return null;
+                } else {
+                    Optional<Rank> rankCheck = interests.checkRank(game1.get(), form.getRank());
+                    if (rankCheck.isEmpty()) {
+                        setErrorMessage("This game doesn't have this rank");
+                        return null;
+                    } else return interests.createInterest(gamer, game1.get(), rankCheck.get(), form.getLvl());
                 }
-                else return interests.createInterest(gamer, game1.get(), rankCheck.get(), form.getLvl());
             }
         }
     }
@@ -140,5 +157,13 @@ public class WebSystem {
         String[] interest = gamerInterest.split(", ");
         String gameName = interest[0];
         interests.deleteInterest(gamerUser, gameName);
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

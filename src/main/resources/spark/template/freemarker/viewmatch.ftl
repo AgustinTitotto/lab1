@@ -106,7 +106,7 @@
     <p>Your matches are</p>
 
     <#if message??>
-        <div style="margin-left: 625px; margin-right: 600px; color: #45cb85; font-size: 150%; font-family: 'LEMON MILK'">
+        <div class="alert alert-success" style="margin-left: 625px; margin-right: 600px; color: #45cb85; font-size: 150%; font-family: 'LEMON MILK'">
             ${message}
         </div>
     </#if>

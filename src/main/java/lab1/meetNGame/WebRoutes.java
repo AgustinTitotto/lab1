@@ -237,13 +237,15 @@ public class WebRoutes {
         authenticatedPost(CREATE_DESCRIPTION_ROUTE, (req, res) -> {
             CreateDescriptionForm descriptionForm = CreateDescriptionForm.createFromBody(req.body());
             GamerUser gamer = getAuthenticatedGamerUser(req).get();
-            GamerDescription description = system.registerGamerDescription(gamer, descriptionForm);
+            List<GamerDescription> myDescriptions = system.getUserDescriptions(gamer);
+            GamerDescription description = system.registerGamerDescription(gamer, myDescriptions, descriptionForm);
             if (description != null){
                 res.redirect("/home?ok");
                 return halt();
             }
             else {
-                final Map<String, Object> model = Map.of("message", "One or more parameter are wrong");
+                final String message = system.getErrorMessage();
+                final Map<String, Object> model = Map.of("message", message);
                 return render(model, CREATE_DESCRIPTION_TEMPLATE);
             }
         });
@@ -252,13 +254,13 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()){
                 List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
-                final Map<String, Object> model = new HashMap<>();
-                if (gamerDescriptions != null){
+                if (gamerDescriptions.size() != 0){
+                    final Map<String, Object> model = new HashMap<>();
                     model.put("descriptions", gamerDescriptions);
                     return new FreeMarkerEngine().render(new ModelAndView(model, MANAGE_DESCRIPTION_TEMPLATE));
                 }
                 else {
-                    model.put("message", "You dont have descriptions, create one first");
+                    final Map<String, Object> model = Map.of("message", "You dont have descriptions");
                     return render(model, PROFILE_TEMPLATE);
                 }
             }
@@ -306,13 +308,14 @@ public class WebRoutes {
         authenticatedPost(CREATE_INTEREST_ROUTE, (req, res) -> {
             CreateInterestForm interestForm = CreateInterestForm.createFromBody(req.body());
             GamerUser gamer = getAuthenticatedGamerUser(req).get();
-            GamerInterest interest = system.registerGamerInterest(gamer, interestForm);
+            List<GamerInterest> myInterests = system.getGamerInterest(gamer);
+            GamerInterest interest = system.registerGamerInterest(gamer, myInterests, interestForm);
             if (interest != null){
                 res.redirect("/home?ok");
                 return halt();
             }
             else {
-                final Map<String, Object> model = Map.of("message", "One or more parameter are wrong");
+                final Map<String, Object> model = Map.of("message", "One or more parameters are wrong");
                 return render(model, CREATE_INTEREST_TEMPLATE);
             }
         });
@@ -327,10 +330,8 @@ public class WebRoutes {
                     return new FreeMarkerEngine().render(new ModelAndView(model, DELETE_INTEREST_TEMPLATE));
                 }
                 else {
-                    final Map<String, Object> model = new HashMap<>();
-                    model.put("message", "You don't have interests");
-                    res.redirect(MANAGE_INTEREST_ROUTE);
-                    return halt();
+                    final Map<String, Object> model = Map.of("message", "You dont have interests");
+                    return render(model, MANAGE_INTEREST_TEMPLATE);
                 }
             }
             else {
@@ -394,10 +395,8 @@ public class WebRoutes {
                     return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
                 }
                 else {
-                    final Map<String, Object> model = new HashMap<>();
-                    String message = "You have no matches yet";
-                    model.put("message", message);
-                    return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
+                    final Map<String, Object> model = Map.of("message", "You have no matches yet");
+                    return render(model, HOME_TEMPLATE);
                 }
             }
             else {

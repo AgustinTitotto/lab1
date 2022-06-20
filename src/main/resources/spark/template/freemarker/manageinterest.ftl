@@ -92,7 +92,7 @@
     button{
         background-color: #45cb85;
         border-color: #45cb85;
-        font-size: 120%;
+        font-size: 150%;
         align-content: center;
         margin-left: 600px;
         margin-right: 600px;
@@ -108,6 +108,14 @@
 <h1>
     <u>Welcome to your interests profile</u>
 </h1>
+
+<#if message??>
+    <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
+     background-color: lightblue">
+        ${message}
+    </div>
+</#if>
+
 <div class="sidebar">
     <a href="/home">Home</a>
     <a href="/profile" class="hpl">Profile</a>
