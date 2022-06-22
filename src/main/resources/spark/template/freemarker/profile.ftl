@@ -129,9 +129,13 @@
     <button>
         <a href="/createdescription" class="hpl">Create Description</a>
     </button>
-    <p>View or delete your descriptions</p>
+    <p>Update your descriptions</p>
     <button>
-        <a href="/managedescription" class="hpl">Manage Description</a>
+        <a href="/updatedescription" class="hpl">Update Description</a>
+    </button>
+    <p>Delete your descriptions</p>
+    <button>
+        <a href="/deletedescription" class="hpl">Delete Description</a>
     </button>
 
 </body>

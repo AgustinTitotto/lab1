@@ -143,6 +143,10 @@ public class WebSystem {
         return descriptions.getUserDescriptions(gamerUser);
     }
 
+    public boolean updateDescriptionLvl(GamerUser gamerUser, String gameName, String newLevel){
+        return descriptions.updateByLvl(gamerUser, gameName, newLevel);
+    }
+
     public void deleteDescription(String gamerDescription, GamerUser gamerUser) {
         String[] description = gamerDescription.split(", ");
         String gameName = description[0];

@@ -104,7 +104,7 @@
     <a class="leave" href="/logout" class="hpl">Sign Out</a>
 </div>
 
-    <form class="container" action="/managedescription" role="form" method="post">
+    <form class="container" action="/deletedescription" role="form" method="post">
         <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gamers" id="descriptionId">
             <#list descriptions as description>
                 <option value="${description.game.gameName}, ${description.lvl}, ${description.rank.rankName}">

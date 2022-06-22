@@ -99,6 +99,18 @@ public class GamerDescriptions {
                 GamerDescription.class).setParameter("userName", gamerUser.getUserName()).getResultList());
     }
 
+    public boolean updateByLvl(GamerUser gamerUser, String gameName, String newLevel){
+        String gameLvl = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u " +
+                "WHERE u.gameName LIKE:gameName", Game.class).setParameter("gameName", gameName).getResultList()).stream().findFirst().get().getLvlMAX();
+        if (Integer.parseInt(gameLvl) >= Integer.parseInt(newLevel)){
+            tx(() -> currentEntityManager().createQuery("UPDATE GamerDescription u SET u.lvl = ?1 WHERE u.game.gameName LIKE: gameName and u.gamerUser.userName LIKE:userName")
+                    .setParameter("gameName", gameName).setParameter("userName", gamerUser.getUserName()).setParameter(1, newLevel).executeUpdate());
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public void deleteDescription(GamerUser gamerUser, String gameName) {
         Optional<GamerDescription> gamerDescription = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription u " +
                 "WHERE u.game.gameName LIKE:gameName and u.gamerUser.userName LIKE:userName", GamerDescription.class)

@@ -28,7 +28,8 @@ public class WebRoutes {
     public static final String UPDATE_GAME_TEMPLATE = "updategame.ftl";
     public static final String DELETE_GAME_TEMPLATE = "deletegame.ftl";
     public static final String PROFILE_TEMPLATE = "profile.ftl";
-    public static final String MANAGE_DESCRIPTION_TEMPLATE = "managedescription.ftl";
+    public static final String UPDATE_DESCRIPTION_TEMPLATE = "updatedescription.ftl";
+    public static final String DELETE_DESCRIPTION_TEMPLATE = "deletedescription.ftl";
     public static final String MANAGE_INTEREST_TEMPLATE = "manageinterest.ftl";
     public static final String DELETE_INTEREST_TEMPLATE = "deleteinterest.ftl";
 
@@ -49,7 +50,8 @@ public class WebRoutes {
     public static final String UPDATE_GAME_ROUTE = "/updategame";
     public static final String DELETE_GAME_ROUTE = "/deletegame";
     public static final String PROFILE_ROUTE = "/profile";
-    public static final String MANAGE_DESCRIPTION_ROUTE = "/managedescription";
+    public static final String UPDATE_DESCRIPTION_ROUTE = "/updatedescription";
+    public static final String DELETE_DESCRIPTION_ROUTE = "/deletedescription";
     public static final String MANAGE_INTEREST_ROUTE = "/manageinterest";
     public static final String DELETE_INTEREST_ROUTE = "/deleteinterest";
 
@@ -264,14 +266,52 @@ public class WebRoutes {
             }
         });
 
-        authenticatedGet(MANAGE_DESCRIPTION_ROUTE, (req, res) -> {
+        authenticatedGet(UPDATE_DESCRIPTION_ROUTE, (req, res) -> {
+            final GamerUser user = getAuthenticatedGamerUser(req).get();
+            if (!user.isAdmin()) {
+                List<GamerDescription> gamerDescriptions = system.getUserDescriptions(user);
+                if(gamerDescriptions.size() != 0) {
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("descriptions", gamerDescriptions);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, UPDATE_DESCRIPTION_TEMPLATE));
+                }else{
+                    final Map<String, Object> model = Map.of("message", "You don't have descriptions");
+                    return render(model, PROFILE_TEMPLATE);
+                }
+            } else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+
+        post(UPDATE_GAME_ROUTE, (req, res) -> {
+            UpdateDescriptionForm updateDescriptionForm = UpdateDescriptionForm.createFromBody(req.body());
+            final GamerUser user = getAuthenticatedGamerUser(req).get();
+            if (updateDescriptionForm.getGameName() != null && (updateDescriptionForm.getLvl() != null)){
+                if (updateDescriptionForm.getLvl().equals("")) {
+                    res.redirect("/updatedescription?ok");
+                    return halt();
+                }else{
+                    system.updateDescriptionLvl(user, updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
+                    res.redirect("/home?ok");
+                    return halt();
+                }
+            }
+            else {
+                final Map<String, Object> model = Map.of("message", "Select an attribute to update");
+                return render(model, PROFILE_TEMPLATE);
+            }
+        });
+
+        authenticatedGet(DELETE_DESCRIPTION_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()){
                 List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
                 if (gamerDescriptions.size() != 0){
                     final Map<String, Object> model = new HashMap<>();
                     model.put("descriptions", gamerDescriptions);
-                    return new FreeMarkerEngine().render(new ModelAndView(model, MANAGE_DESCRIPTION_TEMPLATE));
+                    return new FreeMarkerEngine().render(new ModelAndView(model, DELETE_DESCRIPTION_TEMPLATE));
                 }
                 else {
                     final Map<String, Object> model = Map.of("message", "You dont have descriptions");
@@ -284,7 +324,7 @@ public class WebRoutes {
             }
         });
 
-        authenticatedPost(MANAGE_DESCRIPTION_ROUTE, (req, res) -> {
+        authenticatedPost(DELETE_DESCRIPTION_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             LikeForm description = LikeForm.createFromBody(req.body()); //uso LikeForm pq es igual
             system.deleteDescription(description.getLikedUser(), authenticatedGamerUser.get());

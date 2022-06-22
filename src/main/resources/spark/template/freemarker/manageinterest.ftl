@@ -130,7 +130,7 @@
     </button>
         <p>View or delete your interests</p>
     <button>
-        <a href="/deleteinterest" class="hpl">Manage Interests</a>
+        <a href="/deleteinterest" class="hpl">Delete Interests</a>
     </button>
 </body>
 </html>
