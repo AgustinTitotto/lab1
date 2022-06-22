@@ -51,6 +51,13 @@
     <u>Welcome Administrator</u>
 </h1>
 
+<#if message??>
+<div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
+     background-color: lightblue">
+    ${message}
+</div>
+</#if>
+
 <div class="container" >
     <p>Create a new Game</p>
     <button>

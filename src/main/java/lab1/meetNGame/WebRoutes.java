@@ -157,9 +157,14 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.get().isAdmin()) {
                 List<Game> games = system.getGames();
-                final Map<String, Object> model = new HashMap<>();
-                model.put("games", games);
-                return new FreeMarkerEngine().render(new ModelAndView(model, UPDATE_GAME_TEMPLATE));
+                if(games.size() != 0) {
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("games", games);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, UPDATE_GAME_TEMPLATE));
+                }else{
+                    final Map<String, Object> model = Map.of("message", "You don't have games");
+                    return render(model, ADMIN_HOME_TEMPLATE);
+                }
             } else {
                 final Map<String, Object> model = new HashMap<>();
                 model.put("message", "User is not Admin");
@@ -170,10 +175,15 @@ public class WebRoutes {
         post(UPDATE_GAME_ROUTE, (req, res) -> {
             UpdateGameForm updateGameForm = UpdateGameForm.createFromBody(req.body());
              if (updateGameForm.getGameName() != null && (updateGameForm.getCategory() != null || updateGameForm.getLvlMax() != null)){
-                if (updateGameForm.getCategory().equals("")){
-                    system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
-                    res.redirect("/admin?ok");
-                    return halt();
+                 if(updateGameForm.getCategory().equals("")){
+                     if (updateGameForm.getLvlMax().equals("")) {
+                         res.redirect("/updategame?ok");
+                         return halt();
+                     }else{
+                         system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
+                         res.redirect("/admin?ok");
+                         return halt();
+                     }
                 }
                 else if (updateGameForm.getLvlMax().equals("")){
                     system.updateGameCategory(updateGameForm.getGameName(), updateGameForm.getCategory());
@@ -188,8 +198,7 @@ public class WebRoutes {
                 }
             }
             else {
-                final Map<String, Object> model = new HashMap<>();
-                model.put("message", "Select a game and attribute to update");
+                final Map<String, Object> model = Map.of("message", "Select an attribute to update");
                 return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
@@ -198,9 +207,14 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.get().isAdmin()){
                 List<Game> games = system.getGames();
-                final Map<String, Object> model = new HashMap<>();
-                model.put("games", games);
-                return new FreeMarkerEngine().render(new ModelAndView(model, DELETE_GAME_TEMPLATE));
+                if(games.size() != 0) {
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("games", games);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, DELETE_GAME_TEMPLATE));
+                }else{
+                    final Map<String, Object> model = Map.of("message", "You don't have games");
+                    return render(model, ADMIN_HOME_TEMPLATE);
+                }
             }
             else {
                 final Map<String, Object> model = new HashMap<>();
