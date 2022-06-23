@@ -285,7 +285,7 @@ public class WebRoutes {
             }
         });
 
-        post(UPDATE_GAME_ROUTE, (req, res) -> {
+        post(UPDATE_DESCRIPTION_ROUTE, (req, res) -> {
             UpdateDescriptionForm updateDescriptionForm = UpdateDescriptionForm.createFromBody(req.body());
             final GamerUser user = getAuthenticatedGamerUser(req).get();
             if (updateDescriptionForm.getGameName() != null && (updateDescriptionForm.getLvl() != null)){
@@ -293,14 +293,19 @@ public class WebRoutes {
                     res.redirect("/updatedescription?ok");
                     return halt();
                 }else{
-                    system.updateDescriptionLvl(user, updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
-                    res.redirect("/home?ok");
-                    return halt();
+                    if (system.checkNewLevel(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl())){
+                        system.updateDescriptionLvl(user, updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
+                        res.redirect("/home?ok");
+                        return halt();
+                    }else{
+                        final Map<String, Object> model = Map.of("message", system.getErrorMessage());
+                        return render(model, UPDATE_DESCRIPTION_TEMPLATE);
+                    }
                 }
             }
             else {
                 final Map<String, Object> model = Map.of("message", "Select an attribute to update");
-                return render(model, PROFILE_TEMPLATE);
+                return render(model, UPDATE_DESCRIPTION_TEMPLATE);
             }
         });
 

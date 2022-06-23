@@ -143,8 +143,17 @@ public class WebSystem {
         return descriptions.getUserDescriptions(gamerUser);
     }
 
-    public boolean updateDescriptionLvl(GamerUser gamerUser, String gameName, String newLevel){
-        return descriptions.updateByLvl(gamerUser, gameName, newLevel);
+    public void updateDescriptionLvl(GamerUser gamerUser, String gameName, String newLevel){
+            descriptions.updateByLvl(gamerUser, gameName, newLevel);
+    }
+
+    public boolean checkNewLevel(String gameName, String newLevel){
+        if (descriptions.checkNewLvl(gameName, newLevel)){
+            return true;
+        }else{
+            setErrorMessage("This level is not within the game's range");
+            return false;
+        }
     }
 
     public void deleteDescription(String gamerDescription, GamerUser gamerUser) {
