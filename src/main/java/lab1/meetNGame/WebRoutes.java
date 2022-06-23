@@ -179,8 +179,8 @@ public class WebRoutes {
              if (updateGameForm.getGameName() != null && (updateGameForm.getCategory() != null || updateGameForm.getLvlMax() != null)){
                  if(updateGameForm.getCategory().equals("")){
                      if (updateGameForm.getLvlMax().equals("")) {
-                         res.redirect("/updategame?ok");
-                         return halt();
+                         final Map<String, Object> model = Map.of("message", "Select an atribute to update");
+                         return render(model, UPDATE_GAME_TEMPLATE);
                      }else{
                          system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
                          res.redirect("/admin?ok");
@@ -267,9 +267,9 @@ public class WebRoutes {
         });
 
         authenticatedGet(UPDATE_DESCRIPTION_ROUTE, (req, res) -> {
-            final GamerUser user = getAuthenticatedGamerUser(req).get();
-            if (!user.isAdmin()) {
-                List<GamerDescription> gamerDescriptions = system.getUserDescriptions(user);
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
                 if(gamerDescriptions.size() != 0) {
                     final Map<String, Object> model = new HashMap<>();
                     model.put("descriptions", gamerDescriptions);
