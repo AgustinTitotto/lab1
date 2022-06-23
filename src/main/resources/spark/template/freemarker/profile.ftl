@@ -43,12 +43,14 @@
         display: block;
         color: white;
         padding: 16px;
+        font-size: 290%;
         text-decoration: none;
     }
 
     .sidebar a.active {
         background-color: #45cb85;
         color: green;
+        font-size: 290%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -56,6 +58,7 @@
     .sidebar a.leave {
         background-color: #ff4655;
         color: darkred;
+        font-size: 290%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -63,6 +66,7 @@
     .sidebar a:hover:not(.active) {
         background-color: #45cb85;
         color: green;
+        font-size: 290%;
     }
 
     @media screen and (max-width: 700px) {
@@ -105,10 +109,6 @@
     }
 </style>
 <body>
-<h1>
-    <u>Welcome to your descriptions profile</u>
-</h1>
-
 <#if message??>
     <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
      background-color: lightblue">
@@ -124,6 +124,10 @@
     <a href="/viewmatch" class="hpl">Matches</a>
     <a class="leave" href="/logout" class="hpl">Sign Out</a>
 </div>
+
+<h1>
+    <u>Welcome to your descriptions profile</u>
+</h1>
 
     <p>Create a new game description</p>
     <button>

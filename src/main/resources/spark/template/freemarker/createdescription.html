@@ -43,12 +43,14 @@
         display: block;
         color: white;
         padding: 16px;
+        font-size: 290%;
         text-decoration: none;
     }
 
     .sidebar a.active {
         background-color: #45cb85;
         color: green;
+        font-size: 290%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -56,6 +58,7 @@
     .sidebar a.leave {
         background-color: #ff4655;
         color: darkred;
+        font-size: 290%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -63,6 +66,7 @@
     .sidebar a:hover:not(.active) {
         background-color: #45cb85;
         color: green;
+        font-size: 290%;
     }
 
     @media screen and (max-width: 700px) {
@@ -95,18 +99,19 @@
     ${message}
 </div>
 </#if>
+
+<div class="sidebar">
+    <a href="/home">Home</a>
+    <a class="active" href="/profile" class="hpl">Profile</a>
+    <a a href="/manageinterest">Interests</a>
+    <a href="/findplayers">Players</a>
+    <a href="/viewmatch" class="hpl">Matches</a>
+    <a class="leave" href="/logout" class="hpl">Sign Out</a>
+</div>
+
 <h1>
 <u>Create A Game Description</u>
 </h1>
-
-<div class="sidebar">
-        <a href="/home">Home</a>
-        <a class="active" href="/profile" class="hpl">Profile</a>
-        <a a href="/manageinterest">Interests</a>
-        <a href="/findplayers">Players</a>
-        <a href="/viewmatch" class="hpl">Matches</a>
-        <a class="leave" href="/logout" class="hpl">Sign Out</a>
-</div>
 
     <p style="color: #45cb85; font-size: 250%; text-align: center; font-family: 'LEMON MILK'">What game do you play?</p>
     <form class="container" action = "/createdescription" role="form" method="post">

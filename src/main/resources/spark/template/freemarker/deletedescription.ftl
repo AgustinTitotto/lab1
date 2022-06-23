@@ -44,12 +44,14 @@
         display: block;
         color: white;
         padding: 16px;
+        font-size: 290%;
         text-decoration: none;
     }
 
     .sidebar a.active {
         background-color: #45cb85;
         color: green;
+        font-size: 290%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -57,6 +59,7 @@
     .sidebar a.leave {
         background-color: #ff4655;
         color: darkred;
+        font-size: 290%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -64,6 +67,7 @@
     .sidebar a:hover:not(.active) {
         background-color: #45cb85;
         color: green;
+        font-size: 290%;
     }
 
     @media screen and (max-width: 700px) {
@@ -90,11 +94,6 @@
     }
 </style>
 <body>
-<h1>
-    <u>What dsecription would you</u><br>
-    <u>like to delete?</u>
-</h1>
-
 <div class="sidebar">
     <a href="/home">Home</a>
     <a class="active" href="/profile" class="hpl">Profile</a>
@@ -103,6 +102,10 @@
     <a href="/viewmatch" class="hpl">Matches</a>
     <a class="leave" href="/logout" class="hpl">Sign Out</a>
 </div>
+<h1>
+    <u>What dsecription would you</u><br>
+    <u>like to delete?</u>
+</h1>
 
     <form class="container" action="/deletedescription" role="form" method="post">
         <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gamers" id="descriptionId">

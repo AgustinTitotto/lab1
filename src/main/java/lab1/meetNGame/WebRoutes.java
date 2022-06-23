@@ -125,7 +125,19 @@ public class WebRoutes {
             return halt();
         });
 
-        authenticatedGet(HOME_ROUTE, (req, res) -> render(HOME_TEMPLATE));
+        authenticatedGet(HOME_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                String name = authenticatedGamerUser.get().getUserName();
+                final Map<String, Object> model = new HashMap<>();
+                model.put("myName", name);
+                return render(model, HOME_TEMPLATE);
+            }else{
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
 
         authenticatedGet(ADMIN_HOME_ROUTE, (req, res) -> render(ADMIN_HOME_TEMPLATE));
 
@@ -374,7 +386,8 @@ public class WebRoutes {
                 return halt();
             }
             else {
-                final Map<String, Object> model = Map.of("message", "One or more parameters are wrong");
+                final String message = system.getErrorMessage();
+                final Map<String, Object> model = Map.of("message", message);
                 return render(model, CREATE_INTEREST_TEMPLATE);
             }
         });
