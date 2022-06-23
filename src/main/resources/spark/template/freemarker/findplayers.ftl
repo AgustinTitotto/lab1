@@ -35,6 +35,7 @@
         margin: 0;
         padding: 0;
         width: 200px;
+        background-color: #282e3a;
         position: fixed;
         height: 100%;
         overflow: auto;

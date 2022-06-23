@@ -40,6 +40,7 @@
     .sidebar {
         margin: 0;
         padding: 0;
+        background-color: #282e3a;
         width: 200px;
         position: fixed;
         height: 100%;

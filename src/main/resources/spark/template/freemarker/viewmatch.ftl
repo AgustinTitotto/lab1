@@ -36,6 +36,7 @@
         padding: 0;
         width: 200px;
         position: fixed;
+        background-color: #282e3a;
         height: 100%;
         overflow: auto;
     }

@@ -191,8 +191,8 @@ public class WebRoutes {
              if (updateGameForm.getGameName() != null && (updateGameForm.getCategory() != null || updateGameForm.getLvlMax() != null)){
                  if(updateGameForm.getCategory().equals("")){
                      if (updateGameForm.getLvlMax().equals("")) {
-                         final Map<String, Object> model = Map.of("message", "Select an atribute to update");
-                         return render(model, UPDATE_GAME_TEMPLATE);
+                         res.redirect("/updategame?ok");
+                         return halt();
                      }else{
                          system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
                          res.redirect("/admin?ok");
