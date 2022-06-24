@@ -171,7 +171,7 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.get().isAdmin()) {
                 List<Game> games = system.getGames();
-                if(games.size() != 0) {
+                if(!games.isEmpty()) {
                     final Map<String, Object> model = new HashMap<>();
                     model.put("games", games);
                     return new FreeMarkerEngine().render(new ModelAndView(model, UPDATE_GAME_TEMPLATE));
@@ -221,7 +221,7 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.get().isAdmin()){
                 List<Game> games = system.getGames();
-                if(games.size() != 0) {
+                if(!games.isEmpty()) {
                     final Map<String, Object> model = new HashMap<>();
                     model.put("games", games);
                     return new FreeMarkerEngine().render(new ModelAndView(model, DELETE_GAME_TEMPLATE));
@@ -325,7 +325,7 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()){
                 List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
-                if (gamerDescriptions.size() != 0){
+                if (!gamerDescriptions.isEmpty()){
                     final Map<String, Object> model = new HashMap<>();
                     model.put("descriptions", gamerDescriptions);
                     return new FreeMarkerEngine().render(new ModelAndView(model, DELETE_DESCRIPTION_TEMPLATE));
@@ -396,7 +396,7 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()){
                 List<GamerInterest> interests = system.getGamerInterest(authenticatedGamerUser.get());
-                if (interests.size() != 0){
+                if (!interests.isEmpty()){
                     final Map<String, Object> model = new HashMap<>();
                     model.put("interests", interests);
                     return new FreeMarkerEngine().render(new ModelAndView(model, DELETE_INTEREST_TEMPLATE));
@@ -424,7 +424,7 @@ public class WebRoutes {
                 if (!authenticatedGamerUser.get().isAdmin()) {
                     GamerUser gamerUser = authenticatedGamerUser.get();
                     List<GamerDescription> descriptions = system.getInterestPlayers(gamerUser);
-                    if (descriptions != null){
+                    if (!descriptions.isEmpty()){
                         List<String> userNames = userNameQuoted(descriptions);
                         final Map<String, Object> model = new HashMap<>();
                         model.put("descriptions", descriptions);
@@ -461,7 +461,7 @@ public class WebRoutes {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
                 List<GamerUser> matches = system.showMatch(currentUser.get());
-                if(matches.size() != 0){
+                if(!matches.isEmpty()){
                     final Map<String, Object> model = new HashMap<>();
                     model.put("matches", matches);
                     return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
