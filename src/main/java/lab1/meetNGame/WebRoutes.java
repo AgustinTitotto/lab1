@@ -62,23 +62,44 @@ public class WebRoutes {
     }
 
     private void webroutes() {
-        get(REGISTER_ROUTE, (req, res) -> render(SIGN_UP_TEMPLATE));
-        post(REGISTER_ROUTE, (req, res) -> {
-            final SignUpForm form = SignUpForm.createFromBody(req.body());
-
-            final GamerUser gamer = system.registerGamer(form);
-
-            if (gamer != null) {
-                res.redirect("/login?ok");
+        get(REGISTER_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (authenticatedGamerUser.isEmpty()) {
+                return render(SIGN_UP_TEMPLATE);
+            }
+            else if(authenticatedGamerUser.get().isAdmin()){ //si el usuario ya esta logeado, lleva a la pagina correspondiente
+                res.redirect(ADMIN_HOME_ROUTE);
                 return halt();
-            } else {
-                final Map<String, Object> model = Map.of("message", "UserName already exists");
-                return render(model, SIGN_UP_TEMPLATE);
+            }
+            else{
+                res.redirect(HOME_ROUTE);
+                return halt();
+            }
+        });
+        post(REGISTER_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (authenticatedGamerUser.isEmpty()){
+                final SignUpForm form = SignUpForm.createFromBody(req.body());
+                final GamerUser gamer = system.registerGamer(form);
+                if (gamer != null) {
+                    res.redirect("/login?ok");
+                    return halt();
+                } else {
+                    final Map<String, Object> model = Map.of("message", "UserName already exists");
+                    return render(model, SIGN_UP_TEMPLATE);
+                }
+            }
+            else if(authenticatedGamerUser.get().isAdmin()){ //si el usuario ya esta logeado, lleva a la pagina correspondiente
+                res.redirect(ADMIN_HOME_ROUTE);
+                return halt();
+            }
+            else{
+                res.redirect(HOME_ROUTE);
+                return halt();
             }
         });
         get(LOGIN_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-
             if (authenticatedGamerUser.isEmpty()) {
                 final Map<String, Object> model = new HashMap<>();
 
@@ -86,14 +107,18 @@ public class WebRoutes {
 
                 return render(model, LOGIN_TEMPLATE);
             }
-
-            res.redirect(HOME_ROUTE);
-            return halt();
+            else if(authenticatedGamerUser.get().isAdmin()){ //si el usuario ya esta logeado, lleva a la pagina correspondiente
+                res.redirect(ADMIN_HOME_ROUTE);
+                return halt();
+            }
+            else{
+                res.redirect(HOME_ROUTE);
+                return halt();
+            }
         });
 
         post(LOGIN_ROUTE, (req, res) ->{ //chequeamos que no haya un usuario ya iniciado, vemos si es admin o no.
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-
             if (authenticatedGamerUser.isEmpty()){
                 LogInForm logInForm = LogInForm.createFromBody(req.body());
                 final Optional<GamerUser> validUser = system.checkLogin(logInForm);
@@ -113,8 +138,16 @@ public class WebRoutes {
                     model.put("message", "Invalid user or password");
                     return render(model, LOGIN_TEMPLATE);
                 }
-            } else {
-                res.redirect(LOGIN_ROUTE);      //revisar esto, no deberia llevar al home ?
+            } /*else {
+                res.redirect(LOGIN_ROUTE);      //Esto vuelve a hacer el get de Login, lleva a home o adminHome.
+                return halt();
+            }*/
+            else if(authenticatedGamerUser.get().isAdmin()){ //si el usuario ya esta logeado, lleva a la pagina correspondiente
+                res.redirect(ADMIN_HOME_ROUTE);
+                return halt();
+            }
+            else{
+                res.redirect(HOME_ROUTE);
                 return halt();
             }
         });
