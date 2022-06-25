@@ -8,7 +8,7 @@
     body{
         background-color: #282e3a;
         background-image: url(/img/Background2.jpg);
-        background-position: top;
+        background-position: right;
         background-repeat: no-repeat;
         background-size: 85%;
     }
@@ -31,7 +31,7 @@
     }
 
     .sidebar {
-        margin: 0;
+        margin-top: -40px;
         padding: 0;
         width: 200px;
         background-color: #282e3a;
@@ -112,7 +112,7 @@
 <body>
 <#if message??>
     <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
-     background-color: lightblue">
+     background-color: lightblue; text-align: center">
         ${message}
     </div>
 </#if>
@@ -123,6 +123,12 @@
     <a a href="/manageinterest">Interests</a>
     <a href="/findplayers">Players</a>
     <a href="/viewmatch" class="hpl">Matches</a>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <a class="leave" href="/logout" class="hpl">Sign Out</a>
 </div>
 

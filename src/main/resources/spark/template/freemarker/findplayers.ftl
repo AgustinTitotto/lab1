@@ -10,7 +10,7 @@
     body{
         background-color: #282e3a;
         background-image: url(/img/Background2.jpg);
-        background-position: top;
+        background-position: right;
         background-repeat: no-repeat;
     }
 
@@ -32,7 +32,7 @@
     }
 
     .sidebar {
-        margin: 0;
+        margin-top: -40px;
         padding: 0;
         width: 200px;
         background-color: #282e3a;
@@ -95,6 +95,12 @@
     <a a href="/manageinterest">Interests</a>
     <a class="active" href="#findplayers">Players</a>
     <a href="/viewmatch" class="hpl">Matches</a>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <a class="leave" href="/logout" class="hpl">Sign Out</a>
 </div>
 <h1>

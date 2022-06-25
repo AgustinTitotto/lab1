@@ -457,7 +457,7 @@ public class WebRoutes {
                 if (!authenticatedGamerUser.get().isAdmin()) {
                     GamerUser gamerUser = authenticatedGamerUser.get();
                     List<GamerDescription> descriptions = system.getInterestPlayers(gamerUser);
-                    if (!descriptions.isEmpty()){
+                    if (descriptions != null){
                         List<String> userNames = userNameQuoted(descriptions);
                         final Map<String, Object> model = new HashMap<>();
                         model.put("descriptions", descriptions);
@@ -494,7 +494,7 @@ public class WebRoutes {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
                 List<GamerUser> matches = system.showMatch(currentUser.get());
-                if(!matches.isEmpty()){
+                if(matches != null){
                     final Map<String, Object> model = new HashMap<>();
                     model.put("matches", matches);
                     return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
