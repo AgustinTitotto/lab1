@@ -47,37 +47,39 @@
 <body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
  background-position: center; background-size: 85%">
 
-<h1>
-    <u>Welcome Administrator</u>
-</h1>
+    <h1>
+        <u>Welcome Administrator</u>
+    </h1>
 
-<#if message??>
-<div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
-     background-color: lightblue">
-    ${message}
-</div>
-</#if>
+    <#if message??>
+    <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK'; text-align: center;
+        background-color: lightblue">
+        ${message}
+    </div>
+    </#if>
 
-<div class="container" >
-    <p>Create a new Game</p>
-    <button>
-        <a href="/creategame" class="hpl">Create Game</a>
-    </button>
-    <p>Update Game</p>
-    <button>
-        <a href="/updategame" class="hpl">Update Game</a>
-    </button>
-    <p>Delete Game</p>
-    <button>
-        <a href="/deletegame" class="hpl">Delete Game</a>
-    </button>
-    <p>Leave session</p>
-    <button1>
-        <a href="/logout" class="hpl1">Sign Out</a>
-    </button1>
-</div>
-
-
+    <div class="container" >
+        <p>Create a new Game</p>
+        <button>
+            <a href="/creategame" class="hpl">Create Game</a>
+        </button>
+        <p>Update Game</p>
+        <button>
+            <a href="/updategame" class="hpl">Update Game</a>
+        </button>
+        <p>Delete Game</p>
+        <button>
+            <a href="/deletegame" class="hpl">Delete Game</a>
+        </button>
+        <p>Manage Game Ranks</p>
+        <button>
+            <a href="/manageranks" class="hpl">Manage Ranks</a>
+        </button>
+        <p>Leave session</p>
+        <button1>
+            <a href="/logout" class="hpl1">Sign Out</a>
+        </button1>
+    </div>
 
 </body>
 </html>

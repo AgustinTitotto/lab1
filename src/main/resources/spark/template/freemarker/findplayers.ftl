@@ -104,7 +104,8 @@
     <a class="leave" href="/logout" class="hpl">Sign Out</a>
 </div>
 <h1>
-    <u>Meet the people who play like you</u>
+    <u>Meet the people who would</u><br>
+    <u>like to play with you</u>
 </h1>
 
 <br>

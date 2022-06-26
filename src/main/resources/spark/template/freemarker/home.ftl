@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="myName" type="String" -->
+<#-- @ftlvariable name="myName" type="java.lang.String" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>

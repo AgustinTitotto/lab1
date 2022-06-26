@@ -133,7 +133,7 @@
 </div>
 
 <h1>
-    <u>Welcome to your descriptions profile</u>
+    <u>Welcome to your profile</u>
 </h1>
 
     <p>Create a new game description</p>

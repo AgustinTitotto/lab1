@@ -179,4 +179,8 @@ public class WebSystem {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+
+    public Rank registerRank(String gameName, String newRank) {
+        return games.createNewRank(gameName, newRank);
+    }
 }

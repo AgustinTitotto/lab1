@@ -93,9 +93,28 @@ public class Games {
                 .setParameter("gameName", game).executeUpdate());
         List<Rank> ranks = game1.get().getRanks();
         for (int i = 0; i < ranks.size(); i++) {
-            String name = ranks.get(i).getRankName();
-            tx(() -> currentEntityManager().createQuery("DELETE FROM Rank u WHERE u.rankName LIKE:rankName")
-                    .setParameter("rankName", name).executeUpdate());
+            String name = ranks.get(i).getRankName(); //Borra los rangos con mismo nombre y mismo Id
+            long id = ranks.get(i).getRankId();
+            tx(() -> currentEntityManager().createQuery("DELETE FROM Rank u WHERE u.rankName LIKE:rankName and u.rankId = ?1")
+                    .setParameter("rankName", name).setParameter(1, id).executeUpdate());
         }
+    }
+
+    public Rank createNewRank(String gameName, String newRank) {
+        Rank rank = new Rank();
+        Optional<Game> game1 = findByGameName(gameName);
+        List<Rank> ranks = game1.get().getRanks();
+        for (int i = 0; i < ranks.size(); i++) {
+            String name = ranks.get(i).getRankName();
+            if (name.equals(newRank)){
+                rank = null;
+                break;
+            }
+        }
+        if (rank != null){
+            rank = Rank.createRank(newRank);
+            game1.get().getRanks().add(rank);
+        }
+        return EntityTransactions.persist(rank);
     }
 }
