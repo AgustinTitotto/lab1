@@ -92,7 +92,7 @@
 <div class="sidebar">
     <a href="/home">Home</a>
     <a href="/profile" class="hpl">Profile</a>
-    <a a href="/manageinterest">Interests</a>
+    <a href="/manageinterest">Interests</a>
     <a class="active" href="#findplayers">Players</a>
     <a href="/viewmatch" class="hpl">Matches</a>
     <br>

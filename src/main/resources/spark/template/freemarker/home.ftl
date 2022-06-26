@@ -95,15 +95,10 @@
 
 </style>
 <body>
-<#if message??>
-    <div class="alert alert-success" style="text-align: center">
-        ${message}
-    </div>
-</#if>
 <div class="sidebar">
     <a class="active" href="#home">Home</a>
     <a href="/profile" class="hpl">Profile</a>
-    <a a href="/manageinterest">Interests</a>
+    <a href="/manageinterest">Interests</a>
     <a href="/findplayers" class="hpl">Players</a>
     <a href="/viewmatch" class="hpl">Matches</a>
     <br>
@@ -111,6 +106,14 @@
     <br>
     <a class="leave" href="/logout" class="hpl">Sign Out</a>
 </div>
+
+<#if message??>
+    <div class="alert alert-success" style="color: black; font-family: 'LEMON MILK';
+     background-color: lightblue; margin-left: 250px; text-align: center">
+        ${message}
+    </div>
+</#if>
+
     <h1><u>Welcome back</u> <br>
         <u>${myName}</u></h1>
 

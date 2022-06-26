@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class WebSystem {
 
-    private String errorMessage = null;
+    private String message = null;
     private final Gamers gamers = new Gamers();
     private final Games games = new Games();
     private final GamerDescriptions descriptions = new GamerDescriptions();
@@ -46,27 +46,29 @@ public class WebSystem {
     public GamerDescription registerGamerDescription(GamerUser gamer, List<GamerDescription> myDescriptions, CreateDescriptionForm form){
         Optional<Game> game1 = games.findByGameName(form.getGameName());
         if (game1.isEmpty()){
-            setErrorMessage("This game doesn't exists");
+            setMessage("This game doesn't exists");
             return null;
         }
         else {
             boolean gamecheck = descriptions.checkGame(myDescriptions, form.getGameName());
             if (!gamecheck){
-                setErrorMessage("You already have a description for this game");
+                setMessage("You already have a description for this game");
                 return null;
             }else{
                 boolean lvlCheck = descriptions.checkLevel(game1.get(), form.getLvl());
                 if (!lvlCheck){
-                    setErrorMessage("This level is not between the parameters of the game's levels");
+                    setMessage("This level is not between the parameters of the game's levels");
                     return null;
                 }
                 else {
                     Optional<Rank> rankCheck = descriptions.checkRank(game1.get(), form.getRank());
                     if (rankCheck.isEmpty()){
-                        setErrorMessage("This game doesn't have this rank");
+                        setMessage("This game doesn't have this rank");
                         return null;
                     }
-                    else return descriptions.createDescription(gamer, game1.get(), rankCheck.get(), form.getLvl());
+                    else
+                        setMessage("Description created");
+                        return descriptions.createDescription(gamer, game1.get(), rankCheck.get(), form.getLvl());
                 }
             }
         }
@@ -75,25 +77,27 @@ public class WebSystem {
     public GamerInterest registerGamerInterest(GamerUser gamer, List<GamerInterest> myInterests, CreateInterestForm form){
         Optional<Game> game1 = games.findByGameName(form.getGameName());
         if (game1.isEmpty()){
-            setErrorMessage("This game doesn't exists");
+            setMessage("This game doesn't exists");
             return null;
         }
         else {
             boolean gamecheck = interests.checkGame(myInterests, form.getGameName());
             if (!gamecheck){
-                setErrorMessage("You already have an interest for this game");
+                setMessage("You already have an interest for this game");
                 return null;
             }else {
                 boolean lvlCheck = interests.checkLevel(game1.get(), form.getLvl());
                 if (!lvlCheck) {
-                    setErrorMessage("This level is not between the parameters of the game's levels");
+                    setMessage("This level is not between the parameters of the game's levels");
                     return null;
                 } else {
                     Optional<Rank> rankCheck = interests.checkRank(game1.get(), form.getRank());
                     if (rankCheck.isEmpty()) {
-                        setErrorMessage("This game doesn't have this rank");
+                        setMessage("This game doesn't have this rank");
                         return null;
-                    } else return interests.createInterest(gamer, game1.get(), rankCheck.get(), form.getLvl());
+                    } else
+                        setMessage("Interest created");
+                        return interests.createInterest(gamer, game1.get(), rankCheck.get(), form.getLvl());
                 }
             }
         }
@@ -129,14 +133,17 @@ public class WebSystem {
 
     public void updateGameLvl(String gameName, String newMaxLvl) {
         games.updateByLvl(gameName, newMaxLvl);
+        setMessage("Game updated");
     }
 
     public void updateGameCategory(String gameName, String category) {
         games.updateByCategory(gameName, category);
+        setMessage("Game updated");
     }
 
     public void deleteGame(String game) {
         games.deleteGame(game);
+        setMessage("Game deleted");
     }
 
     public List<GamerDescription> getUserDescriptions(GamerUser gamerUser) {
@@ -145,13 +152,14 @@ public class WebSystem {
 
     public void updateDescriptionLvl(GamerUser gamerUser, String gameName, String newLevel){
             descriptions.updateByLvl(gamerUser, gameName, newLevel);
+            setMessage("Description updated");
     }
 
     public boolean checkNewLevel(String gameName, String newLevel){
         if (descriptions.checkNewLvl(gameName, newLevel)){
             return true;
         }else{
-            setErrorMessage("This level is not within the game's range");
+            setMessage("This level is not within the game's range");
             return false;
         }
     }
@@ -160,6 +168,7 @@ public class WebSystem {
         String[] description = gamerDescription.split(", ");
         String gameName = description[0];
         descriptions.deleteDescription(gamerUser, gameName);
+        setMessage("Description deleted");
     }
 
     public List<GamerInterest> getGamerInterest(GamerUser gamerUser) {
@@ -170,14 +179,15 @@ public class WebSystem {
         String[] interest = gamerInterest.split(", ");
         String gameName = interest[0];
         interests.deleteInterest(gamerUser, gameName);
+        setMessage("Interest deleted");
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Rank registerRank(String gameName, String newRank) {
