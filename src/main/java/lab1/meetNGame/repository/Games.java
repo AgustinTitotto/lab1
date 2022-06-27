@@ -7,7 +7,6 @@ import lab1.meetNGame.model.GamerInterest;
 import lab1.meetNGame.model.Rank;
 import lab1.meetNGame.persistence.EntityTransactions;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,9 +35,15 @@ public class Games {
         return EntityTransactions.persist(newGame);
     }
 
-    public Optional<Rank> findRankByName(String rankName){
-        return tx(() -> currentEntityManager().createQuery("SELECT u FROM Rank u WHERE u.rankName LIKE: rankName",
-                Rank.class).setParameter("rankName", rankName).getResultList()).stream().findFirst();
+    public Rank findRankByName(String rankName, String game){
+        Rank rank = new Rank();
+        Optional<Game> game1 = findByGameName(game);
+        List<Rank> ranks = game1.get().getRanks();
+        for (int i = 0; i < ranks.size(); i++) {
+            if (ranks.get(i).getRankName().equals(rankName))
+            rank = ranks.get(i);
+        }
+        return rank;
     }
 
     public List<Game> allGames(){
@@ -150,10 +155,9 @@ public class Games {
                     .setParameter(1, id).executeUpdate());
             tx(() -> currentEntityManager().createQuery("DELETE FROM GamerDescription u WHERE u.rank.rankId = ?1")
                     .setParameter(1, id).executeUpdate());
-            ranks.remove(rank);
-            Collection<Rank> newRanks = ranks;
+            ranks.remove(rank); //List<Rank> con los rangos del juego, menos el que borre
             tx(() -> currentEntityManager().createQuery("UPDATE Game u SET u.ranks = ?1 WHERE u.gameName LIKE:gameName")
-                    .setParameter("gameName", gameName).setParameter(1, newRanks).executeUpdate());
+                    .setParameter("gameName", gameName).setParameter(1, ranks).executeUpdate());
             tx(() -> currentEntityManager().createQuery("DELETE FROM Rank u WHERE u.rankId = ?1")
                     .setParameter(1, id).executeUpdate());
             return rank;

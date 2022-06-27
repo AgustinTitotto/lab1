@@ -127,4 +127,9 @@ public class GamerDescriptions {
         tx(() -> currentEntityManager().createQuery("DELETE FROM GamerDescription u WHERE u.gamerUser.userName LIKE:userName AND u.game.gameName LIKE:gameName")
                 .setParameter("userName", gamerUser.getUserName()).setParameter("gameName", gameName).executeUpdate());
     }
+
+    public void updateByRank(GamerUser gamerUser, String gameName, Rank rank) {
+        tx(() -> currentEntityManager().createQuery("UPDATE GamerDescription u SET u.rank = ?1 WHERE u.gamerUser.userName LIKE:userName AND " +
+                "u.game.gameName LIKE:gameName").setParameter(1, rank).setParameter("gameName", gameName).setParameter("userName", gamerUser.getUserName()).executeUpdate());
+    }
 }

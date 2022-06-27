@@ -8,16 +8,17 @@ import java.util.List;
 public class UpdateDescriptionForm {
 
     private final String gameName;
-
     private final String lvl;
+    private final String rank;
 
-    public UpdateDescriptionForm (String gameName, String lvl) {
+    public UpdateDescriptionForm (String gameName, String lvl, String rank) {
         this.gameName = gameName;
         this.lvl = lvl;
+        this.rank = rank;
     }
 
-    public static UpdateDescriptionForm createUpdateForm(List<String> gameName, List<String> lvl){
-        return new UpdateDescriptionForm(gameName.get(0), lvl.get(0));
+    public static UpdateDescriptionForm createUpdateForm(List<String> gameName, List<String> lvl, List<String> ranks){
+        return new UpdateDescriptionForm(gameName.get(0), lvl.get(0), ranks.get(0));
     }
 
     public static UpdateDescriptionForm createFromBody(String body) {
@@ -26,7 +27,8 @@ public class UpdateDescriptionForm {
 
         return UpdateDescriptionForm.createUpdateForm(
                 params.getValues("gameName"),
-                params.getValues("newLvl")
+                params.getValues("newLvl"),
+                params.getValues("newRank")
         );
     }
 
@@ -36,5 +38,9 @@ public class UpdateDescriptionForm {
 
     public String getLvl() {
         return lvl;
+    }
+
+    public String getRank() {
+        return rank;
     }
 }

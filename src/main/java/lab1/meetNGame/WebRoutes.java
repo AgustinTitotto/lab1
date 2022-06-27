@@ -239,14 +239,14 @@ public class WebRoutes {
              if (updateGameForm.getGameName() != null && (updateGameForm.getCategory() != null || updateGameForm.getLvlMax() != null)){
                  if(updateGameForm.getCategory().equals("")){
                      if (updateGameForm.getLvlMax().equals("")) {
-                         res.redirect("/updategame?ok");
+                         res.redirect("/updategame?ok"); // tiene que tirar mensaje
                      }else{
                          system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
                          res.redirect("/admin?ok");
                      }
                      return halt();
                  }
-                else if (updateGameForm.getLvlMax().equals("")){
+                else if (updateGameForm.getLvlMax().equals("") && !updateGameForm.getLvlMax().equals("")){
                     system.updateGameCategory(updateGameForm.getGameName(), updateGameForm.getCategory());
                     res.redirect("/admin?ok");
                     return halt();
@@ -391,28 +391,54 @@ public class WebRoutes {
             }
         });
 
-        post(UPDATE_DESCRIPTION_ROUTE, (req, res) -> {
-            UpdateDescriptionForm updateDescriptionForm = UpdateDescriptionForm.createFromBody(req.body());
-            final GamerUser user = getAuthenticatedGamerUser(req).get();
-            if (updateDescriptionForm.getGameName() != null && (updateDescriptionForm.getLvl() != null)){
-                if (updateDescriptionForm.getLvl().equals("")) {
-                    res.redirect("/updatedescription?ok");
-                    return halt();
-                }else{
-                    if (system.checkNewLevel(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl())){
-                        system.updateDescriptionLvl(user, updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
+        authenticatedPost(UPDATE_DESCRIPTION_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                UpdateDescriptionForm updateDescriptionForm = UpdateDescriptionForm.createFromBody(req.body());
+                if (updateDescriptionForm.getLvl().equals("") && updateDescriptionForm.getRank().equals("")) {
+                    final Map<String, Object> model = Map.of("message", "You have to complete new lvl or rank");
+                    return render(model, PROFILE_TEMPLATE);
+                }else if (!updateDescriptionForm.getLvl().equals("") && updateDescriptionForm.getRank().equals("")){
+                    if (system.checkNewLevel(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl())) {
+                        system.updateDescriptionLvl(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
                         res.redirect("/home?ok");
                         return halt();
-                    }else{
+                    }
+                    else{
                         final Map<String, Object> model = Map.of("message", system.getMessage());
                         system.setMessage(null);
                         return render(model, UPDATE_DESCRIPTION_TEMPLATE);
                     }
                 }
-            }
-            else {
-                final Map<String, Object> model = Map.of("message", "Select an attribute to update");
-                return render(model, UPDATE_DESCRIPTION_TEMPLATE);
+                else if (updateDescriptionForm.getLvl().equals("") && !updateDescriptionForm.getRank().equals("")){
+                    Rank newRank = system.getRank(updateDescriptionForm.getRank(), updateDescriptionForm.getGameName());
+                    if (newRank != null){
+                        system.updateDescriptionRank(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(),newRank);
+                        res.redirect("home");
+                        return halt();
+                    }
+                    else {
+                        final Map<String, Object> model = Map.of("message", "Rank doesnt exist or does not belong to game");
+                        return render(model, UPDATE_DESCRIPTION_TEMPLATE);
+                    }
+                }
+                else {
+                    Rank newRank = system.getRank(updateDescriptionForm.getRank(), updateDescriptionForm.getGameName());
+                    if (system.checkNewLevel(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl()) && (newRank != null)) {
+                        system.updateDescriptionLvl(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
+                        system.updateDescriptionRank(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(),newRank);
+                        res.redirect("/home?ok");
+                        return halt();
+                    }
+                    else {
+                        final Map<String, Object> model = Map.of("message", "Rank doesnt exist/Lvl is higher than lvlMax");
+                        return render(model, UPDATE_DESCRIPTION_TEMPLATE);
+                    }
+                }
+            } else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
 
