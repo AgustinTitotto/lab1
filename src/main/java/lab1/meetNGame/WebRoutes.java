@@ -168,6 +168,10 @@ public class WebRoutes {
                 String name = authenticatedGamerUser.get().getUserName();
                 final Map<String, Object> model = new HashMap<>();
                 model.put("myName", name);
+                if(system.getMessage() != null) {
+                    model.put("message", system.getMessage());
+                    system.setMessage(null);
+                }
                 return render(model, HOME_TEMPLATE);
             }else{
                 final Map<String, Object> model = new HashMap<>();
@@ -180,8 +184,10 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.get().isAdmin()){ //Revisa que no sea un gamer
                 final Map<String, Object> model = new HashMap<>();
-                if (req.queryParams("ok") != null) model.put("message", "Game created");
-
+                if(system.getMessage() != null) {
+                    model.put("message", system.getMessage());
+                    system.setMessage(null);
+                }
                 return render(model, ADMIN_HOME_TEMPLATE);
             }
             else {
@@ -213,6 +219,7 @@ public class WebRoutes {
                 CreateGameForm gameForm = CreateGameForm.createFromBody(req.body());
                 final Game validGame = system.registerGame(gameForm);
                 if (validGame != null){
+                    system.setMessage("Game created");
                     res.redirect("/admin?ok");
                     return halt();
                 }
@@ -358,8 +365,9 @@ public class WebRoutes {
                 return halt();
             }
             else {
-                final String message = system.getErrorMessage();
+                final String message = system.getMessage();
                 final Map<String, Object> model = Map.of("message", message);
+                system.setMessage(null);
                 return render(model, CREATE_DESCRIPTION_TEMPLATE);
             }
         });
@@ -396,7 +404,8 @@ public class WebRoutes {
                         res.redirect("/home?ok");
                         return halt();
                     }else{
-                        final Map<String, Object> model = Map.of("message", system.getErrorMessage());
+                        final Map<String, Object> model = Map.of("message", system.getMessage());
+                        system.setMessage(null);
                         return render(model, UPDATE_DESCRIPTION_TEMPLATE);
                     }
                 }
@@ -472,8 +481,9 @@ public class WebRoutes {
                 return halt();
             }
             else {
-                final String message = system.getErrorMessage();
+                final String message = system.getMessage();
                 final Map<String, Object> model = Map.of("message", message);
+                system.setMessage(null);
                 return render(model, CREATE_INTEREST_TEMPLATE);
             }
         });
@@ -576,6 +586,7 @@ public class WebRoutes {
                     return new FreeMarkerEngine().render(new ModelAndView(model, gameTemplate));
                 }else{
                     final Map<String, Object> model = Map.of("message", "You don't have games");
+                    system.setMessage(null);
                     return render(model, ADMIN_HOME_TEMPLATE);
                 }
             } else {
