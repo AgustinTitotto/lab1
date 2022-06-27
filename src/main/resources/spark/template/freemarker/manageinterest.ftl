@@ -144,5 +144,6 @@
     <button>
         <a href="/deleteinterest" class="hpl">Delete Interests</a>
     </button>
+<br><br>
 </body>
 </html>

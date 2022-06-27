@@ -109,7 +109,7 @@
 
 <#if message??>
     <div class="alert alert-success" style="color: black; font-family: 'LEMON MILK';
-     background-color: lightblue; margin-left: 250px; text-align: center">
+     background-color: lightblue; margin-left: 250px; text-align: left; font-size: 150%">
         ${message}
     </div>
 </#if>
@@ -117,7 +117,7 @@
     <h1><u>Welcome back</u> <br>
         <u>${myName}</u></h1>
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 </body>
 

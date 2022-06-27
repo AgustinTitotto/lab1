@@ -11,6 +11,7 @@
         background-image: url(/img/Background2.jpg);
         background-position: right;
         background-repeat: no-repeat;
+        background-size: 85%;
     }
 
     h1{
@@ -94,8 +95,7 @@
         font-size: 200%;
     }
 </style>
-<body style="background-color: #282e3a; background-image: url(/img/Background2.jpg);
- background-position: top; background-size: 85%">
+<body>
 <#if message??>
     <div class="alert alert-success" style="margin-left: 625px; margin-right: 600px; color: #45cb85; font-size: 150%; font-family: 'LEMON MILK'; text-align: center">
         ${message}
@@ -128,5 +128,6 @@
         <option style="margin-left: 625px; margin-right: 600px; color: #45cb85; font-size: 150%; font-family: 'LEMON MILK'" value="${match.userName}">${match.userName}</option>
     </#list>
     </#if>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </body>
 </html>

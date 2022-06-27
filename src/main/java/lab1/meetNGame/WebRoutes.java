@@ -546,7 +546,7 @@ public class WebRoutes {
                 if (!authenticatedGamerUser.get().isAdmin()) {
                     GamerUser gamerUser = authenticatedGamerUser.get();
                     List<GamerDescription> descriptions = system.getInterestPlayers(gamerUser);
-                    if (descriptions != null){
+                    if (descriptions !=null && descriptions.size() != 0){
                         List<String> userNames = userNameQuoted(descriptions);
                         final Map<String, Object> model = new HashMap<>();
                         model.put("descriptions", descriptions);
@@ -554,8 +554,9 @@ public class WebRoutes {
                         return new FreeMarkerEngine().render(new ModelAndView(model, FIND_PLAYERS_TEMPLATE));
                     }
                     else{
-                        final Map<String, Object> model = Map.of("message", "You dont have interests");
-                        return render(model, HOME_TEMPLATE);
+                        system.setMessage("You have no interests");
+                        res.redirect("/home?ok");
+                        return halt();
                     }
                 }
                 else {
@@ -583,14 +584,15 @@ public class WebRoutes {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
                 List<GamerUser> matches = system.showMatch(currentUser.get());
-                if(matches != null){
+                if(!matches.isEmpty()){
                     final Map<String, Object> model = new HashMap<>();
                     model.put("matches", matches);
                     return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
                 }
                 else {
-                    final Map<String, Object> model = Map.of("message", "You have no matches yet");
-                    return render(model, HOME_TEMPLATE);
+                    system.setMessage("You have no matches");
+                    res.redirect("/home?ok");
+                    return halt();
                 }
             }
             else {

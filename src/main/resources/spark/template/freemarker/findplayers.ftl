@@ -12,6 +12,7 @@
         background-image: url(/img/Background2.jpg);
         background-position: right;
         background-repeat: no-repeat;
+        background-size: 85%;
     }
 
     h1{
@@ -123,6 +124,7 @@
     <br>
     <br>
 </form>
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
 </body>
 <!--<script>
     let arr = [<#list userNames as userName>"${userName}", </#list>]
