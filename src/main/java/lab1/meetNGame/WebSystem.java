@@ -183,4 +183,8 @@ public class WebSystem {
     public Rank registerRank(String gameName, String newRank) {
         return games.createNewRank(gameName, newRank);
     }
+
+    public Rank deleteRank(String gameName, String newRank) {
+        return games.deleteRank(gameName, newRank);
+    }
 }

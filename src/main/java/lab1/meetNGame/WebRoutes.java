@@ -305,6 +305,31 @@ public class WebRoutes {
             }
         });
 
+        getGames(DELETE_RANK_ROUTE, DELETE_RANK_TEMPLATE);
+
+        authenticatedPost(DELETE_RANK_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if(authenticatedGamerUser.get().isAdmin()){ //si el usuario ya esta logeado, lleva a la pagina correspondiente
+                RankForm rankForm = RankForm.createFromBody(req.body());
+                Rank newRank = system.deleteRank(rankForm.getGameName(), rankForm.getNewRank());
+                if (newRank != null){
+                    res.redirect("/admin?ok");
+                    return halt();
+                }
+                else {
+                    final Map<String, Object> model = Map.of("message", "Rank doesnt exists");
+                    return render(model, CREATE_RANK_TEMPLATE);
+                }
+            }
+            else{
+                final Map<String, Object> model = new HashMap<>();
+                String name = authenticatedGamerUser.get().getUserName();
+                model.put("message", "User is not Admin");
+                model.put("myName", name);
+                return render(model, HOME_TEMPLATE);
+            }
+        });
+
         authenticatedGet(PROFILE_ROUTE, (req, res) -> render(PROFILE_TEMPLATE));
 
         get(CREATE_DESCRIPTION_ROUTE, (req, res) -> {

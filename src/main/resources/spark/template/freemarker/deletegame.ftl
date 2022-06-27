@@ -19,11 +19,12 @@
     <u>like to delete?</u>
 </h1>
     <form class="container" action="/deletegame" role="form" method="post">
-        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
+        <input list="gameName" name="gameName" style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'"/>
+        <datalist style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
             <#list games as game>
                 <option value="${game.gameName}">${game.gameName}</option>
             </#list>
-        </select>
+        </datalist>
         <br>
         <br>
         <br>

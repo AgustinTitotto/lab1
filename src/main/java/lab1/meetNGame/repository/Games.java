@@ -7,6 +7,7 @@ import lab1.meetNGame.model.GamerInterest;
 import lab1.meetNGame.model.Rank;
 import lab1.meetNGame.persistence.EntityTransactions;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,7 +115,49 @@ public class Games {
         if (rank != null){
             rank = Rank.createRank(newRank);
             game1.get().getRanks().add(rank);
+            return EntityTransactions.persist(rank);
         }
-        return EntityTransactions.persist(rank);
+        else{
+            return null;
+        }
+
+    }
+
+    public Rank deleteRank(String gameName, String newRank) {
+        Rank rank = new Rank();
+        Optional<Game> game1 = findByGameName(gameName);
+        List<Rank> ranks = game1.get().getRanks();
+        for (int i = 0; i < ranks.size(); i++) {
+            String name = ranks.get(i).getRankName();
+            if (name.equals(newRank)){
+                rank = ranks.get(i);
+                break;
+            }
+        }
+        if (rank != null){
+            long id = rank.getRankId();
+            List<GamerDescription> descriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription u " +
+                    "WHERE u.rank.rankId = ?1", GamerDescription.class).setParameter(1, id).getResultList());
+            for (int i = 0; i < descriptions.size(); i++) {
+                long gamerDesId = descriptions.get(i).getId();
+                String userName = descriptions.get(i).getGamerUser().getUserName();
+                tx(() -> currentEntityManager().createQuery("DELETE FROM Match u WHERE u.user1.userName LIKE:userName or u.user2.userName LIKE:userName")
+                        .setParameter("userName", userName).executeUpdate());
+                tx(() -> currentEntityManager().createQuery("DELETE FROM Like u WHERE u.likedUser.id = ?1")
+                        .setParameter(1, gamerDesId).executeUpdate());
+            }
+            tx(() -> currentEntityManager().createQuery("DELETE FROM GamerInterest u WHERE u.rank.rankId = ?1")
+                    .setParameter(1, id).executeUpdate());
+            tx(() -> currentEntityManager().createQuery("DELETE FROM GamerDescription u WHERE u.rank.rankId = ?1")
+                    .setParameter(1, id).executeUpdate());
+            ranks.remove(rank);
+            Collection<Rank> newRanks = ranks;
+            tx(() -> currentEntityManager().createQuery("UPDATE Game u SET u.ranks = ?1 WHERE u.gameName LIKE:gameName")
+                    .setParameter("gameName", gameName).setParameter(1, newRanks).executeUpdate());
+            tx(() -> currentEntityManager().createQuery("DELETE FROM Rank u WHERE u.rankId = ?1")
+                    .setParameter(1, id).executeUpdate());
+            return rank;
+        }
+        else return null;
     }
 }
