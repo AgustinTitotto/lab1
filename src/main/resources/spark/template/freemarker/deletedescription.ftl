@@ -19,11 +19,13 @@
         font-size: 300%;
         text-align: center;
         font-family: 'LEMON MILK';
+        margin-left: 150px;
     }
 
     .container{
         font-size: 150%;
         color: #45cb85;
+        margin-left: 150px;
         text-align: center;
     }
 
@@ -87,12 +89,6 @@
         }
     }
 
-    .container{
-        color: #45cb85;
-        text-align: center;
-        margin-top: 100px;
-        font-family: "LEMON MILK";
-    }
 </style>
 <body>
 <div class="sidebar">
@@ -127,6 +123,6 @@
         <br>
         <input style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" type="submit" value="Delete">
     </form>
-<br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </body>
 </html>

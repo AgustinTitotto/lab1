@@ -6,8 +6,19 @@
     <title>Update Interest</title>
 </head>
 <style>
-    p1{
-        font-size: 120%;
+    h1{
+        color: white;
+        font-size: 300%;
+        text-align: center;
+        font-family: 'LEMON MILK';
+        margin-left: 150px;
+    }
+
+    .container{
+        font-size: 150%;
+        color: #45cb85;
+        margin-left: 150px;
+        text-align: center;
     }
 
     .sidebar {
@@ -66,12 +77,6 @@
         }
     }
 
-    .container{
-        color: #45cb85;
-        text-align: center;
-        margin-top: 100px;
-        font-family: "LEMON MILK";
-    }
 </style>
 <body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
  background-position: right; background-size: 80%">

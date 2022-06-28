@@ -18,11 +18,13 @@
         font-size: 300%;
         text-align: center;
         font-family: 'LEMON MILK';
+        margin-left: 150px;
     }
 
     .container{
         font-size: 150%;
         color: #45cb85;
+        margin-left: 150px;
         text-align: center;
     }
 
@@ -86,12 +88,6 @@
         }
     }
 
-    .container{
-        color: #45cb85;
-        text-align: center;
-        margin-top: 100px;
-        font-family: "LEMON MILK";
-    }
 </style>
 <body>
 <#if message??>
@@ -120,7 +116,7 @@
 <u>Create A Game Description</u>
 </h1>
 
-    <p style="color: #45cb85; font-size: 250%; text-align: center; font-family: 'LEMON MILK'">What game do you play?</p>
+    <p style="margin-left: 150px; color: #45cb85; font-size: 250%; text-align: center; font-family: 'LEMON MILK'">What game do you play?</p>
     <form class="container" action = "/createdescription" role="form" method="post">
         <label for="gameNameId" style="font-size: 200%"> Select Game:</label>
         <input type="text" id="gameNameId" name="gameName" style="font-size: 120%; font-family: 'LEMON MILK'" required>

@@ -18,16 +18,13 @@
         font-size: 300%;
         text-align: center;
         font-family: 'LEMON MILK';
+        margin-left: 150px;
     }
 
     .container{
         font-size: 150%;
         color: #45cb85;
         text-align: center;
-    }
-
-    p1{
-        font-size: 120%;
     }
 
     .sidebar {
@@ -44,14 +41,15 @@
         display: block;
         color: white;
         padding: 16px;
-        font-size: 290%;
+        font-size: 250%;
+        font-family: "LEMON MILK";
         text-decoration: none;
     }
 
     .sidebar a.active {
         background-color: #45cb85;
         color: green;
-        font-size: 290%;
+        font-size: 250%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -59,7 +57,7 @@
     .sidebar a.leave {
         background-color: #ff4655;
         color: darkred;
-        font-size: 290%;
+        font-size: 250%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -67,7 +65,8 @@
     .sidebar a:hover:not(.active) {
         background-color: #45cb85;
         color: green;
-        font-size: 290%;
+        font-size: 250%;
+        font-family: "LEMON MILK";
     }
 
     @media screen and (max-width: 700px) {
@@ -92,21 +91,28 @@
         margin-top: 100px;
         font-family: "LEMON MILK";
         font-size: 200%;
+        margin-left: 150px;
     }
 
     button{
         background-color: #45cb85;
         border-color: #45cb85;
-        font-size: 120%;
+        font-size: 170%;
         align-content: center;
-        margin-left: 600px;
-        margin-right: 600px;
+        margin-left: 650px;
+        margin-right: 500px;
     }
 
     .hpl{
         color: green;
         font-family: "LEMON MILK";
         text-decoration: none;
+    }
+
+    .hpl1{
+        font-family: "LEMON MILK";
+        text-decoration: none;
+        alignment: bottom;
     }
 </style>
 <body>
@@ -129,7 +135,9 @@
     <br>
     <br>
     <br>
-    <a class="leave" href="/logout" class="hpl">Sign Out</a>
+    <br>
+    <br>
+    <a class="leave" href="/logout" class="hpl1">Sign Out</a>
 </div>
 
 <h1>

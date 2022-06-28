@@ -14,13 +14,6 @@
         background-size: 85%;
     }
 
-    h1{
-        color: white;
-        font-size: 300%;
-        text-align: center;
-        font-family: 'LEMON MILK';
-    }
-
     .container{
         font-size: 150%;
         color: #45cb85;
@@ -45,14 +38,15 @@
         display: block;
         color: white;
         padding: 16px;
-        font-size: 290%;
+        font-size: 250%;
+        font-family: "LEMON MILK";
         text-decoration: none;
     }
 
     .sidebar a.active {
         background-color: #45cb85;
         color: green;
-        font-size: 290%;
+        font-size: 250%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -60,7 +54,7 @@
     .sidebar a.leave {
         background-color: #ff4655;
         color: darkred;
-        font-size: 290%;
+        font-size: 250%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -68,7 +62,8 @@
     .sidebar a:hover:not(.active) {
         background-color: #45cb85;
         color: green;
-        font-size: 290%;
+        font-size: 250%;
+        font-family: "LEMON MILK";
     }
 
     @media screen and (max-width: 700px) {
@@ -91,6 +86,7 @@
         color: #45cb85;
         text-align: center;
         margin-top: 100px;
+        margin-left: 110px;
         font-family: "LEMON MILK";
         font-size: 200%;
     }
@@ -114,10 +110,12 @@
     <br>
     <br>
     <br>
+    <br>
+    <br>
     <a class="leave" href="/logout" class="hpl">Sign Out</a>
 </div>
 
-<h1 style="color: white; font-size: 300%; text-align: center; font-family: 'LEMON MILK'">
+<h1 style="color: white; font-size: 300%; text-align: center; font-family: 'LEMON MILK'; margin-left: 150px">
     <u>View who you match with</u>
 </h1>
 
@@ -125,7 +123,7 @@
 
     <#if matches??>
     <#list matches as match>
-        <option style="margin-left: 625px; margin-right: 600px; color: #45cb85; font-size: 150%; font-family: 'LEMON MILK'" value="${match.userName}">${match.userName}</option>
+        <option style="margin-left: 725px; margin-right: 600px; color: #45cb85; font-size: 150%; font-family: 'LEMON MILK'" value="${match.userName}">${match.userName}</option>
     </#list>
     </#if>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>

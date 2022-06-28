@@ -120,7 +120,7 @@ public class WebSystem {
     }
 
     public List<Match> createMatch(GamerUser currentUser) {
-        return matches.match(currentUser);
+        return matches.match(currentUser, matches.showMatches(currentUser));
     }
 
     public List<GamerUser> showMatch(GamerUser gamerUser) {

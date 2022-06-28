@@ -21,6 +21,7 @@
         text-align: center;
         font-family: "LEMON MILK";
         margin-top: 20px;
+        margin-left: 150px;
     }
 
     .container{
@@ -32,9 +33,14 @@
     }
 
     .hpl{
-        color: green;
         font-family: "LEMON MILK";
         text-decoration: none;
+    }
+
+    .hpl1{
+        font-family: "LEMON MILK";
+        text-decoration: none;
+        alignment: bottom;
     }
 
     .sidebar {
@@ -104,7 +110,7 @@
     <br>
     <br>
     <br>
-    <a class="leave" href="/logout" class="hpl">Sign Out</a>
+    <a class="leave" href="/logout" class="hpl1">Sign Out</a>
 </div>
 
 <#if message??>

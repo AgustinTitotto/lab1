@@ -627,7 +627,7 @@ public class WebRoutes {
                         return new FreeMarkerEngine().render(new ModelAndView(model, FIND_PLAYERS_TEMPLATE));
                     }
                     else{
-                        system.setMessage("You have no interests");
+                        system.setMessage("You have no candidates");
                         res.redirect("/home?ok");
                         return halt();
                     }

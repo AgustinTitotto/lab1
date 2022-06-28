@@ -20,6 +20,7 @@
         font-size: 300%;
         text-align: center;
         font-family: 'LEMON MILK';
+        margin-left: 120px;
     }
 
     .container{
@@ -46,14 +47,15 @@
         display: block;
         color: white;
         padding: 16px;
-        font-size: 290%;
+        font-size: 250%;
         text-decoration: none;
+        font-family: "LEMON MILK";
     }
 
     .sidebar a.active {
         background-color: #45cb85;
         color: green;
-        font-size: 290%;
+        font-size: 250%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -61,7 +63,8 @@
     .sidebar a.leave {
         background-color: #ff4655;
         color: darkred;
-        font-size: 290%;
+        font-size: 250%;
+        alignment: bottom;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -69,7 +72,8 @@
     .sidebar a:hover:not(.active) {
         background-color: #45cb85;
         color: green;
-        font-size: 290%;
+        font-size: 250%;
+        font-family: "LEMON MILK";
     }
 
     @media screen and (max-width: 700px) {
@@ -102,6 +106,8 @@
     <br>
     <br>
     <br>
+    <br>
+    <br>
     <a class="leave" href="/logout" class="hpl">Sign Out</a>
 </div>
 <h1>
@@ -111,7 +117,7 @@
 
 <br>
 <form class="container" action="/findplayers" role="form" method="post">
-    <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;" name="gamers" id="gamers">
+    <select style="margin-left: 120px; font-size: 150%; background-color: #45cb85; border-color: #45cb85;" name="gamers" id="gamers">
         <#list descriptions as description>
             <option value="${description.gamerUser.userName}, ${description.game.gameName}, ${description.lvl}, ${description.rank.rankName}">
                 ${description.gamerUser.userName} - ${description.game.gameName} - ${description.lvl} - ${description.rank.rankName}</option>
@@ -119,7 +125,7 @@
     </select>
     <br>
     <br>
-    <input style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;" type="submit" value="Like">
+    <input style="margin-left: 120px; font-size: 150%; background-color: #45cb85; border-color: #45cb85;" type="submit" value="Like">
     <br>
     <br>
     <br>

@@ -18,6 +18,7 @@
         font-size: 300%;
         text-align: center;
         font-family: 'LEMON MILK';
+        margin-left: 150px;
     }
 
     .container{
@@ -44,14 +45,15 @@
         display: block;
         color: white;
         padding: 16px;
-        font-size: 290%;
+        font-size: 250%;
+        font-family: "LEMON MILK";
         text-decoration: none;
     }
 
     .sidebar a.active {
         background-color: #45cb85;
         color: green;
-        font-size: 290%;
+        font-size: 250%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -59,15 +61,15 @@
     .sidebar a.leave {
         background-color: #ff4655;
         color: darkred;
-        font-size: 290%;
+        font-size: 250%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
 
     .sidebar a:hover:not(.active) {
         background-color: #45cb85;
-        color: green;
-        font-size: 290%;
+        color: green;font-size: 250%;
+        font-family: "LEMON MILK";
     }
 
     @media screen and (max-width: 700px) {
@@ -92,15 +94,16 @@
         margin-top: 100px;
         font-family: "LEMON MILK";
         font-size: 200%;
+        margin-left: 150px;
     }
 
     button{
         background-color: #45cb85;
         border-color: #45cb85;
-        font-size: 150%;
+        font-size: 170%;
         align-content: center;
-        margin-left: 600px;
-        margin-right: 600px;
+        margin-left: 650px;
+        margin-right: 500px;
     }
 
     .hpl{
@@ -129,11 +132,14 @@
     <br>
     <br>
     <br>
+    <br>
+    <br>
     <a class="leave" href="/logout" class="hpl">Sign Out</a>
 </div>
 
 <h1>
-    <u>Welcome to your interests profile</u>
+    <u>Welcome to your</u><br>
+    <u>interests profile</u>
 </h1>
 
     <p>Create new interest</p>
