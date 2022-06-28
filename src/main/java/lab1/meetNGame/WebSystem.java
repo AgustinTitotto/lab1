@@ -205,4 +205,13 @@ public class WebSystem {
     public void updateDescriptionRank(GamerUser gamerUser, String gameName, Rank rank) {
         descriptions.updateByRank(gamerUser, gameName, rank);
     }
+
+    public void updateInterestLvl(GamerUser gamerUser, String gameName, String newLevel) {
+        interests.updateByLvl(gamerUser, gameName, newLevel);
+        setMessage("Interest updated");
+    }
+
+    public void updateInterestRank(GamerUser gamerUser, String gameName, Rank newRank) {
+        interests.updateByRank(gamerUser, gameName, newRank);
+    }
 }

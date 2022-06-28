@@ -15,6 +15,12 @@
 </style>
 <body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
  background-position: top; background-size: 95%">
+<#if message??>
+    <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
+     background-color: lightblue; text-align: center">
+        ${message}
+    </div>
+</#if>
 <h1 style="color: white; font-size: 300%; text-align: center; font-family: 'LEMON MILK'">
     <u>What game would you </u><br>
     <u>like to change?</u>

@@ -31,6 +31,7 @@ public class WebRoutes {
     public static final String UPDATE_DESCRIPTION_TEMPLATE = "updatedescription.ftl";
     public static final String DELETE_DESCRIPTION_TEMPLATE = "deletedescription.ftl";
     public static final String MANAGE_INTEREST_TEMPLATE = "manageinterest.ftl";
+    public static final String UPDATE_INTEREST_TEMPLATE = "updateinterest.ftl";
     public static final String DELETE_INTEREST_TEMPLATE = "deleteinterest.ftl";
     public static final String MANAGE_RANK_TEMPLATE = "/manageranks.ftl";
     public static final String CREATE_RANK_TEMPLATE = "createrank.ftl";
@@ -57,6 +58,7 @@ public class WebRoutes {
     public static final String UPDATE_DESCRIPTION_ROUTE = "/updatedescription";
     public static final String DELETE_DESCRIPTION_ROUTE = "/deletedescription";
     public static final String MANAGE_INTEREST_ROUTE = "/manageinterest";
+    public static final String UPDATE_INTEREST_ROUTE = "/updateinterest";
     public static final String DELETE_INTEREST_ROUTE = "/deleteinterest";
     public static final String MANAGE_RANK_ROUTE = "/manageranks";
     public static final String CREATE_RANK_ROUTE = "/createrank";
@@ -239,6 +241,7 @@ public class WebRoutes {
              if (updateGameForm.getGameName() != null && (updateGameForm.getCategory() != null || updateGameForm.getLvlMax() != null)){
                  if(updateGameForm.getCategory().equals("")){
                      if (updateGameForm.getLvlMax().equals("")) {
+                         system.setMessage("Choose a value to update");
                          res.redirect("/updategame?ok"); // tiene que tirar mensaje
                      }else{
                          system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
@@ -246,7 +249,7 @@ public class WebRoutes {
                      }
                      return halt();
                  }
-                else if (updateGameForm.getLvlMax().equals("") && !updateGameForm.getLvlMax().equals("")){
+                else if (updateGameForm.getLvlMax().equals("")){
                     system.updateGameCategory(updateGameForm.getGameName(), updateGameForm.getCategory());
                     res.redirect("/admin?ok");
                     return halt();
@@ -514,6 +517,76 @@ public class WebRoutes {
             }
         });
 
+        authenticatedGet(UPDATE_INTEREST_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                List<GamerInterest> gamerInterests = system.getGamerInterest(authenticatedGamerUser.get());
+                if(gamerInterests.size() != 0) {
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("interests", gamerInterests);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, UPDATE_INTEREST_TEMPLATE));
+                }else{
+                    final Map<String, Object> model = Map.of("message", "You don't have interests");
+                    return render(model, MANAGE_INTEREST_TEMPLATE);
+                }
+            } else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+
+        authenticatedPost(UPDATE_INTEREST_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                UpdateInterestForm updateInterestForm = UpdateInterestForm.createFromBody(req.body());
+                if (updateInterestForm.getLvl().equals("") && updateInterestForm.getRank().equals("")) {
+                    final Map<String, Object> model = Map.of("message", "You have to complete new lvl or rank");
+                    return render(model, MANAGE_INTEREST_TEMPLATE);
+                }else if (!updateInterestForm.getLvl().equals("") && updateInterestForm.getRank().equals("")){
+                    if (system.checkNewLevel(updateInterestForm.getGameName(), updateInterestForm.getLvl())) {
+                        system.updateInterestLvl(authenticatedGamerUser.get(), updateInterestForm.getGameName(), updateInterestForm.getLvl());
+                        res.redirect("/home?ok");
+                        return halt();
+                    }
+                    else{
+                        final Map<String, Object> model = Map.of("message", system.getMessage());
+                        system.setMessage(null);
+                        return render(model, UPDATE_INTEREST_TEMPLATE);
+                    }
+                }
+                else if (updateInterestForm.getLvl().equals("") && !updateInterestForm.getRank().equals("")){
+                    Rank newRank = system.getRank(updateInterestForm.getRank(), updateInterestForm.getGameName());
+                    if (newRank != null){
+                        system.updateInterestRank(authenticatedGamerUser.get(), updateInterestForm.getGameName(),newRank);
+                        res.redirect("home");
+                        return halt();
+                    }
+                    else {
+                        final Map<String, Object> model = Map.of("message", "Rank doesnt exist or does not belong to game");
+                        return render(model, UPDATE_INTEREST_TEMPLATE);
+                    }
+                }
+                else {
+                    Rank newRank = system.getRank(updateInterestForm.getRank(), updateInterestForm.getGameName());
+                    if (system.checkNewLevel(updateInterestForm.getGameName(), updateInterestForm.getLvl()) && (newRank != null)) {
+                        system.updateInterestLvl(authenticatedGamerUser.get(), updateInterestForm.getGameName(), updateInterestForm.getLvl());
+                        system.updateInterestRank(authenticatedGamerUser.get(), updateInterestForm.getGameName(),newRank);
+                        res.redirect("/home?ok");
+                        return halt();
+                    }
+                    else {
+                        final Map<String, Object> model = Map.of("message", "Rank doesnt exist/Lvl is higher than lvlMax");
+                        return render(model, UPDATE_DESCRIPTION_TEMPLATE);
+                    }
+                }
+            } else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+
         authenticatedGet(DELETE_INTEREST_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()){
@@ -610,6 +683,10 @@ public class WebRoutes {
                 List<Game> games = system.getGames();
                 if(!games.isEmpty()) {
                     final Map<String, Object> model = new HashMap<>();
+                    if(system.getMessage() != null) {
+                        model.put("message", system.getMessage());
+                        system.setMessage(null);
+                    }
                     model.put("games", games);
                     return new FreeMarkerEngine().render(new ModelAndView(model, gameTemplate));
                 }else{
