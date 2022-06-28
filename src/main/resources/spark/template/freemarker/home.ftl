@@ -102,7 +102,7 @@
 </style>
 <body>
 <div class="sidebar">
-    <a class="active" href="#home">Home</a>
+    <a href="/home" class="hpl">Home</a>
     <a href="/profile" class="hpl">Profile</a>
     <a href="/manageinterest" class="hpl">Interests</a>
     <a href="/findplayers" class="hpl">Players</a>

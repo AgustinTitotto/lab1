@@ -121,20 +121,15 @@
 </#if>
 
 <div class="sidebar">
-    <a href="/home">Home</a>
+    <a href="/home" class="hpl">Home</a>
     <a href="/profile" class="hpl">Profile</a>
-    <a class="active" href="#manageinterest">Interests</a>
-    <a href="/findplayers">Players</a>
+    <a href="/manageinterest" class="hpl">Interests</a>
+    <a href="/findplayers" class="hpl">Players</a>
     <a href="/viewmatch" class="hpl">Matches</a>
     <br>
     <br>
     <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <a class="leave" href="/logout" class="hpl">Sign Out</a>
+    <a class="leave" href="/logout" class="hpl1">Sign Out</a>
 </div>
 
 <h1>

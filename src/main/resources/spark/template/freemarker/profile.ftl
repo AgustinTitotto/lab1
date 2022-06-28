@@ -124,16 +124,11 @@
 </#if>
 
 <div class="sidebar">
-    <a href="/home">Home</a>
-    <a class="active" href="#profile" class="hpl">Profile</a>
-    <a a href="/manageinterest">Interests</a>
-    <a href="/findplayers">Players</a>
+    <a href="/home" class="hpl">Home</a>
+    <a href="/profile" class="hpl">Profile</a>
+    <a href="/manageinterest" class="hpl">Interests</a>
+    <a href="/findplayers" class="hpl">Players</a>
     <a href="/viewmatch" class="hpl">Matches</a>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
     <br>
     <br>
     <br>

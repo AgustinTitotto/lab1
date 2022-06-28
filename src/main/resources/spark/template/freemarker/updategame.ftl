@@ -15,22 +15,23 @@
 </style>
 <body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
  background-position: top; background-size: 95%">
-<#if message??>
-    <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
-     background-color: lightblue; text-align: center">
-        ${message}
-    </div>
-</#if>
-<h1 style="color: white; font-size: 300%; text-align: center; font-family: 'LEMON MILK'">
-    <u>What game would you </u><br>
-    <u>like to change?</u>
-</h1>
+    <h1 style="color: white; font-size: 300%; text-align: center; font-family: 'LEMON MILK'">
+        <u>What game would you </u><br>
+        <u>like to change?</u>
+    </h1>
+    <#if message??>
+        <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
+             background-color: lightblue; text-align: center">
+            ${message}
+        </div>
+    </#if>
     <form class="container" action="/updategame" role="form" method="post">
-        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
+        <input list="gameName" name="gameName" style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" required/>
+        <datalist style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
             <#list games as game>
                 <option value="${game.gameName}">${game.gameName}</option>
             </#list>
-        </select>
+        </datalist>
         <br>
         <br>
         <label for="newCategory" style="font-size: 200%"> New Category:</label>
