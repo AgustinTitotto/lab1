@@ -92,6 +92,14 @@
             float: none;
         }
     }
+
+    .container{
+        font-size: 125%;
+        color: #45cb85;
+        text-align: center;
+        font-family: "LEMON MILK";
+    }
+
 </style>
 <body>
 <!-- <a id="user"></a>-->
@@ -115,12 +123,32 @@
     <br>
     <br>
     <p class="container">Your matches are</p>
-    <#if matches??>
-        <#list matches as match>
-            <option style="color: #45cb85; font-size: 150%; font-family: 'LEMON MILK'"
-                    value="${match.userName}">${match.userName}</option>
+    <form action="/viewmatch" role="form" method="post">
+        <div class="container">
+            <select style="font-size: 125%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gamers" id="gamers">
+                <#if matches??>
+                    <#list matches as match>
+                        <option style="color: #45cb85; font-size: 125%; font-family: 'LEMON MILK'"
+                                value="${match.userName}">${match.userName}</option>
+                    </#list>
+                </#if>
+            </select>
+        </div>
+        <br>
+        <br>
+        <button type="submit" style="color: darkgreen; font-size: 150%; background-color: #45cb85; border-color: #45cb85;font-family: 'LEMON MILK'">
+            Click to view player profile
+        </button>
+        <br>
+        <br>
+        <#if descriptions??>
+        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="descriptions" id="descriptions">
+        <#list descriptions as description>
+            <option value="${description.game.gameName}, ${description.lvl}, ${description.rank.rankName}">
+                Game: ${description.game.gameName}, Lvl: ${description.lvl}, Rank: ${description.rank.rankName}</option>
         </#list>
-    </#if>
+        </#if>
+    </form>
 </div>
 </body>
 </html>

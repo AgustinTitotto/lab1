@@ -36,6 +36,7 @@ public class WebRoutes {
     public static final String MANAGE_RANK_TEMPLATE = "/manageranks.ftl";
     public static final String CREATE_RANK_TEMPLATE = "createrank.ftl";
     public static final String DELETE_RANK_TEMPLATE = "deleterank.ftl";
+    public static final String VIEW_PLAYER_PROFILE = "viewplayerprofile.ftl";
 
 
     /**
@@ -63,6 +64,7 @@ public class WebRoutes {
     public static final String MANAGE_RANK_ROUTE = "/manageranks";
     public static final String CREATE_RANK_ROUTE = "/createrank";
     public static final String DELETE_RANK_ROUTE = "/deleterank";
+    public static final String VIEW_PLAYER_ROUTE = "/viewplayerprofile";
 
     final static private WebSystem system = new WebSystem();
 
@@ -175,6 +177,11 @@ public class WebRoutes {
                     system.setMessage(null);
                 }
                 if (req.queryParams("noGames") != null) model.put("message", "No games created yet");
+                if (req.queryParams("liked") != null) model.put("message", "Liked user");
+                if (req.queryParams("updatedInterest") != null) model.put("message", "Interest updated");
+                if (req.queryParams("updatedDescription") != null) model.put("message", "Description updated");
+
+
                 return render(model, HOME_TEMPLATE);
             }else{
                 final Map<String, Object> model = new HashMap<>();
@@ -469,24 +476,27 @@ public class WebRoutes {
                 }else if (!updateDescriptionForm.getLvl().equals("") && updateDescriptionForm.getRank().equals("")){
                     if (system.checkNewLevel(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl())) {
                         system.updateDescriptionLvl(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
-                        res.redirect("/home?ok");
+                        res.redirect("/home?descriptionUpdated");
                         return halt();
                     }
                     else{
-                        final Map<String, Object> model = Map.of("message", system.getMessage());
+                        List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
+                        final Map<String, Object> model = Map.of("message", system.getMessage(), "descriptions", gamerDescriptions);
                         system.setMessage(null);
                         return render(model, UPDATE_DESCRIPTION_TEMPLATE);
                     }
                 }
                 else if (updateDescriptionForm.getLvl().equals("") && !updateDescriptionForm.getRank().equals("")){
                     Rank newRank = system.getRank(updateDescriptionForm.getRank(), updateDescriptionForm.getGameName());
-                    if (newRank != null){
+                    if (newRank.getRankId() != null){
                         system.updateDescriptionRank(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(),newRank);
-                        res.redirect("home");
+                        res.redirect("/home?updatedDescription");
                         return halt();
                     }
                     else {
-                        final Map<String, Object> model = Map.of("message", "Rank doesnt exist or does not belong to game");
+                        List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
+                        final Map<String, Object> model = Map.of("message","Rank doesnt exist or does not belong to game", "descriptions", gamerDescriptions);
+                        system.setMessage(null);
                         return render(model, UPDATE_DESCRIPTION_TEMPLATE);
                     }
                 }
@@ -495,11 +505,13 @@ public class WebRoutes {
                     if (system.checkNewLevel(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl()) && (newRank != null)) {
                         system.updateDescriptionLvl(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
                         system.updateDescriptionRank(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(),newRank);
-                        res.redirect("/home?ok");
+                        res.redirect("/home?updatedDescription");
                         return halt();
                     }
                     else {
-                        final Map<String, Object> model = Map.of("message", "Rank doesnt exist/Lvl is higher than lvlMax");
+                        List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
+                        final Map<String, Object> model = Map.of("message","Rank doesnt exist/Lvl is higher than lvlMax", "descriptions", gamerDescriptions);
+                        system.setMessage(null);
                         return render(model, UPDATE_DESCRIPTION_TEMPLATE);
                     }
                 }
@@ -571,21 +583,6 @@ public class WebRoutes {
                 return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
-        get(CREATE_INTEREST_ROUTE, (req, res) -> {
-            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if (authenticatedGamerUser.isPresent()) {
-                if (!authenticatedGamerUser.get().isAdmin()){
-                    return render(CREATE_INTEREST_TEMPLATE);
-                }
-                else {
-                    res.redirect(ADMIN_HOME_ROUTE);
-                    return halt();
-                }
-            } else {
-                res.redirect(LOGIN_ROUTE);
-                return halt();
-            }
-        });
 
         authenticatedPost(CREATE_INTEREST_ROUTE, (req, res) -> {
             CreateInterestForm interestForm = CreateInterestForm.createFromBody(req.body());
@@ -598,7 +595,8 @@ public class WebRoutes {
             }
             else {
                 final String message = system.getMessage();
-                final Map<String, Object> model = Map.of("message", message);
+                List<Game> games = system.getGames();
+                final Map<String, Object> model = Map.of("message", message, "games", games);
                 system.setMessage(null);
                 return render(model, CREATE_INTEREST_TEMPLATE);
             }
@@ -627,44 +625,54 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()) {
                 UpdateInterestForm updateInterestForm = UpdateInterestForm.createFromBody(req.body());
-                if (updateInterestForm.getLvl().equals("") && updateInterestForm.getRank().equals("")) {
-                    final Map<String, Object> model = Map.of("message", "You have to complete new lvl or rank");
+                if (!system.gameExists(updateInterestForm.getGameName())){
+                    final Map<String, Object> model = Map.of("message", "Game does not exist");
                     return render(model, MANAGE_INTEREST_TEMPLATE);
-                }else if (!updateInterestForm.getLvl().equals("") && updateInterestForm.getRank().equals("")){
-                    if (system.checkNewLevel(updateInterestForm.getGameName(), updateInterestForm.getLvl())) {
-                        system.updateInterestLvl(authenticatedGamerUser.get(), updateInterestForm.getGameName(), updateInterestForm.getLvl());
-                        res.redirect("/home?ok");
-                        return halt();
-                    }
-                    else{
-                        final Map<String, Object> model = Map.of("message", system.getMessage());
-                        system.setMessage(null);
-                        return render(model, UPDATE_INTEREST_TEMPLATE);
-                    }
-                }
-                else if (updateInterestForm.getLvl().equals("") && !updateInterestForm.getRank().equals("")){
-                    Rank newRank = system.getRank(updateInterestForm.getRank(), updateInterestForm.getGameName());
-                    if (newRank != null){
-                        system.updateInterestRank(authenticatedGamerUser.get(), updateInterestForm.getGameName(),newRank);
-                        res.redirect("home");
-                        return halt();
-                    }
-                    else {
-                        final Map<String, Object> model = Map.of("message", "Rank doesnt exist or does not belong to game");
-                        return render(model, UPDATE_INTEREST_TEMPLATE);
-                    }
                 }
                 else {
-                    Rank newRank = system.getRank(updateInterestForm.getRank(), updateInterestForm.getGameName());
-                    if (system.checkNewLevel(updateInterestForm.getGameName(), updateInterestForm.getLvl()) && (newRank != null)) {
-                        system.updateInterestLvl(authenticatedGamerUser.get(), updateInterestForm.getGameName(), updateInterestForm.getLvl());
-                        system.updateInterestRank(authenticatedGamerUser.get(), updateInterestForm.getGameName(),newRank);
-                        res.redirect("/home?ok");
-                        return halt();
+                    if (updateInterestForm.getLvl().equals("") && updateInterestForm.getRank().equals("")) {
+                        final Map<String, Object> model = Map.of("message", "You have to complete new lvl or rank");
+                        return render(model, MANAGE_INTEREST_TEMPLATE);
+                    }else if (!updateInterestForm.getLvl().equals("") && updateInterestForm.getRank().equals("")){
+                        if (system.checkNewLevel(updateInterestForm.getGameName(), updateInterestForm.getLvl())) {
+                            system.updateInterestLvl(authenticatedGamerUser.get(), updateInterestForm.getGameName(), updateInterestForm.getLvl());
+                            res.redirect("/home?updatedInterest");
+                            return halt();
+                        }
+                        else{
+                            List<GamerInterest> gamerInterests = system.getGamerInterest(authenticatedGamerUser.get());
+                            final Map<String, Object> model = Map.of("message", system.getMessage(),"interests", gamerInterests);
+                            system.setMessage(null);
+                            return render(model, UPDATE_INTEREST_TEMPLATE);
+                        }
+                    }
+                    else if (updateInterestForm.getLvl().equals("") && !updateInterestForm.getRank().equals("")){
+                        Rank newRank = system.getRank(updateInterestForm.getRank(), updateInterestForm.getGameName());
+                        if (newRank.getRankId() != null){
+                            system.updateInterestRank(authenticatedGamerUser.get(), updateInterestForm.getGameName(),newRank);
+                            res.redirect("/home?updatedInterest");
+                            return halt();
+                        }
+                        else {
+                            List<GamerInterest> gamerInterests = system.getGamerInterest(authenticatedGamerUser.get());
+                            final Map<String, Object> model = Map.of("message", "Rank doesnt exist or does not belong to game","interests", gamerInterests);
+                            system.setMessage(null);
+                            return render(model, UPDATE_INTEREST_TEMPLATE);
+                        }
                     }
                     else {
-                        final Map<String, Object> model = Map.of("message", "Rank doesnt exist/Lvl is higher than lvlMax");
-                        return render(model, UPDATE_DESCRIPTION_TEMPLATE);
+                        Rank newRank = system.getRank(updateInterestForm.getRank(), updateInterestForm.getGameName());
+                        if (system.checkNewLevel(updateInterestForm.getGameName(), updateInterestForm.getLvl()) && (newRank != null)) {
+                            system.updateInterestLvl(authenticatedGamerUser.get(), updateInterestForm.getGameName(), updateInterestForm.getLvl());
+                            system.updateInterestRank(authenticatedGamerUser.get(), updateInterestForm.getGameName(),newRank);
+                            res.redirect("/home?updatedInterest");
+                            return halt();
+                        }
+                        else {
+                            List<GamerInterest> gamerInterests = system.getGamerInterest(authenticatedGamerUser.get());
+                            final Map<String, Object> model = Map.of("message", "Rank doesnt exist/Lvl is higher than lvlMax","interests", gamerInterests);
+                            return render(model, UPDATE_INTEREST_TEMPLATE);
+                        }
                     }
                 }
             } else {
@@ -731,7 +739,7 @@ public class WebRoutes {
             Like like = system.registerLike(likedUser, gamer);
             system.createMatch(gamer);
             if (like != null){
-                res.redirect("/home?ok");
+                res.redirect("/home?liked");
                 return halt();
             }
             else {
@@ -751,6 +759,32 @@ public class WebRoutes {
                 }
                 else {
                     system.setMessage("You have no matches");
+                    res.redirect("/home?ok");
+                    return halt();
+                }
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+
+        authenticatedPost(VIEW_MATCH_ROUTE, (req, res) -> {
+            final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
+            if (!currentUser.get().isAdmin()){
+                LikeForm player = LikeForm.createFromBody(req.body());
+                Optional<GamerUser> gamerUser = system.findUserByUserName(player.getLikedUser());
+                List<GamerUser> matches = system.showMatch(currentUser.get());
+                if (gamerUser.isPresent()){
+                    List<GamerDescription> descriptions = system.getUserDescriptions(gamerUser.get());
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("matches", matches);
+                    model.put("descriptions", descriptions);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
+                }
+                else {
+                    system.setMessage("You have to select a player");
                     res.redirect("/home?ok");
                     return halt();
                 }

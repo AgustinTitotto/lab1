@@ -134,10 +134,10 @@
             </datalist>
             <br>
             <label for="newLvlId" style="font-size: 200%"> New Lvl:</label>
-            <input type="text" min="1" id="newLvlId" name="newLvl" style="font-size: 120%; font-family: 'LEMON MILK'" required>
+            <input type="text" min="1" id="newLvlId" name="newLvl" style="font-size: 120%; font-family: 'LEMON MILK'">
             <br>
             <label for="newRank" style="font-size: 200%"> New Rank:</label>
-            <input type="text" min="1" id="newRankId" name="newRank" style="font-size: 120%; font-family: 'LEMON MILK'" required>
+            <input type="text" min="1" id="newRankId" name="newRank" style="font-size: 120%; font-family: 'LEMON MILK'">
             <br>
             <br>
         </div>

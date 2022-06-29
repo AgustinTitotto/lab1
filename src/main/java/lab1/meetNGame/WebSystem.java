@@ -200,6 +200,7 @@ public class WebSystem {
     }
 
     public void updateDescriptionRank(GamerUser gamerUser, String gameName, Rank rank) {
+
         descriptions.updateByRank(gamerUser, gameName, rank);
     }
 

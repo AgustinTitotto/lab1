@@ -19,7 +19,7 @@ public class GamerInterest {
 
     private String lvl;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     private Rank rank;
 
     public GamerInterest(){

@@ -31,6 +31,7 @@
         color: #45cb85;
         text-align: left;
         padding-left: 100px;
+        font-family: "LEMON MILK";
     }
 
     .sidebar {

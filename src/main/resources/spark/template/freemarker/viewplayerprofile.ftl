@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Update Description</title>
+    <title>View Player Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
@@ -27,8 +27,8 @@
         text-align: center;
     }
 
-    .container{
-        font-size: 125%;
+    .container {
+        font-size: 150%;
         color: #45cb85;
         text-align: center;
         font-family: "LEMON MILK";
@@ -92,15 +92,15 @@
             float: none;
         }
     }
-
 </style>
 <body>
+<!-- <a id="user"></a>-->
 <div class="sidebar">
     <a class="active" href="/home">Home</a>
-    <a href="/profile">Profile</a>
+    <a class="active" href="/profile">Profile</a>
     <a class="active" href="/manageinterest">Interests</a>
     <a class="active" href="/findplayers">Players</a>
-    <a class="active" href="/viewmatch">Matches</a>
+    <a href="/viewmatch">Matches</a>
     <br>
     <br>
     <br>
@@ -108,40 +108,10 @@
 </div>
 
 <div class="content">
-    <h1>
-        <u>What game description</u><br>
-        <u>would you like to change?</u>
-    </h1>
-    <#if message??>
-        <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
-     background-color: lightblue; text-align: center">
-            ${message}
-        </div>
-    </#if>
-    <br>
-    <br>
-    <form class="container" action="/updatedescription" role="form" method="post">
-        <label for="gameName" style="font-size: 200%">Select Game:</label>
-        <br>
-        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
-            <#list descriptions as description>
-                <option value="${description.game.gameName}">${description.game.gameName}</option>
-            </#list>
-        </select>
-        <br>
-        <br>
-        <label for="newLvlId" style="font-size: 200%"> New Lvl:</label>
-        <br>
-        <input type="text" min="1" id="newLvlId" name="newLvl" style="font-size: 120%; font-family: 'LEMON MILK'">
-        <br>
-        <label for="newRank" style="font-size: 200%"> New Rank:</label>
-        <br>
-        <input type="text" min="1" id="newRankId" name="newRank" style="font-size: 120%; font-family: 'LEMON MILK'">
-        <br>
-        <br>
-        <input style="color: darkgreen; font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" type="submit" value="Update">
-    </form>
-
+        <#list descriptions as description>
+            <option value="${description.game.gameName}, ${description.lvl}, ${description.rank.rankName}">
+                Game: ${description.game.gameName}, Lvl: ${description.lvl}, Rank: ${description.rank.rankName}</option>
+        </#list>
 </div>
 </body>
 </html>

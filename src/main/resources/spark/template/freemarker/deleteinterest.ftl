@@ -118,8 +118,8 @@
         <div class="container">
             <label for="gameName" style="font-size: 200%;font-family: 'LEMON MILK'"> Select Game:</label>
             <br>
-            <input list="gameName" name="gameName" style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" required/>
-            <datalist style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
+            <input list="gamers" name="gamers" style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" required/>
+            <datalist style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gamers" id="gamers">
                 <#list interests as interest>
                     <option value="${interest.game.gameName}">${interest.game.gameName}</option>
                 </#list>

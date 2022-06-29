@@ -16,7 +16,7 @@ public class GamerDescription {
     @OneToOne
     private Game game;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     private Rank rank;
 
     @ManyToOne

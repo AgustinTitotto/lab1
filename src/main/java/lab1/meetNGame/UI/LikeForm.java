@@ -20,7 +20,6 @@ public class LikeForm {
     public static LikeForm createFromBody(String body){
         final MultiMap<String> params = new MultiMap<>();
         UrlEncoded.decodeTo(body, params, "UTF-8");
-
         return LikeForm.createLikeForm(
                 params.getValues("gamers")
         );
