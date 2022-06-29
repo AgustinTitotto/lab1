@@ -6,7 +6,7 @@
     <title>Delete game</title>
 </head>
 <body style="background-color: #272d39; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
- background-position: center; background-size: 85%">
+ background-position: top; background-size: 85%">
     <h1 style="color: white; font-size: 300%; font-family: 'LEMON MILK'; text-align: center"><u>Create a new rank</u></h1>
 
     <#if message??>
