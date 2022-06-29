@@ -22,7 +22,7 @@ public class WebRoutes {
     public static final String ADMIN_HOME_TEMPLATE = "adminhome.ftl";
     public static final String CREATE_GAME_TEMPLATE = "creategame.ftl";
     public static final String CREATE_DESCRIPTION_TEMPLATE = "createdescription.ftl";
-    public static final String CREATE_INTEREST_TEMPLATE = "createinterest.html";
+    public static final String CREATE_INTEREST_TEMPLATE = "createinterest.ftl";
     public static final String FIND_PLAYERS_TEMPLATE = "findplayers.ftl";
     public static final String VIEW_MATCH_TEMPLATE = "viewmatch.ftl";
     public static final String UPDATE_GAME_TEMPLATE = "updategame.ftl";
@@ -438,20 +438,6 @@ public class WebRoutes {
                 model.put("message", "User is Admin");
                 return render(model, ADMIN_HOME_TEMPLATE);
             }
-            /*CreateDescriptionForm descriptionForm = CreateDescriptionForm.createFromBody(req.body());
-            GamerUser gamer = getAuthenticatedGamerUser(req).get();
-            List<GamerDescription> myDescriptions = system.getUserDescriptions(gamer);
-            GamerDescription description = system.registerGamerDescription(gamer, myDescriptions, descriptionForm);
-            if (description != null){
-                res.redirect("/home?ok");
-                return halt();
-            }
-            else {
-                final String message = system.getMessage();
-                final Map<String, Object> model = Map.of("message", message);
-                system.setMessage(null);
-                return render(model, CREATE_DESCRIPTION_TEMPLATE);
-            }*/
         });
 
         authenticatedGet(UPDATE_DESCRIPTION_ROUTE, (req, res) -> {
@@ -539,8 +525,9 @@ public class WebRoutes {
                 }
             }
             else {
-                res.redirect(ADMIN_HOME_ROUTE);
-                return halt();
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
 
@@ -558,11 +545,32 @@ public class WebRoutes {
                 return render(MANAGE_INTEREST_TEMPLATE);
             }
             else {
-                res.redirect(ADMIN_HOME_ROUTE);
-                return halt();
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
 
+        authenticatedGet(CREATE_INTEREST_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()){
+                List<Game> games = system.getGames();
+                if (!games.isEmpty()){
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("games", games);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, CREATE_INTEREST_TEMPLATE));
+                }
+                else {
+                    res.redirect("/home?noGames");
+                    return halt();
+                }
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
         get(CREATE_INTEREST_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.isPresent()) {

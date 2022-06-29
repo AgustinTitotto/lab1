@@ -1,9 +1,7 @@
-<#-- @ftlvariable name="descriptions" type="java.util.List<GamerDescription>" -->
-<#-- @ftlvariable name="userNames" type="java.util.List<String>" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>View Players</title>
+    <title>Create Interests</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
@@ -28,10 +26,11 @@
         text-align: center;
     }
 
-    .container{
+    .container {
         font-size: 125%;
         color: #45cb85;
-        font-family: "LEMON MILK";
+        text-align: left;
+        padding-left: 100px;
     }
 
     .sidebar {
@@ -92,14 +91,14 @@
             float: none;
         }
     }
+
 </style>
 <body>
-<!-- <a id="user"></a>-->
 <div class="sidebar">
     <a class="active" href="/home">Home</a>
     <a class="active" href="/profile">Profile</a>
-    <a class="active" href="/manageinterest">Interests</a>
-    <a href="/findplayers">Players</a>
+    <a href="/manageinterest">Interests</a>
+    <a class="active" href="/findplayers">Players</a>
     <a class="active" href="/viewmatch">Matches</a>
     <br>
     <br>
@@ -109,33 +108,41 @@
 
 <div class="content">
     <h1>
-        <u>Meet the people who would</u><br>
-        <u>like to play with you</u>
+        <u>Create An Interest</u>
     </h1>
+    <#if message??>
+        <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
+         background-color: lightblue; text-align: center">
+            ${message}
+        </div>
+    </#if>
+    <p style="color: #45cb85; font-size: 250%; text-align: center; font-family: 'LEMON MILK'">What do you seek in a player?</p>
     <br>
     <br>
     <br>
-    <form class="container" action="/findplayers" role="form" method="post">
-        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;" name="gamers" id="gamers">
-            <#list descriptions as description>
-                <option value="${description.gamerUser.userName}, ${description.game.gameName}, ${description.lvl}, ${description.rank.rankName}">
-                    ${description.gamerUser.userName} - ${description.game.gameName} - ${description.lvl} - ${description.rank.rankName}</option>
-            </#list>
-        </select>
-        <br>
-        <br>
-        <button type="submit" style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;font-family: 'LEMON MILK'">
-        Like
+    <form action = "/createinterest" role="form" method="post">
+        <div class="container">
+            <label for="gameName" style="font-size: 200%;font-family: 'LEMON MILK'"> Select Game:</label>
+            <input list="gameName" name="gameName" style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" required/>
+            <datalist style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
+                <#list games as game>
+                    <option value="${game.gameName}">${game.gameName}</option>
+                </#list>
+            </datalist>
+            <br>
+            <label for="gamerLvl" style="font-size: 200%;font-family: 'LEMON MILK'"> Select lvl:</label>
+            <input type="number" min="1" id="gamerLvl" name="gamerLvl" style="font-size: 120%" required>
+            <br>
+            <label for="gamerRank" style="font-size: 200%;font-family: 'LEMON MILK'"> Select Rank:</label>
+            <input type="text" min="1" id="gamerRank" name="gamerRank" style="font-size: 120%" required>
+            <br>
+            <br>
+        </div>
+        <button type="submit" style="color: darkgreen; font-size: 150%; background-color: #45cb85; border-color: #45cb85;font-family: 'LEMON MILK'">
+            Create interest
         </button>
     </form>
 </div>
+
 </body>
-<!--<script>
-    let arr = [<#list userNames as userName>"${userName}", </#list>]
-    let desc = [<#list descriptions as description>"${description.game.gameName}", </#list>]
-    let a = arr[0]
-    document.write(a)
-    document.getElementById("user").innerHTML = a;
-</script> -->
 </html>
-<!--  -->

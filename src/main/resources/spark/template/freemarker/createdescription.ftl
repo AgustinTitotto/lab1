@@ -32,12 +32,8 @@
         color: #45cb85;
         text-align: left;
         padding-left: 100px;
-
     }
 
-    p1{
-        font-size: 120%;
-    }
 
     .sidebar {
         height: 100%;
@@ -128,7 +124,7 @@
     <br>
     <form action = "/createdescription" role="form" method="post">
         <div class="container" >
-            <label for="gamerLvl" style="font-size: 200%;font-family: 'LEMON MILK'"> Select Game:</label>
+            <label for="gameName" style="font-size: 200%;font-family: 'LEMON MILK'"> Select Game:</label>
             <input list="gameName" name="gameName" style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" required/>
             <datalist style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
                 <#list games as game>
