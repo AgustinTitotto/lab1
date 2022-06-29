@@ -129,7 +129,7 @@ public class Games {
     }
 
     public Rank deleteRank(String gameName, String newRank) {
-        Rank rank = new Rank();
+        Rank rank = null;
         Optional<Game> game1 = findByGameName(gameName);
         List<Rank> ranks = game1.get().getRanks();
         for (int i = 0; i < ranks.size(); i++) {
