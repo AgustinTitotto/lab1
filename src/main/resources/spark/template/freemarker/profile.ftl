@@ -9,8 +9,8 @@
         background-color: #282e3a;
         background-image: url(/img/Background2.jpg);
         background-position: right;
-        background-repeat: no-repeat;
-        background-size: 85%;
+        background-size: 81%;
+        background-repeat: no-repeat
     }
 
     h1{
@@ -28,10 +28,11 @@
     }
 
     .sidebar {
-        margin-top: -40px;
+        margin-top: -30px;
+        margin-left: -15px;
         padding: 0;
-        width: 200px;
         background-color: #282e3a;
+        width: 250px;
         position: fixed;
         height: 100%;
         overflow: auto;
@@ -41,15 +42,14 @@
         display: block;
         color: white;
         padding: 16px;
-        font-size: 250%;
-        font-family: "LEMON MILK";
+        font-size: 295%;
         text-decoration: none;
     }
 
     .sidebar a.active {
         background-color: #45cb85;
         color: green;
-        font-size: 250%;
+        font-size: 295%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -57,7 +57,7 @@
     .sidebar a.leave {
         background-color: #ff4655;
         color: darkred;
-        font-size: 250%;
+        font-size: 295%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -65,8 +65,7 @@
     .sidebar a:hover:not(.active) {
         background-color: #45cb85;
         color: green;
-        font-size: 250%;
-        font-family: "LEMON MILK";
+        font-size: 295%;
     }
 
     @media screen and (max-width: 700px) {
@@ -129,6 +128,9 @@
     <a href="/manageinterest" class="hpl">Interests</a>
     <a href="/findplayers" class="hpl">Players</a>
     <a href="/viewmatch" class="hpl">Matches</a>
+    <br>
+    <br>
+    <br>
     <br>
     <br>
     <br>

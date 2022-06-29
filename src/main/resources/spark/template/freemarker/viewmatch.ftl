@@ -10,8 +10,8 @@
         background-color: #282e3a;
         background-image: url(/img/Background2.jpg);
         background-position: right;
-        background-repeat: no-repeat;
-        background-size: 85%;
+        background-size: 81%;
+        background-repeat: no-repeat
     }
 
     .container{
@@ -25,11 +25,12 @@
     }
 
     .sidebar {
-        margin-top: -40px;
+        margin-top: -30px;
+        margin-left: -15px;
         padding: 0;
-        width: 200px;
-        position: fixed;
         background-color: #282e3a;
+        width: 250px;
+        position: fixed;
         height: 100%;
         overflow: auto;
     }
@@ -38,15 +39,14 @@
         display: block;
         color: white;
         padding: 16px;
-        font-size: 250%;
-        font-family: "LEMON MILK";
+        font-size: 295%;
         text-decoration: none;
     }
 
     .sidebar a.active {
         background-color: #45cb85;
         color: green;
-        font-size: 250%;
+        font-size: 295%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -54,7 +54,7 @@
     .sidebar a.leave {
         background-color: #ff4655;
         color: darkred;
-        font-size: 250%;
+        font-size: 295%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -62,8 +62,7 @@
     .sidebar a:hover:not(.active) {
         background-color: #45cb85;
         color: green;
-        font-size: 250%;
-        font-family: "LEMON MILK";
+        font-size: 295%;
     }
 
     @media screen and (max-width: 700px) {
@@ -81,29 +80,18 @@
             float: none;
         }
     }
-
-    p{
-        color: #45cb85;
-        text-align: center;
-        margin-top: 100px;
-        margin-left: 110px;
-        font-family: "LEMON MILK";
-        font-size: 200%;
-    }
 </style>
 <body>
-<#if message??>
-    <div class="alert alert-success" style="margin-left: 625px; margin-right: 600px; color: #45cb85; font-size: 150%; font-family: 'LEMON MILK'; text-align: center">
-        ${message}
-    </div>
-</#if>
-
+<!-- <a id="user"></a>-->
 <div class="sidebar">
     <a href="/home" class="hpl">Home</a>
     <a href="/profile" class="hpl">Profile</a>
     <a href="/manageinterest" class="hpl">Interests</a>
     <a href="/findplayers" class="hpl">Players</a>
     <a href="/viewmatch" class="hpl">Matches</a>
+    <br>
+    <br>
+    <br>
     <br>
     <br>
     <br>
@@ -114,13 +102,13 @@
     <u>View who you match with</u>
 </h1>
 
-    <p>Your matches are</p>
+    <p style="margin-left: 120px; text-align: center; color: #45cb85; font-size: 150%">Your matches are</p>
 
     <#if matches??>
     <#list matches as match>
-        <option style="margin-left: 725px; margin-right: 600px; color: #45cb85; font-size: 150%; font-family: 'LEMON MILK'" value="${match.userName}">${match.userName}</option>
+        <option style="margin-left: 700px; margin-right: 600px; color: #45cb85; font-size: 150%; font-family: 'LEMON MILK'" value="${match.userName}">${match.userName}</option>
     </#list>
     </#if>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </body>
 </html>

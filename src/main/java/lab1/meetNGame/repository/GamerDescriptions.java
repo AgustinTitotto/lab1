@@ -64,6 +64,7 @@ public class GamerDescriptions {
     }
 
     public List<GamerDescription> getGamersWithInterest(List<GamerInterest> interestGamers) {
+        List<GamerDescription> purgedDescriptions = new ArrayList<>();
         List<GamerDescription> finalDescriptions = new ArrayList<>();
         String userName = interestGamers.get(0).getGamerUser().getUserName();
         List<GamerDescription> descriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription u",
@@ -71,16 +72,16 @@ public class GamerDescriptions {
         List<Like> likedGamers = tx(() -> currentEntityManager().createQuery("SELECT u FROM Like u WHERE u.mainUser.userName LIKE: userName",
                 Like.class).setParameter("userName", userName).getResultList());
         for (int i = 0; i < descriptions.size(); i++) {
-            if (descriptions.get(i).getGamerUser().getUserName().equals(userName)){
-                descriptions.remove(descriptions.get(i));
+            if (!descriptions.get(i).getGamerUser().getUserName().equals(userName)){
+                purgedDescriptions.add(descriptions.get(i));
             }
         }
         for (int i = 0; i < interestGamers.size(); i++) {
-            for (int j = 0; j < descriptions.size(); j++) {
-                if (interestGamers.get(i).getGame().getGameName().equals(descriptions.get(j).getGame().getGameName())
-                        && Integer.parseInt(interestGamers.get(i).getLvl()) < Integer.parseInt(descriptions.get(j).getLvl())
-                        && interestGamers.get(i).getRank().getRankName().equals(descriptions.get(j).getRank().getRankName())){
-                    finalDescriptions.add(descriptions.get(j));
+            for (int j = 0; j < purgedDescriptions.size(); j++) {
+                if (interestGamers.get(i).getGame().getGameName().equals(purgedDescriptions.get(j).getGame().getGameName())
+                        && Integer.parseInt(interestGamers.get(i).getLvl()) < Integer.parseInt(purgedDescriptions.get(j).getLvl())
+                        && interestGamers.get(i).getRank().getRankName().equals(purgedDescriptions.get(j).getRank().getRankName())){
+                    finalDescriptions.add(purgedDescriptions.get(j));
                 }
             }
         }

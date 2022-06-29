@@ -32,17 +32,6 @@
         margin-top: 50px;
     }
 
-    .hpl{
-        font-family: "LEMON MILK";
-        text-decoration: none;
-    }
-
-    .hpl1{
-        font-family: "LEMON MILK";
-        text-decoration: none;
-        alignment: bottom;
-    }
-
     .sidebar {
         margin-top: -20px;
         padding: 0;
@@ -99,6 +88,16 @@
         }
     }
 
+    .hpl{
+        font-family: "LEMON MILK";
+        text-decoration: none;
+    }
+
+    .hpl1{
+        font-family: "LEMON MILK";
+        text-decoration: none;
+        alignment: bottom;
+    }
 </style>
 <body>
 <div class="sidebar">

@@ -10,8 +10,8 @@
         background-color: #282e3a;
         background-image: url(/img/Background2.jpg);
         background-position: right;
-        background-repeat: no-repeat;
-        background-size: 85%;
+        background-size: 81%;
+        background-repeat: no-repeat
     }
 
     h1{
@@ -34,10 +34,11 @@
     }
 
     .sidebar {
-        margin-top: -40px;
+        margin-top: -30px;
+        margin-left: -15px;
         padding: 0;
-        width: 205px;
         background-color: #282e3a;
+        width: 250px;
         position: fixed;
         height: 100%;
         overflow: auto;
@@ -47,14 +48,14 @@
         display: block;
         color: white;
         padding: 16px;
-        font-size: 290%;
+        font-size: 295%;
         text-decoration: none;
     }
 
     .sidebar a.active {
         background-color: #45cb85;
         color: green;
-        font-size: 290%;
+        font-size: 295%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -62,7 +63,7 @@
     .sidebar a.leave {
         background-color: #ff4655;
         color: darkred;
-        font-size: 290%;
+        font-size: 295%;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
@@ -70,7 +71,7 @@
     .sidebar a:hover:not(.active) {
         background-color: #45cb85;
         color: green;
-        font-size: 290%;
+        font-size: 295%;
     }
 
     @media screen and (max-width: 700px) {
@@ -88,14 +89,14 @@
             float: none;
         }
     }
-
 </style>
 <body>
+<!-- <a id="user"></a>-->
 <div class="sidebar">
-    <a href="/home">Home</a>
-    <a class="active" href="/profile" class="hpl">Profile</a>
-    <a href="/manageinterest">Interests</a>
-    <a href="/findplayers">Players</a>
+    <a href="/home" class="hpl">Home</a>
+    <a href="/profile" class="hpl">Profile</a>
+    <a href="/manageinterest" class="hpl">Interests</a>
+    <a href="/findplayers" class="hpl">Players</a>
     <a href="/viewmatch" class="hpl">Matches</a>
     <br>
     <br>
@@ -103,7 +104,7 @@
     <br>
     <br>
     <br>
-    <a class="leave" href="/logout" class="hpl">Sign Out</a>
+    <a class="leave" href="/logout" class="hpl1">Sign Out</a>
 </div>
 <h1>
     <u>What dsecription would you</u><br>
