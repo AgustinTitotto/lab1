@@ -199,6 +199,7 @@ public class WebRoutes {
                 if (req.queryParams("updatedGame") != null) model.put("message", "Game updated");
                 if (req.queryParams("deletedGame") != null) model.put("message", "Game deleted");
                 if (req.queryParams("updatedRanks") != null) model.put("message", "Ranks updated");
+                if (req.queryParams("deletedRanks") != null) model.put("message", "Rank deleted");
 
 
                 return render(model, ADMIN_HOME_TEMPLATE);
@@ -373,7 +374,7 @@ public class WebRoutes {
                 RankForm rankForm = RankForm.createFromBody(req.body());
                 Rank newRank = system.deleteRank(rankForm.getGameName(), rankForm.getNewRank());
                 if (newRank != null){                       //Se fija que el rango exista
-                    res.redirect("/admin?ok");
+                    res.redirect("/admin?deletedRanks");
                     return halt();
                 }
                 else {                                      //Vuelve al deleterank con mensaje
