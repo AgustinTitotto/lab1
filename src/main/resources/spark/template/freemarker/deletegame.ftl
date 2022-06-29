@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="games" type="java.util.List<Game>" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>

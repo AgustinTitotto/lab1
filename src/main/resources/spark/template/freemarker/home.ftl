@@ -7,52 +7,50 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <style>
-    body{
-        background-color: #282e3a;
-        background-image: url(/img/Background2.jpg);
-        background-position: right;
-        background-size: 81%;
-        background-repeat: no-repeat
-    }
 
     h1{
         color: white;
         font-size: 300%;
         text-align: center;
         font-family: "LEMON MILK";
-        margin-top: 20px;
-        margin-left: 150px;
     }
 
-    .container{
-        text-align: center;
-        font-size: 150%;
-        color: #45cb85;
-        font-family: "LEMON MILK";
-        margin-top: 50px;
+    .content {
+        padding: 20px 20px;
+        height: 768px;
+        margin-left: 250px;
+        background-color: #272d39;
+        background-image: url(/img/Background2.jpg);
+        background-position: top;
+        background-size: contain;
+        background-repeat: repeat-y;
     }
 
     .sidebar {
-        margin-top: -20px;
-        padding: 0;
-        background-color: #282e3a;
+        height: 100%;
         width: 250px;
         position: fixed;
-        height: 100%;
-        overflow: auto;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        overflow-x: hidden;
+        padding-top: 20px;
+        background-color: #272d39;
     }
 
     .sidebar a {
-        display: block;
-        color: white;
         padding: 16px;
+        background-color: #45cb85;
+        font-family: "LEMON MILK";
+        color: green;
+        display: block;
         font-size: 250%;
         text-decoration: none;
     }
 
     .sidebar a.active {
-        background-color: #45cb85;
-        color: green;
+        background-color: #272d39;
+        color: white;
         font-size: 250%;
         font-family: "LEMON MILK";
         text-decoration: none;
@@ -66,7 +64,7 @@
         text-decoration: none;
     }
 
-    .sidebar a:hover:not(.active) {
+    .sidebar a.active:hover{
         background-color: #45cb85;
         color: green;
         font-size: 250%;
@@ -80,7 +78,6 @@
         }
         .sidebar a {float: left;}
     }
-
     @media screen and (max-width: 400px) {
         .sidebar a {
             text-align: center;
@@ -88,41 +85,32 @@
         }
     }
 
-    .hpl{
-        font-family: "LEMON MILK";
-        text-decoration: none;
-    }
-
-    .hpl1{
-        font-family: "LEMON MILK";
-        text-decoration: none;
-        alignment: bottom;
-    }
 </style>
 <body>
 <div class="sidebar">
-    <a href="/home" class="hpl">Home</a>
-    <a href="/profile" class="hpl">Profile</a>
-    <a href="/manageinterest" class="hpl">Interests</a>
-    <a href="/findplayers" class="hpl">Players</a>
-    <a href="/viewmatch" class="hpl">Matches</a>
+    <a href="/home">Home</a>
+    <a class="active" href="/profile">Profile</a>
+    <a class="active" href="/manageinterest">Interests</a>
+    <a class="active" href="/findplayers">Players</a>
+    <a class="active" href="/viewmatch">Matches</a>
     <br>
     <br>
     <br>
-    <a class="leave" href="/logout" class="hpl1">Sign Out</a>
+    <a class="leave" href="/logout">Sign Out</a>
 </div>
 
-<#if message??>
-    <div class="alert alert-success" style="color: black; font-family: 'LEMON MILK';
-     background-color: lightblue; margin-left: 250px; text-align: left; font-size: 150%">
-        ${message}
-    </div>
-</#if>
-
+<div class="content">
     <h1><u>Welcome back</u> <br>
         <u>${myName}</u></h1>
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <#if message??>
+        <div class="alert alert-success" style="color: black; font-family: 'LEMON MILK';
+         background-color: lightblue; text-align: center; font-size: 150%">
+            ${message}
+        </div>
+    </#if>
+</div>
+
 
 </body>
 

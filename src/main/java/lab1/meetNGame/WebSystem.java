@@ -133,17 +133,14 @@ public class WebSystem {
 
     public void updateGameLvl(String gameName, String newMaxLvl) {
         games.updateByLvl(gameName, newMaxLvl);
-        setMessage("Game updated");
     }
 
     public void updateGameCategory(String gameName, String category) {
         games.updateByCategory(gameName, category);
-        setMessage("Game updated");
     }
 
     public void deleteGame(String game) {
         games.deleteGame(game);
-        setMessage("Game deleted");
     }
 
     public List<GamerDescription> getUserDescriptions(GamerUser gamerUser) {
@@ -213,5 +210,9 @@ public class WebSystem {
 
     public void updateInterestRank(GamerUser gamerUser, String gameName, Rank newRank) {
         interests.updateByRank(gamerUser, gameName, newRank);
+    }
+
+    public boolean gameExists(String gameName) {
+        return games.gameExists(gameName);
     }
 }

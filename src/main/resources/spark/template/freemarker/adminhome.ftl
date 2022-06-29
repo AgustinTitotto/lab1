@@ -26,25 +26,19 @@
         font-size: 80%;
     }
 
-    button1{
-        background-color: #ff4655;
-        border-color: #ff4655;
-        font-size: 80%;
-    }
-
     .hpl{
-        color: green;
+        color: darkgreen;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
 
     .hpl1{
-        color: darkred;
+        color: black;
         font-family: "LEMON MILK";
         text-decoration: none;
     }
 </style>
-<body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
+<body style="background-color: #272d39; background-image: url(/img/Background2.jpg); background-repeat: no-repeat;
  background-position: center; background-size: 85%">
 
     <h1>
@@ -76,9 +70,9 @@
             <a href="/manageranks" class="hpl">Manage Ranks</a>
         </button>
         <p>Leave session</p>
-        <button1>
-            <a href="/logout" class="hpl1">Sign Out</a>
-        </button1>
+        <button  style="font-size: 80%;background-color: #ff4655;border-color: #ff4655">
+            <a href="/logout" class="hpl1">Log Out</a>
+        </button>
     </div>
 
 </body>

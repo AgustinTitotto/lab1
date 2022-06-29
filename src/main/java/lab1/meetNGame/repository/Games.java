@@ -156,8 +156,8 @@ public class Games {
             tx(() -> currentEntityManager().createQuery("DELETE FROM GamerDescription u WHERE u.rank.rankId = ?1")
                     .setParameter(1, id).executeUpdate());
             ranks.remove(rank); //List<Rank> con los rangos del juego, menos el que borre
-            tx(() -> currentEntityManager().createQuery("UPDATE Game u SET u.ranks = ?1 WHERE u.gameName LIKE:gameName")
-                    .setParameter("gameName", gameName).setParameter(1, ranks).executeUpdate());
+            game1.get().setRanks(ranks);
+            EntityTransactions.persist(game1.get());
             tx(() -> currentEntityManager().createQuery("DELETE FROM Rank u WHERE u.rankId = ?1")
                     .setParameter(1, id).executeUpdate());
             return rank;
