@@ -474,7 +474,7 @@ public class WebRoutes {
                     final Map<String, Object> model = Map.of("message", "You have to complete new lvl or rank");
                     return render(model, PROFILE_TEMPLATE);
                 }else if (!updateDescriptionForm.getLvl().equals("") && updateDescriptionForm.getRank().equals("")){
-                    if (system.checkNewLevel(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl())) {
+                    if (system.checkNewLevelDescription(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl())) {
                         system.updateDescriptionLvl(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
                         res.redirect("/home?descriptionUpdated");
                         return halt();
@@ -502,7 +502,7 @@ public class WebRoutes {
                 }
                 else {
                     Rank newRank = system.getRank(updateDescriptionForm.getRank(), updateDescriptionForm.getGameName());
-                    if (system.checkNewLevel(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl()) && (newRank != null)) {
+                    if (system.checkNewLevelDescription(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl()) && (newRank != null)) {
                         system.updateDescriptionLvl(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
                         system.updateDescriptionRank(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(),newRank);
                         res.redirect("/home?updatedDescription");
@@ -634,7 +634,7 @@ public class WebRoutes {
                         final Map<String, Object> model = Map.of("message", "You have to complete new lvl or rank");
                         return render(model, MANAGE_INTEREST_TEMPLATE);
                     }else if (!updateInterestForm.getLvl().equals("") && updateInterestForm.getRank().equals("")){
-                        if (system.checkNewLevel(updateInterestForm.getGameName(), updateInterestForm.getLvl())) {
+                        if (system.checkNewLevelInterest(updateInterestForm.getGameName(), updateInterestForm.getLvl())) {
                             system.updateInterestLvl(authenticatedGamerUser.get(), updateInterestForm.getGameName(), updateInterestForm.getLvl());
                             res.redirect("/home?updatedInterest");
                             return halt();
@@ -662,7 +662,7 @@ public class WebRoutes {
                     }
                     else {
                         Rank newRank = system.getRank(updateInterestForm.getRank(), updateInterestForm.getGameName());
-                        if (system.checkNewLevel(updateInterestForm.getGameName(), updateInterestForm.getLvl()) && (newRank != null)) {
+                        if (system.checkNewLevelInterest(updateInterestForm.getGameName(), updateInterestForm.getLvl()) && (newRank != null)) {
                             system.updateInterestLvl(authenticatedGamerUser.get(), updateInterestForm.getGameName(), updateInterestForm.getLvl());
                             system.updateInterestRank(authenticatedGamerUser.get(), updateInterestForm.getGameName(),newRank);
                             res.redirect("/home?updatedInterest");

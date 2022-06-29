@@ -147,7 +147,7 @@ public class WebSystem {
         return descriptions.getUserDescriptions(gamerUser);
     }
 
-    public boolean checkNewLevel(String gameName, String newLevel){
+    public boolean checkNewLevelDescription(String gameName, String newLevel){
         if (descriptions.checkNewLvl(gameName, newLevel)){
             return true;
         }else{
@@ -215,5 +215,14 @@ public class WebSystem {
 
     public boolean gameExists(String gameName) {
         return games.gameExists(gameName);
+    }
+
+    public boolean checkNewLevelInterest(String gameName, String newLevel) {
+        if (interests.checkNewLvl(gameName, newLevel)){
+            return true;
+        }else{
+            setMessage("This level is not within the game's range");
+            return false;
+        }
     }
 }
