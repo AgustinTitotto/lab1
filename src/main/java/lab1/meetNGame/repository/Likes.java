@@ -5,10 +5,6 @@ import lab1.meetNGame.model.GamerUser;
 import lab1.meetNGame.model.Like;
 import lab1.meetNGame.persistence.EntityTransactions;
 
-import java.util.List;
-
-import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
-import static lab1.meetNGame.persistence.EntityTransactions.tx;
 
 public class Likes {
 

@@ -125,11 +125,11 @@
     <br>
     <form action="/updateinterest" role="form" method="post">
         <div class="container">
-            <label for="gameName" style="font-size: 200%;font-family: 'LEMON MILK'"> Select Game:</label>
+            <label for="gameName" style="font-size: 200%;font-family: 'LEMON MILK'"> Select Interest:</label>
             <input list="gameName" name="gameName" style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" required/>
             <datalist style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
                 <#list interests as interest>
-                    <option value="${interest.game.gameName}">${interest.game.gameName}</option>
+                    <option value="${interest.game.gameName}">Game:${interest.game.gameName}, Lvl:${interest.lvl}, Rank:${interest.rank.rankName}</option>
                 </#list>
             </datalist>
             <br>

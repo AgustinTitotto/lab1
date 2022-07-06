@@ -771,11 +771,11 @@ public class WebRoutes {
             }
         });
 
-        authenticatedPost(VIEW_MATCH_ROUTE, (req, res) -> {
+        authenticatedGet("/viewmatch/:username", (req, res) -> {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
-                LikeForm player = LikeForm.createFromBody(req.body());
-                Optional<GamerUser> gamerUser = system.findUserByUserName(player.getLikedUser());
+                String username = req.params(":username");
+                Optional<GamerUser> gamerUser = system.findUserByUserName(username);
                 List<GamerUser> matches = system.showMatch(currentUser.get());
                 if (gamerUser.isPresent()){
                     List<GamerDescription> descriptions = system.getUserDescriptions(gamerUser.get());
@@ -789,6 +789,47 @@ public class WebRoutes {
                     res.redirect("/home?ok");
                     return halt();
                 }
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+
+        authenticatedGet("/chat/:username", (req, res) -> {
+            final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
+            if (!currentUser.get().isAdmin()){
+                String username2 = req.params(":username");
+                List<Message> messages = system.getMessages(currentUser.get().getUserName(), username2);
+                if (messages.isEmpty()){
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("sender", currentUser.get().getUserName());
+                    model.put("receiver", username2);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, "chat.ftl"));
+                }
+                else {
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("messages", messages);
+                    model.put("sender", currentUser.get().getUserName());
+                    model.put("receiver", username2);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, "chat.ftl"));
+                }
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+        authenticatedPost("/chat/:username", (req, res) -> {
+            final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
+            if (!currentUser.get().isAdmin()){
+                String receiver = req.params(":username");
+                MessageForm message = MessageForm.createFromBody(req.body());
+                system.registerMessage(currentUser.get().getUserName(), receiver, message, new Date());
+                res.redirect("/chat/" + receiver);
+                return halt();
             }
             else {
                 final Map<String, Object> model = new HashMap<>();

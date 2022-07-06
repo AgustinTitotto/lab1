@@ -49,10 +49,6 @@ public class Match {
         return user2;
     }
 
-    public Game getCommonGame() {
-        return commonGame;
-    }
-
     public Long getId() {
         return id;
     }

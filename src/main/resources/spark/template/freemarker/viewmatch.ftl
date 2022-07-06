@@ -94,7 +94,7 @@
     }
 
     .container{
-        font-size: 125%;
+        font-size: 150%;
         color: #45cb85;
         text-align: center;
         font-family: "LEMON MILK";
@@ -123,6 +123,43 @@
     <br>
     <br>
     <p class="container">Your matches are</p>
+    <div class="container" style="padding-left: 200px; padding-right: 200px">
+        <#if matches??>
+            <#list matches as match>
+                <hr/>
+                <div class="match">
+                    <div style="text-align: left; float: left">
+                        ${match.userName}
+                    </div>
+                    <div style="text-align: right; float: right;">
+                        <button style="background-color: #45cb85;border-color: #45cb85;">
+                            <a href="/viewmatch/${match.userName}" style="text-decoration: none; color: black">View Profile</a>
+                        </button>
+                        <button style="background-color: #45cb85;border-color: #45cb85;">
+                            <a href="/chat/${match.userName}"style="text-decoration: none; color: black">Chat with Player</a>
+                        </button>
+                    </div>
+                </div>
+                <br>
+                <#else>
+                    <hr/>
+                    <div class="well">
+                        There're no matches so far.
+                    </div>
+                </#list>
+        </#if>
+        <br>
+        <br>
+        <#if descriptions??>
+        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="descriptions" id="descriptions">
+            <#list descriptions as description>
+                <option value="${description.game.gameName}, ${description.lvl}, ${description.rank.rankName}">
+                    Game: ${description.game.gameName}, Lvl: ${description.lvl}, Rank: ${description.rank.rankName}</option>
+            </#list>
+            </#if>
+    </div>
+
+    <!--
     <form action="/viewmatch" role="form" method="post">
         <div class="container">
             <select style="font-size: 125%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gamers" id="gamers">
@@ -149,6 +186,7 @@
         </#list>
         </#if>
     </form>
+    -->
 </div>
 </body>
 </html>

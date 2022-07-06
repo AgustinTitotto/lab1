@@ -121,11 +121,11 @@
     <br>
     <br>
     <form class="container" action="/updatedescription" role="form" method="post">
-        <label for="gameName" style="font-size: 200%">Select Game:</label>
+        <label for="gameName" style="font-size: 200%">Select Description:</label>
         <br>
         <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
             <#list descriptions as description>
-                <option value="${description.game.gameName}">${description.game.gameName}</option>
+                <option value="${description.game.gameName}">Game:${description.game.gameName}, Lvl:${description.lvl}, Rank:${description.rank.rankName}</option>
             </#list>
         </select>
         <br>

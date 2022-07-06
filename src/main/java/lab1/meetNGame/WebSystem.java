@@ -5,6 +5,7 @@ import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.repository.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ public class WebSystem {
     private final GamerInterests interests = new GamerInterests();
     private final Likes likes = new Likes();
     private final Matches matches = new Matches();
+    private final Messages messages = new Messages();
 
     public GamerUser registerGamer(SignUpForm form) {
         if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()))
@@ -224,5 +226,13 @@ public class WebSystem {
             setMessage("This level is not within the game's range");
             return false;
         }
+    }
+
+    public List<Message> getMessages(String userName1, String userName2) {
+        return messages.getListMessages(userName1, userName2);
+    }
+
+    public void registerMessage(String userName, String receiver, MessageForm message, Date date) {
+        messages.registerMessage(userName, receiver, message, date);
     }
 }
