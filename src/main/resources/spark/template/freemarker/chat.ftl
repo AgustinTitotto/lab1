@@ -20,7 +20,7 @@
     .content {
         top: 0;
         padding: 20px 20px;
-        height: 768px;
+        min-height: 100vh;
         margin-left: 250px;
         background-color: #272d39;
         background-image: url(/img/Background2.jpg);
@@ -28,13 +28,6 @@
         background-size: contain;
         background-repeat: repeat-y;
         text-align: center;
-    }
-
-    .container {
-        font-size: 150%;
-        color: #45cb85;
-        text-align: center;
-        font-family: "LEMON MILK";
     }
 
     .sidebar {
@@ -101,14 +94,27 @@
         color: #45cb85;
         text-align: center;
         font-family: "LEMON MILK";
+        padding-bottom: 50px;
+        padding-top: 50px;
     }
 
     .form-wrapper {
-        height: 100%;
-        margin-left: 250px;
-        background-color: #272d39;
         text-align: center;
-        overflow: hidden;
+        bottom: 0;
+        position: fixed;
+        width: 100vh;
+    }
+
+    .message{
+        word-break: break-word;
+        border: 2px solid #dedede;
+        border-radius: 5px;
+    }
+
+    br1 {
+        display: block; /* makes it have a width */
+        content: ""; /* clears default height */
+        margin-top: 10px; /* change this to whatever height you want it */
     }
 
 </style>
@@ -131,31 +137,35 @@
         <#if messages??>
             <#list messages as message>
                 <#if message.sender == sender>
-                    <div class="message" style="float: right">
-                        ${message.message}
+                    <div class="message">
+                        <p style="text-align: right; margin: 0; padding: 0">${message.sender}</p>
+                        <p style="text-align: right; margin: 0; padding: 0">${message.message}</p>
+                        <p style="color: #aaa; text-align: right; margin: 0; padding: 0">${message.date}</p>
                     </div>
-                    <br>
+                    <br1>
                 </#if>
                 <#if message.sender != sender>
-                    <div class="message" style="float: left">
-                        ${message.message}
+                    <div class="message">
+                        <p style="text-align: left; margin: 0; padding: 0">${message.sender}</p>
+                        <p style="text-align: left; margin: 0; padding: 0">${message.message}</p>
+                        <p style="color: #aaa; text-align: left; margin: 0; padding: 0">${message.date}</p>
                     </div>
-                    <br>
+                    <br1>
                 </#if>
             </#list>
         </#if>
-    </div>
-</div>
-<div class="form-wrapper">
-    <form id="message-form" class="message-form" action = "/chat/${receiver}" role="form" method="post">
-        <span style="display: block; overflow: hidden; padding: 0 5px; float: left; width: 80%">
-            <input style="width: 100%; box-sizing: border-box; background-color: #45cb85;border-color: #45cb85; font-size: 150%" type="text" name="message" placeholder="Send a message..." class="message" id="message" />
+        <div class="form-wrapper">
+            <form id="message-form" class="message-form" action = "/chat/${receiver}" role="form" method="post">
+        <span style="padding: 0 5px; float: left; width: 80%">
+            <input style="width: 100%;background-color: #45cb85;border-color: #45cb85;" type="text" name="message" placeholder="Send a message..." class="message" id="message" required/>
         </span>
-        <button style="float: right; box-sizing: border-box; width: 20%;background-color: #45cb85;border-color: #45cb85; font-size: 150%;" type="submit" name="send" class="send" id="send">
-            <a href="/chat/${receiver}" style="text-decoration: none; color: black">Send</a>
-            Send
-        </button>
-    </form>
+                <button style="float: right;width: 20%;background-color: #45cb85;border-color: #45cb85;" type="submit" name="send" class="send" id="send">
+                    <a href="/chat/${receiver}" style="text-decoration: none; color: black"></a>
+                    Send
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 <!--
 <div class="content2" style="float: left">

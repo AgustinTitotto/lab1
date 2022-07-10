@@ -23,7 +23,16 @@ public class Messages {
         message1.setSender(userName);
         message1.setReceiver(receiver);
         message1.setMessage(message.getMessageContent());
-        message1.setDate(date.toString());
+        int hours = date.getHours();
+        int minutes = date.getMinutes();
+        String dateNow = "";
+        if (minutes < 10){
+            dateNow = hours + "" + ":" + "0" + minutes + "";
+        }
+        else {
+            dateNow = hours + "" + ":" + minutes + "";
+        }
+        message1.setDate(dateNow);
         EntityTransactions.persist(message1);
     }
 }

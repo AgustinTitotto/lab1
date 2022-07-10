@@ -98,6 +98,21 @@ public class WebApp {
         interest2.setRank(rank3);
         EntityTransactions.persist(interest1);
         EntityTransactions.persist(interest2);
+
+        final Like like1 = Like.createLike();
+        final Like like3 = Like.createLike();
+        like1.setMainUser(gamer1);
+        like1.setLikedUser(description4);
+        like3.setMainUser(gamer3);
+        like3.setLikedUser(description1);
+        EntityTransactions.persist(like1);
+        EntityTransactions.persist(like3);
+
+        final Match match = Match.createMatch();
+        match.setUser1(gamer1);
+        match.setUser2(gamer3);
+        match.setCommonGame(game1);
+        EntityTransactions.persist(match);
     }
 
     private void startDatabase() {

@@ -17,7 +17,7 @@
 
     .content {
         padding: 20px 20px;
-        height: 768px;
+        height: 100vh;
         margin-left: 250px;
         background-color: #272d39;
         background-image: url(/img/Background2.jpg);
