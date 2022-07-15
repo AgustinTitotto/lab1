@@ -5,9 +5,7 @@ import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.repository.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class WebSystem {
 
@@ -19,6 +17,7 @@ public class WebSystem {
     private final Likes likes = new Likes();
     private final Matches matches = new Matches();
     private final Messages messages = new Messages();
+    private final Notifications notifications = new Notifications();
 
     public GamerUser registerGamer(SignUpForm form) {
         if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()))
@@ -234,5 +233,31 @@ public class WebSystem {
 
     public void registerMessage(String userName, String receiver, MessageForm message, Date date) {
         messages.registerMessage(userName, receiver, message, date);
+    }
+
+    public void deleteNotification(String sender, String receiver) {
+        notifications.deleteNotifications(sender, receiver);
+    }
+
+    public void sendNotification(String sender, String receiver, String message) {
+        if (receiver == null){
+            List<GamerUser> allGamers = gamers.gamerList();
+            for (int i = 0; i < allGamers.size(); i++) {
+                notifications.registerNotifications(sender, allGamers.get(i).getUserName(), message);
+            }
+        }else{
+            notifications.registerNotifications(sender, receiver, message);
+        }
+    }
+
+    public List<Notification> getNotifications(String userName) {
+        return notifications.getListNotifications(userName);
+    }
+
+    public void matchNotification(){
+        String user1 = matches.getUser1();
+        String user2 = matches.getUser2();
+        sendNotification("system", user1,"You have a Match");
+        sendNotification("system", user2,"You have a Match");
     }
 }

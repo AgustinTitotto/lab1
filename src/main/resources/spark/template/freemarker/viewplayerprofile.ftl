@@ -103,7 +103,6 @@
     <a href="/viewmatch">Matches</a>
     <br>
     <br>
-    <br>
     <a class="leave" href="/logout">Sign Out</a>
 </div>
 

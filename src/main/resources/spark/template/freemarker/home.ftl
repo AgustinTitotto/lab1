@@ -1,4 +1,5 @@
 <#-- @ftlvariable name="myName" type="java.lang.String" -->
+<#-- @ftlvariable name="notifications" type="java.util.List<Notification>" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +25,16 @@
         background-position: top;
         background-size: contain;
         background-repeat: repeat-y;
+    }
+
+    p{
+        text-align: left;
+        color: gold;
+        font-size: 200%;
+        font-family: "LEMON MILK";
+        word-break: break-word;
+        border: 2px solid gold;
+        border-radius: 5px;
     }
 
     .sidebar {
@@ -95,7 +106,6 @@
     <a class="active" href="/viewmatch">Matches</a>
     <br>
     <br>
-    <br>
     <a class="leave" href="/logout">Sign Out</a>
 </div>
 
@@ -109,6 +119,13 @@
             ${message}
         </div>
     </#if>
+
+    <#if notifications??>
+        <#list notifications as notif>
+            <p>${notif.message}</p>
+        </#list>
+    </#if>
+
 </div>
 
 

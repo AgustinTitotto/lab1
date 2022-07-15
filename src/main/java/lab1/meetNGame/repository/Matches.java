@@ -12,7 +12,8 @@ import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
 import static lab1.meetNGame.persistence.EntityTransactions.tx;
 
 public class Matches {
-
+    private String User1 = null;
+    private String User2 = null;
 
     public List<Match> match(GamerUser mainUser, List<GamerUser> userMatches){
         List<Like> likedDescriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM Like u WHERE u.likedUser.gamerUser.userName Like:gamerUser",
@@ -31,6 +32,8 @@ public class Matches {
                         match.setCommonGame(likedDescriptions.get(j).getLikedUser().getGame());
                         EntityTransactions.persist(match);
                         matches.add(match);
+                        User1 = user.get(i).getMainUser().getUserName();
+                        User2 = likedDescriptions.get(j).getMainUser().getUserName();
                     }else{
                         boolean repeated = false;
                         for (GamerUser userMatch : userMatches) {
@@ -46,6 +49,8 @@ public class Matches {
                             match.setCommonGame(likedDescriptions.get(j).getLikedUser().getGame());
                             EntityTransactions.persist(match);
                             matches.add(match);
+                            User1 = user.get(i).getMainUser().getUserName();
+                            User2 = likedDescriptions.get(j).getMainUser().getUserName();
                         }
                     }
                 }
@@ -68,5 +73,13 @@ public class Matches {
             finalList.add(gamers2.get(i).getUser1());
         }
         return finalList;
+    }
+
+    public String getUser1() {
+        return User1;
+    }
+
+    public String getUser2() {
+        return User2;
     }
 }

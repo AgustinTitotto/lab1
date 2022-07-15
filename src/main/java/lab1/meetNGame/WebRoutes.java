@@ -170,8 +170,12 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()) { //Revisa que no sea admin
                 String name = authenticatedGamerUser.get().getUserName();
+                List<Notification> userNotifications = system.getNotifications(authenticatedGamerUser.get().getUserName());
                 final Map<String, Object> model = new HashMap<>();
                 model.put("myName", name);
+                if(!userNotifications.isEmpty()){
+                    model.put("notifications",userNotifications);
+                }
                 if(system.getMessage() != null) {
                     model.put("message", system.getMessage());
                     system.setMessage(null);
@@ -180,8 +184,6 @@ public class WebRoutes {
                 if (req.queryParams("liked") != null) model.put("message", "Liked user");
                 if (req.queryParams("updatedInterest") != null) model.put("message", "Interest updated");
                 if (req.queryParams("updatedDescription") != null) model.put("message", "Description updated");
-
-
                 return render(model, HOME_TEMPLATE);
             }else{
                 final Map<String, Object> model = new HashMap<>();
@@ -233,6 +235,8 @@ public class WebRoutes {
                 CreateGameForm gameForm = CreateGameForm.createFromBody(req.body());
                 final Game validGame = system.registerGame(gameForm);
                 if (validGame != null){                     //Si el juego no existe lo crea
+                    system.sendNotification(authenticatedGamerUser.get().getUserName(), null,
+                            "We have a new game, "+gameForm.getGameName()+": Highest level: "+gameForm.getLvlMax()+" - Ranks: "+gameForm.getRanks());
                     res.redirect("/admin?gameOk");
                     return halt();
                 }
@@ -272,6 +276,8 @@ public class WebRoutes {
                     }
                     else if (updateGameForm.getCategory().equals("")){  //Actualiza por nivel
                         system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
+                        system.sendNotification(authenticatedGamerUser.get().getUserName(),null,
+                                "The new highest level for "+updateGameForm.getGameName()+" is "+updateGameForm.getLvlMax());
                         res.redirect("/admin?updatedGame");
                         return halt();
                     }
@@ -283,6 +289,8 @@ public class WebRoutes {
                     else {                                              //Actualiza por nivel y categoria
                         system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
                         system.updateGameCategory(updateGameForm.getGameName(), updateGameForm.getCategory());
+                        system.sendNotification(authenticatedGamerUser.get().getUserName(),null,
+                                "The new highest level for "+updateGameForm.getGameName()+" is "+updateGameForm.getLvlMax());
                         res.redirect("/admin?updatedGame");
                         return halt();
                     }
@@ -313,6 +321,8 @@ public class WebRoutes {
                     }
                     else {
                         system.deleteGame(deleteGameForm.getGame());
+                        system.sendNotification(authenticatedGamerUser.get().getUserName(),null,
+                                "The game "+deleteGameForm.getGame()+" was deleted");
                         res.redirect("/admin?deletedGame");
                     }
                     return halt();
@@ -349,6 +359,8 @@ public class WebRoutes {
                 RankForm rankForm = RankForm.createFromBody(req.body());
                 Rank newRank = system.registerRank(rankForm.getGameName(), rankForm.getNewRank());
                 if (newRank != null){                       //Se fija que el rango no exista. Deberia fijarse que el juego existe
+                    system.sendNotification(authenticatedGamerUser.get().getUserName(), null,
+                            "There is a new rank in "+rankForm.getGameName()+": "+rankForm.getNewRank());
                     res.redirect("/admin?updatedRanks");
                     return halt();
                 }
@@ -374,6 +386,8 @@ public class WebRoutes {
                 RankForm rankForm = RankForm.createFromBody(req.body());
                 Rank newRank = system.deleteRank(rankForm.getGameName(), rankForm.getNewRank());
                 if (newRank != null){                       //Se fija que el rango exista
+                    system.sendNotification(authenticatedGamerUser.get().getUserName(), null,
+                            "The rank "+rankForm.getNewRank()+" in "+rankForm.getGameName()+" was deleted");
                     res.redirect("/admin?deletedRanks");
                     return halt();
                 }
@@ -394,6 +408,7 @@ public class WebRoutes {
         authenticatedGet(PROFILE_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()) {  //Revisa que no sea admin
+                system.deleteNotification("meetngame", authenticatedGamerUser.get().getUserName());
                 return render(PROFILE_TEMPLATE);
             }else{                                          //Lleva a la pagina del admin
                 final Map<String, Object> model = new HashMap<>();
@@ -555,6 +570,7 @@ public class WebRoutes {
         authenticatedGet(MANAGE_INTEREST_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()){
+                system.deleteNotification("meetngame", authenticatedGamerUser.get().getUserName());
                 return render(MANAGE_INTEREST_TEMPLATE);
             }
             else {
@@ -738,7 +754,10 @@ public class WebRoutes {
             LikeForm likedUser = LikeForm.createFromBody(req.body());
             GamerUser gamer = getAuthenticatedGamerUser(req).get();
             Like like = system.registerLike(likedUser, gamer);
-            system.createMatch(gamer);
+            List<Match> existingMatches = system.createMatch(gamer);
+            if (!existingMatches.isEmpty()){
+                system.matchNotification();
+            }
             if (like != null){
                 res.redirect("/home?liked");
                 return halt();
@@ -756,6 +775,7 @@ public class WebRoutes {
                 if(!matches.isEmpty()){
                     final Map<String, Object> model = new HashMap<>();
                     model.put("matches", matches);
+                    system.deleteNotification("system", currentUser.get().getUserName());
                     return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
                 }
                 else {
@@ -782,6 +802,7 @@ public class WebRoutes {
                     final Map<String, Object> model = new HashMap<>();
                     model.put("matches", matches);
                     model.put("descriptions", descriptions);
+                    system.deleteNotification("system", currentUser.get().getUserName());
                     return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
                 }
                 else {
@@ -813,6 +834,7 @@ public class WebRoutes {
                     model.put("messages", messages);
                     model.put("sender", currentUser.get().getUserName());
                     model.put("receiver", username2);
+                    system.deleteNotification(username2, currentUser.get().getUserName());
                     return new FreeMarkerEngine().render(new ModelAndView(model, "chat.ftl"));
                 }
             }
@@ -828,6 +850,7 @@ public class WebRoutes {
                 String receiver = req.params(":username");
                 MessageForm message = MessageForm.createFromBody(req.body());
                 system.registerMessage(currentUser.get().getUserName(), receiver, message, new Date());
+                system.sendNotification(currentUser.get().getUserName(), receiver, "You have a new message from "+currentUser.get().getUserName());
                 res.redirect("/chat/" + receiver);
                 return halt();
             }

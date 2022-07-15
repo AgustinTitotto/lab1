@@ -1,10 +1,7 @@
 package lab1.meetNGame.repository;
 
-import lab1.meetNGame.model.GamerDescription;
-import lab1.meetNGame.model.GamerInterest;
-import lab1.meetNGame.model.GamerUser;
+import lab1.meetNGame.model.*;
 import lab1.meetNGame.UI.SignUpForm;
-import lab1.meetNGame.model.Rank;
 import lab1.meetNGame.persistence.EntityTransactions;
 
 import java.util.ArrayList;
@@ -35,4 +32,13 @@ public class Gamers{
         return EntityTransactions.persist(newGamer);
     }
 
+    public List<GamerUser> gamerList() {
+        List<GamerUser> allGamers = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerUser u", GamerUser.class).getResultList());
+        for (int i = 0; i < allGamers.size(); i++) {
+            if (allGamers.get(i).isAdmin()){
+                allGamers.remove(i);
+            }
+        }
+        return allGamers;
+    }
 }
