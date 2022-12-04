@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Delete game</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <style>
     .container{
@@ -15,16 +16,6 @@
         left: 50%;
         transform: translate(-50%, -50%);
     }
-    button{
-        background-color: #45cb85;
-        border-color: #45cb85;
-        font-size: 80%;
-    }
-    .hpl{
-        color: green;
-        font-family: "LEMON MILK";
-        text-decoration: none;
-    }
     h1{
         font-size: 300%;
         color: white;
@@ -34,8 +25,8 @@
     }
 
 </style>
-<body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: repeat;
- background-position: top; background-size: 85%">
+<body style="background-color: #282e3a; background-image: url(/img/Background2.jpg); background-repeat: repeat-y;
+ background-position: top; background-size: 80%">
 
     <h1>
         <u>Manage Game Ranks</u>
@@ -49,13 +40,12 @@
 
     <div class="container">
         <p>Create new Rank</p>
-        <button>
-            <a href="/createrank" class="hpl">Create new Rank</a>
-        </button>
+        <a href="/createrank" class="btn btn-success" role="button" style="color: #45cb85; font-size: 25px; font-family: LEMON MILK">Create new Rank</a>
+        <br>
+        <br>
         <p>Delete Rank</p>
-        <button>
-            <a href="/deleterank" class="hpl">Delete Rank</a>
-        </button>
+        <a href="/deleterank" class="btn btn-success" role="button" style="color: #45cb85; font-size: 25px; font-family: LEMON MILK">Delete Rank</a>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>
 </html>

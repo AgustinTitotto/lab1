@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <title>Profile</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <style>
 
@@ -16,7 +15,7 @@
 
     .content {
         padding: 20px 20px;
-        height: 768px;
+        height: 100vh;
         margin-left: 250px;
         background-color: #272d39;
         background-image: url(/img/Background2.jpg);
@@ -25,15 +24,14 @@
         background-repeat: repeat-y;
         text-align: center;
     }
+
     .sidebar {
         height: 100%;
         width: 250px;
         position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        overflow-x: hidden;
-        padding-top: 20px;
+        overflow: auto;
+        margin: 0;
+        padding: 0;
         background-color: #272d39;
     }
 
@@ -90,18 +88,6 @@
         font-family: "LEMON MILK";
         font-size: 200%;
     }
-
-    button{
-        background-color: #45cb85;
-        border-color: #45cb85;
-        font-size: 170%;
-    }
-
-    .hpl{
-        color: darkgreen;
-        font-family: "LEMON MILK";
-        text-decoration: none;
-    }
 </style>
 <body>
 <div class="sidebar">
@@ -129,22 +115,16 @@
     <br>
     <br>
     <p>Create a new game description</p>
-    <button>
-        <a href="/createdescription" class="hpl">Create Description</a>
-    </button>
+    <a href="/createdescription" class="btn btn-success" role="button" style="color: #45cb85; font-size: 25px; font-family: LEMON MILK">Create Description</a>
     <br>
     <br>
-    <p>Update your descriptions</p>
-    <button>
-        <a href="/updatedescription" class="hpl">Update Description</a>
-    </button>
+    <p>Update your interests</p>
+    <a href="/updatedescription" class="btn btn-success" role="button" style="color: #45cb85; font-size: 25px; font-family: LEMON MILK">Update Description</a>
     <br>
     <br>
-    <p>Delete your descriptions</p>
-    <button>
-        <a href="/deletedescription" class="hpl">Delete Description</a>
-    </button>
+    <p>Delete your interests</p>
+    <a href="/deletedescription" class="btn btn-success" role="button" style="color: #45cb85; font-size: 25px; font-family: LEMON MILK">Delete Description</a>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>
 </html>
