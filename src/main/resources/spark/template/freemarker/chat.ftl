@@ -91,8 +91,6 @@
         color: #45cb85;
         text-align: center;
         font-family: "LEMON MILK";
-        padding-bottom: 50px;
-        padding-top: 50px;
     }
 
     .form-wrapper {

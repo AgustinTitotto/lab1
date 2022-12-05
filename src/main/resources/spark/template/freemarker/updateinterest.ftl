@@ -29,9 +29,7 @@
     .container{
         font-size: 125%;
         color: #45cb85;
-        margin-left: 400px;
-        text-align: left;
-        padding-left: 100px;
+        text-align: center;
         font-family: "LEMON MILK";
     }
 

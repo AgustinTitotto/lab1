@@ -25,12 +25,10 @@
         text-align: center;
     }
 
-    .container {
+    .container{
         font-size: 125%;
         color: #45cb85;
-        text-align: left;
-        margin-left: 400px;
-        padding-left: 100px;
+        text-align: center;
         font-family: "LEMON MILK";
     }
 
