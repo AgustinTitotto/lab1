@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>Welcome!</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body class="text-center" style="background-color: #272d39; background-image: url(/img/Background1.jpg); background-repeat: no-repeat;
  background-position: top; background-size: 95%">
@@ -20,6 +20,12 @@
         <br>
         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" style="font-size: 20px; height: 60px" required>
         <br>
+        <div id="selectedBanner"></div>
+        <br>
+        <div class="form-group">
+            <input type="file" class="form-control" id="img" accept="image/jpg, image/png" style="font-size: 20px; height: 43px" name="image"/>
+        </div>
+        <br>
         <div class="d-grid gap-2 col-5 mx-auto">
             <button class="btn btn-lg btn-success" type="submit" style="font-size: 25px">Sign up</button>
         </div>
@@ -27,7 +33,35 @@
         <p style="color: white">Already logged in?</p>
         <button class="btn btn-success" onclick="document.location='/login'" style="font-size: 25px">Log In</button>
     </form>
+    <br>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+    var selDiv = "";
+    var storedFiles = [];
+    $(document).ready(function () {
+        $("#img").on("change", handleFileSelect);
+        selDiv = $("#selectedBanner");
+    });
+
+    function handleFileSelect(e) {
+        var files = e.target.files;
+        var filesArr = Array.prototype.slice.call(files);
+        filesArr.forEach(function (f) {
+            if (!f.type.match("image.*")) {
+                return;
+            }
+            storedFiles.push(f);
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var html = '<img src="' + e.target.result + "\" data-file='" + f.name + "' class='avatar rounded lg' alt='Category Image' height='200px' width='200px'>";
+                selDiv.html(html);
+            };
+            reader.readAsDataURL(f);
+        });
+    }
+</script>
 </body>
 </html>
