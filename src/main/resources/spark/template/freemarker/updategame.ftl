@@ -35,17 +35,11 @@
         </select>
         <br>
         <br>
-        <p>Your current Category is:
-            <span name="previousCategory" id="previousCategory"></span>
-        </p>
         <label for="newCategory" style="font-size: 200%"> New Category:</label>
         <br>
         <input type="text" id="newCategory" name="newCategory" style="font-size: 120%; font-family: 'LEMON MILK'">
         <br>
         <br>
-        <p>Your current Max Level is:
-            <span name="previousLvl" id="previousLvl"></span>
-        </p>
         <label for="newLvlId" style="font-size: 200%"> New Max Lvl:</label>
         <br>
         <input type="text" min="1" id="newLvlId" name="newMaxLvl" style="font-size: 120%; font-family: 'LEMON MILK'">
@@ -56,44 +50,28 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script type="text/javascript">
         const selectElement = document.querySelector('#gameName');
-        let level = document.querySelector('#previousLvl');
-        let category = document.querySelector('#previousCategory');
+        let level = document.querySelector('#newLvlId');
+        let category = document.querySelector('#newCategory');
+        let levelMap = new Map();
+        let categoryMap = new Map();
+        let gameName;
+        let gameLevel;
+        let gameCategory;
+        <#list games as game>
+            gameName = '${game.gameName}';
+            gameLevel = ${game.lvlMAX};
+            gameCategory = '${game.category}';
+            levelMap.set(gameName,gameLevel);
+            categoryMap.set(gameName,gameCategory);
+        </#list>
         selectElement.addEventListener('change', () =>{
-            let levelMap = new Map();
-            let categoryMap = new Map();
-            let gameName;
-            let gameLevel;
-            let gameCategory;
-            <#list games as game>
-            gameName = '${game.gameName}';
-            gameLevel = ${game.lvlMAX};
-            gameCategory = '${game.category}';
-            levelMap.set(gameName,gameLevel);
-            categoryMap.set(gameName,gameCategory);
-            </#list>
             const levelOutput = levelMap.get(selectElement.value);
             const gameOutput = categoryMap.get(selectElement.value);
-            level.textContent = levelOutput;
-            category.textContent = gameOutput;
+            level.value = levelOutput;
+            category.value = gameOutput;
         });
-        selectElement.addEventListener('click', () =>{
-            let levelMap = new Map();
-            let categoryMap = new Map();
-            let gameName;
-            let gameLevel;
-            let gameCategory;
-            <#list games as game>
-            gameName = '${game.gameName}';
-            gameLevel = ${game.lvlMAX};
-            gameCategory = '${game.category}';
-            levelMap.set(gameName,gameLevel);
-            categoryMap.set(gameName,gameCategory);
-            </#list>
-            const levelOutput = levelMap.get(selectElement.value);
-            const gameOutput = categoryMap.get(selectElement.value);
-            level.textContent = levelOutput;
-            category.textContent = gameOutput;
-        })
+        level.value = levelMap.get(selectElement.value);
+        category.value = categoryMap.get(selectElement.value);
     </script>
 </body>
 </html>

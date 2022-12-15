@@ -1,4 +1,5 @@
 <#-- @ftlvariable name="myName" type="java.lang.String" -->
+<#-- @ftlvariable name="myImage" type="java.lang.String" -->
 <#-- @ftlvariable name="notifications" type="java.util.List<Notification>" -->
 <!DOCTYPE html>
 <html lang="en">
@@ -115,6 +116,10 @@
          background-color: lightblue; text-align: center; font-size: 150%">
             ${message}
         </div>
+    </#if>
+
+    <#if myImage??>
+        <img alt="avatar" src='${myImage}'>
     </#if>
 
     <#if notifications??>

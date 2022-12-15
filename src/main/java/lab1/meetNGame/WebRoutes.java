@@ -2,9 +2,11 @@ package lab1.meetNGame;
 
 import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
+import org.eclipse.jetty.http.MultiPartFormInputStream;
 import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
+import java.io.File;
 import java.util.*;
 
 import static spark.Spark.*;
@@ -170,9 +172,11 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()) { //Revisa que no sea admin
                 String name = authenticatedGamerUser.get().getUserName();
+                String image = authenticatedGamerUser.get().getImage();
                 List<Notification> userNotifications = system.getNotifications(authenticatedGamerUser.get().getUserName());
                 final Map<String, Object> model = new HashMap<>();
                 model.put("myName", name);
+                model.put("myImage", image);
                 if(!userNotifications.isEmpty()){
                     model.put("notifications",userNotifications);
                 }

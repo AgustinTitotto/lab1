@@ -4,6 +4,8 @@ import lab1.meetNGame.model.*;
 import lab1.meetNGame.UI.SignUpForm;
 import lab1.meetNGame.persistence.EntityTransactions;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +26,8 @@ public class Gamers{
                 .findFirst();
     }
 
-    public GamerUser createGamer(SignUpForm form) {
-        final GamerUser newGamer = GamerUser.create(form.getUserName(), form.getPassword(), false);
+    public GamerUser createGamer(SignUpForm form) throws IOException {
+        final GamerUser newGamer = GamerUser.create(form.getUserName(), form.getPassword(), new File(form.getImage()),false);
 
         if (exists(newGamer.getUserName())) throw new IllegalStateException("UserName already exists.");
 

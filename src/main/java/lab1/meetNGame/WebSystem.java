@@ -5,6 +5,7 @@ import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.repository.*;
 
+import java.io.IOException;
 import java.util.*;
 
 public class WebSystem {
@@ -19,7 +20,7 @@ public class WebSystem {
     private final Messages messages = new Messages();
     private final Notifications notifications = new Notifications();
 
-    public GamerUser registerGamer(SignUpForm form) {
+    public GamerUser registerGamer(SignUpForm form) throws IOException {
         if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()))
             return null;
         return gamers.exists(form.getUserName()) ? null : gamers.createGamer(form);

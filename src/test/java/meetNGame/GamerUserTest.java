@@ -2,17 +2,17 @@ package meetNGame;
 
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.persistence.DataBase;
-import lab1.meetNGame.repository.Gamers;
 import org.junit.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
 import static lab1.meetNGame.persistence.EntityTransactions.tx;
 
 public class GamerUserTest {
@@ -42,15 +42,15 @@ public class GamerUserTest {
     }*/
 
     @Test
-    public void getUsers(){
+    public void getUsers() throws IOException {
         EntityManagerFactory sessionFactory = Persistence.createEntityManagerFactory("monolithic-db");
         final EntityManager entityManager = sessionFactory.createEntityManager();
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
-        final GamerUser gamer1 = GamerUser.create("gamer1", "123", false);
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false);
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false);
+        final GamerUser gamer1 = GamerUser.create("gamer1", "123", new File("Adopt us.jpg"), false);
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", new File("asteroid.png"), false);
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", new File("starship2.png"), false);
 
         entityManager.persist(gamer1);
         entityManager.persist(gamer2);
@@ -73,15 +73,15 @@ public class GamerUserTest {
     }
 
     @Test
-    public void checkInterest(){
+    public void checkInterest() throws IOException {
         EntityManagerFactory sessionFactory = Persistence.createEntityManagerFactory("monolithic-db");
         final EntityManager entityManager = sessionFactory.createEntityManager();
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
-        final GamerUser gamer1 = GamerUser.create("gamer1", "123", false);
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false);
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false);
+        final GamerUser gamer1 = GamerUser.create("gamer1", "123", new File("Adopt us.jpg"), false);
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", new File("asteroid.png"), false);
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", new File("starship2.png"), false);
         entityManager.persist(gamer1);
         entityManager.persist(gamer2);
         entityManager.persist(gamer3);

@@ -20,11 +20,10 @@
         <br>
         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" style="font-size: 20px; height: 60px" required>
         <br>
-        <div id="selectedBanner"></div>
-        <br>
         <div class="form-group">
             <input type="file" class="form-control" id="img" accept="image/jpg, image/png" style="font-size: 20px; height: 43px" name="image"/>
         </div>
+        <div id="selectedBanner"></div>
         <br>
         <div class="d-grid gap-2 col-5 mx-auto">
             <button class="btn btn-lg btn-success" type="submit" style="font-size: 25px">Sign up</button>

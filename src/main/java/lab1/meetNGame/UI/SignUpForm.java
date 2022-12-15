@@ -3,30 +3,37 @@ package lab1.meetNGame.UI;
 import org.eclipse.jetty.util.MultiMap;
 import org.eclipse.jetty.util.UrlEncoded;
 
+import javax.servlet.http.Part;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 import java.util.List;
 
 public class SignUpForm {
 
     private final String userName;
     private final String password;
+    private final String image;
 
-    public SignUpForm(String userName, String password) {
+    public SignUpForm(String userName, String password, String image) {
         this.userName = userName;
         this.password = password;
+        this.image = image;
     }
 
-    public static SignUpForm create(List<String> userName, List<String> password) {
-        return new SignUpForm(userName.get(0), password.get(0));
+    public static SignUpForm create(List<String> userName, List<String> password, String image) {
+        return new SignUpForm(userName.get(0), password.get(0), image);
     }
 
-    public static SignUpForm createFromBody(String body) {
+    public static SignUpForm createFromBody(String body) throws IOException {
         final MultiMap<String> params = new MultiMap<>();
         UrlEncoded.decodeTo(body, params, "UTF-8");
-
         return SignUpForm.create(
-                params.getValues("userName"),
-                params.getValues("password")
-        );
+                    params.getValues("userName"),
+                    params.getValues("password"),
+                    String.valueOf(params.getValues("image")).substring(1,String.valueOf(params.getValues("image")).length()-1)
+            );
     }
 
     public String getUserName() {
@@ -37,4 +44,7 @@ public class SignUpForm {
         return password;
     }
 
+    public String getImage() {
+        return image;
+    }
 }

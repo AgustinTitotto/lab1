@@ -8,6 +8,8 @@ import lab1.meetNGame.persistence.EntityTransactions;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class WebApp {
     private final WebRoutes webRoutes = new WebRoutes();
     private final DataBase dataserver = new DataBase();
 
-    public void start(){
+    public void start() throws IOException {
         //startDatabase();
         startWebServer();
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("monolithic-db");
@@ -27,14 +29,14 @@ public class WebApp {
         initialData();
     }
 
-    private void initialData() {
-        GamerUser admin = new GamerUser("meetngame", "meetngame123", true);
-        GamerUser gamer1 = new GamerUser("gamer1", "123", false);
+    private void initialData() throws IOException {
+        GamerUser admin = new GamerUser("meetngame", "meetngame123", null,true);
+        GamerUser gamer1 = new GamerUser("gamer1", "123", new File("Adopt us.jpg"),false);
         EntityTransactions.persist(admin);
         EntityTransactions.persist(gamer1);
 
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false);
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false);
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", new File("asteroid.png"),false);
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", new File("starship2.png"),false);
         EntityTransactions.persist(gamer2);
         EntityTransactions.persist(gamer3);
 

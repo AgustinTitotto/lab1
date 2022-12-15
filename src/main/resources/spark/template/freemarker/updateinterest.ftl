@@ -121,7 +121,7 @@
     <br>
     <form action="/updateinterest" role="form" method="post">
         <div class="container">
-            <label for="gameName" style="font-size: 200%">Select Description:</label>
+            <label for="gameName" style="font-size: 200%">Select Interest:</label>
             <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85; font-family: 'LEMON MILK'" name="gameName" id="gameName">
                 <#list interests as interest>
                     <option value="${interest.game.gameName}">${interest.game.gameName}</option>
@@ -129,16 +129,10 @@
             </select>
             <br>
             <br>
-            <p>Your current Level is:
-                <span name="previousLvl" id="previousLvl"></span>
-            </p>
             <label for="newLvlId" style="font-size: 200%"> New Lvl:</label>
             <input type="text" min="1" id="newLvlId" name="newLvl" style="font-size: 120%; font-family: 'LEMON MILK'">
             <br>
             <br>
-            <p>Your current Rank is:
-                <span name="previousRank" id="previousRank"></span>
-            </p>
             <label for="newRank" style="font-size: 200%"> New Rank:</label>
             <input type="text" min="1" id="newRankId" name="newRank" style="font-size: 120%; font-family: 'LEMON MILK'">
             <br>
@@ -152,44 +146,28 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 <script type="text/javascript">
     const selectElement = document.querySelector('#gameName');
-    let level = document.querySelector('#previousLvl');
-    let rank = document.querySelector('#previousRank');
+    let level = document.querySelector('#newLvlId');
+    let rank = document.querySelector('#newRankId');
+    let levelMap = new Map();
+    let rankMap = new Map();
+    let gameName;
+    let gameLevel;
+    let gameRank;
+    <#list interests as interest>
+        gameName = '${interest.game.gameName}';
+        gameLevel = ${interest.lvl};
+        gameRank = '${interest.rank.rankName}';
+        levelMap.set(gameName,gameLevel);
+        rankMap.set(gameName,gameRank);
+    </#list>
     selectElement.addEventListener('change', () =>{
-        let levelMap = new Map();
-        let rankMap = new Map();
-        let gameName;
-        let gameLevel;
-        let gameRank;
-        <#list interests as interest>
-        gameName = '${interest.game.gameName}';
-        gameLevel = ${interest.lvl};
-        gameRank = '${interest.rank.rankName}';
-        levelMap.set(gameName,gameLevel);
-        rankMap.set(gameName,gameRank);
-        </#list>
         const levelOutput = levelMap.get(selectElement.value);
         const rankOutput = rankMap.get(selectElement.value);
-        level.textContent = levelOutput;
-        rank.textContent = rankOutput;
+        level.value = levelOutput;
+        rank.value = rankOutput;
     })
-    selectElement.addEventListener('click', () =>{
-        let levelMap = new Map();
-        let rankMap = new Map();
-        let gameName;
-        let gameLevel;
-        let gameRank;
-        <#list interests as interest>
-        gameName = '${interest.game.gameName}';
-        gameLevel = ${interest.lvl};
-        gameRank = '${interest.rank.rankName}';
-        levelMap.set(gameName,gameLevel);
-        rankMap.set(gameName,gameRank);
-        </#list>
-        const levelOutput = levelMap.get(selectElement.value);
-        const rankOutput = rankMap.get(selectElement.value);
-        level.textContent = levelOutput;
-        rank.textContent = rankOutput;
-    })
+    level.value = levelMap.get(selectElement.value);
+    rank.value = rankMap.get(selectElement.value);
 </script>
 </body>
 </html>

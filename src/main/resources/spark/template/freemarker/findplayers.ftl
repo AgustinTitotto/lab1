@@ -15,6 +15,12 @@
         font-family: "LEMON MILK";
     }
 
+    p{
+        font-size: 120%;
+        text-align: center;
+        font-family: "LEMON MILK";
+    }
+
     .content {
         padding: 20px 20px;
         height: 100vh;
@@ -109,15 +115,33 @@
         <u>like to play with you</u>
     </h1>
     <br>
-    <br>
-    <br>
     <form class="container" action="/findplayers" role="form" method="post">
-        <select style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;" name="gamers" id="gamers">
-            <#list descriptions as description>
-                <option value="${description.gamerUser.userName}, ${description.game.gameName}, ${description.lvl}, ${description.rank.rankName}">
-                    ${description.gamerUser.userName} - ${description.game.gameName} - ${description.lvl} - ${description.rank.rankName}</option>
-            </#list>
-        </select>
+        <br>
+        <div id="carouselExampleControls" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <h1 name="userName" id="userName"></h1>
+                    <p>Game:
+                        <span name="gameName" id="gameName"></span>
+                    </p>
+                    <p>Level:
+                        <span name="level" id="level"></span>
+                    </p>
+                    <p>Rank:
+                        <span name="rankName" id="rankName"></span>
+                    </p>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev" name="backButton" id="backButton">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next" name="nextButton" id="nextButton">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+        </div>
+        <br>
+        <br>
+        <input name="gamers" id="gamers" readonly>
         <br>
         <br>
         <button type="submit" style="font-size: 150%; background-color: #45cb85; border-color: #45cb85;font-family: 'LEMON MILK'">
@@ -127,12 +151,66 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>
-<!--<script>
-    let arr = [<#list userNames as userName>"${userName}", </#list>]
-    let desc = [<#list descriptions as description>"${description.game.gameName}", </#list>]
-    let a = arr[0]
-    document.write(a)
-    document.getElementById("user").innerHTML = a;
-</script> -->
+<script type="text/javascript">
+    let counter = 0;
+    let name = new Map;
+    let game = new Map;
+    let level = new Map;
+    let rank = new Map;
+    const displayName = document.querySelector('#userName');
+    const displayGame = document.querySelector('#gameName');
+    const displayLevel = document.querySelector('#level');
+    const displayRank = document.querySelector('#rankName');
+    const input = document.querySelector('#gamers');
+    <#list descriptions as description>
+        userName = '${description.gamerUser.userName}';
+        gameName = '${description.game.gameName}';
+        gameLevel = ${description.lvl};
+        gameRank = '${description.rank.rankName}';
+        name.set(counter,userName);
+        game.set(counter,gameName);
+        level.set(counter,gameLevel);
+        rank.set(counter,gameRank);
+        counter += 1;
+    </#list>
+    let newCounter = 0;
+    const next = document.querySelector('#nextButton');
+    const back = document.querySelector('#backButton');
+    next.addEventListener('click', () =>{
+        newCounter += 1;
+        if (newCounter >= counter){
+            newCounter = newCounter - counter;
+        }
+        const nameOutput = name.get(newCounter);
+        const gameOutput = game.get(newCounter);
+        const levelOutput = level.get(newCounter);
+        const rankOutput = rank.get(newCounter);
+        displayName.textContent = nameOutput;
+        displayGame.textContent = gameOutput;
+        displayLevel.textContent = levelOutput;
+        displayRank.textContent = rankOutput;
+        input.value = ""+nameOutput+", "+gameOutput+", "+levelOutput+", "+rankOutput;
+    })
+    back.addEventListener('click', () =>{
+        newCounter -= 1;
+        if (newCounter < 0){
+            newCounter = counter + newCounter;
+        }
+        const nameOutput = name.get(newCounter);
+        const gameOutput = game.get(newCounter);
+        const levelOutput = level.get(newCounter);
+        const rankOutput = rank.get(newCounter);
+        displayName.textContent = nameOutput;
+        displayGame.textContent = gameOutput;
+        displayLevel.textContent = levelOutput;
+        displayRank.textContent = rankOutput;
+        input.value = ""+nameOutput+", "+gameOutput+", "+levelOutput+", "+rankOutput;
+    })
+    displayName.textContent = name.get(0);
+    displayGame.textContent = game.get(0);
+    displayLevel.textContent = level.get(0);
+    displayRank.textContent = rank.get(0);
+    input.value = ""+name.get(0)+", "+game.get(0)+", "+level.get(0)+", "+rank.get(0);
+</script>
 </html>
 <!--  -->
