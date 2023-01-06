@@ -240,7 +240,7 @@ public class WebRoutes {
                 final Game validGame = system.registerGame(gameForm);
                 if (validGame != null){                     //Si el juego no existe lo crea
                     system.sendNotification(authenticatedGamerUser.get().getUserName(), null,
-                            "We have a new game, "+gameForm.getGameName()+": Highest level: "+gameForm.getLvlMax()+" - Ranks: "+gameForm.getRanks());
+                            "We have a new game, "+gameForm.getGameName()+" - Highest level: "+gameForm.getLvlMax()+" - Ranks: "+gameForm.getRanks());
                     res.redirect("/admin?gameOk");
                     return halt();
                 }
@@ -779,6 +779,7 @@ public class WebRoutes {
                 if(!matches.isEmpty()){
                     final Map<String, Object> model = new HashMap<>();
                     model.put("matches", matches);
+                    system.deleteNotification("meetngame", currentUser.get().getUserName());
                     system.deleteNotification("system", currentUser.get().getUserName());
                     return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
                 }
@@ -806,6 +807,7 @@ public class WebRoutes {
                     final Map<String, Object> model = new HashMap<>();
                     model.put("matches", matches);
                     model.put("descriptions", descriptions);
+                    system.deleteNotification("meetngame", currentUser.get().getUserName());
                     system.deleteNotification("system", currentUser.get().getUserName());
                     return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
                 }
@@ -871,9 +873,11 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.get().isAdmin()) {       //Se fija que no sea un gamer
                 List<Game> games = system.getGames();
+                HashMap<String,String> ranks = system.getRanksNames();
                 final Map<String, Object> model = new HashMap<>();
                 if(!games.isEmpty()) {                          //Se fija que haya juegos creados
                     model.put("games", games);
+                    model.put("ranks", ranks);
                     if (req.queryParams("notOk") != null) model.put("message", "Fill at least one attribute to update");
                     if (req.queryParams("noGameSelected") != null) model.put("message", "Choose a game to delete");
                     if (req.queryParams("notGame") != null) model.put("message", "The game you chose does not exist");

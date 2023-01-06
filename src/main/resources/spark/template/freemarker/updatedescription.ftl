@@ -123,7 +123,7 @@
             <#list descriptions as description>
                 <option value="${description.game.gameName}" >${description.game.gameName}</option>
             </#list>
-        </select
+        </select>
         <label for="newLvlId" style="font-size: 200%"> New Lvl:</label>
         <input type="text" min="1" id="newLvlId" name="newLvl" style="font-size: 120%; font-family: 'LEMON MILK'">
         <br>

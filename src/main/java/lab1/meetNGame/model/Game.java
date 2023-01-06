@@ -53,4 +53,21 @@ public class Game {
     public void setRanks(List<Rank> ranks) {
         this.ranks = ranks;
     }
+
+    public String ranksString(){
+        StringBuilder result = new StringBuilder();
+        if(ranks.size() > 1) {
+            result.append(ranks.get(0).getRankName()).append(", ");
+            for (int i = 1; i < ranks.size()-1; i++) {
+                result.append(ranks.get(i).getRankName()).append(", ");
+            }
+            result.append(ranks.get(ranks.size()-1).getRankName());
+            return result.toString();
+        }else if(ranks.size() == 1){
+            result.append(ranks.get(0).getRankName());
+            return result.toString();
+        }else{
+            return "No Ranks For This Game";
+        }
+    }
 }

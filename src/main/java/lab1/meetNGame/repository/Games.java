@@ -7,6 +7,7 @@ import lab1.meetNGame.model.GamerInterest;
 import lab1.meetNGame.model.Rank;
 import lab1.meetNGame.persistence.EntityTransactions;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +50,15 @@ public class Games {
     public List<Game> allGames(){
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u", Game.class).getResultList());
 
+    }
+
+    public HashMap<String, String> ranksNames(){
+        HashMap<String,String> ranksNames = new HashMap<>();
+        List<Game> games = allGames();
+        for (Game game : games) {
+            ranksNames.put(game.getGameName(), game.ranksString());
+        }
+        return ranksNames;
     }
 
     public void updateByLvl(String gameName, String newMaxLvl) {

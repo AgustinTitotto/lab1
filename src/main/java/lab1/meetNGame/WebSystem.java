@@ -133,6 +133,10 @@ public class WebSystem {
         return games.allGames();
     }
 
+    public HashMap<String, String> getRanksNames() {
+        return games.ranksNames();
+    }
+
     public void updateGameLvl(String gameName, String newMaxLvl) {
         games.updateByLvl(gameName, newMaxLvl);
     }
