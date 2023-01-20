@@ -2,36 +2,62 @@
 <html lang="en">
 <head>
     <title>Welcome!</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
-<body class="text-center" style="background-color: #272d39; background-image: url(/img/Background1.jpg); background-repeat: no-repeat;
- background-position: top; background-size: 95%">
+<style>
+    html,body{
+        height: 100%;
+    }
+    .h-custom{
+        height: 100%;
+    }
 
-<main style="margin-top: 225px;">
-    <#if message??>
-        <div class="alert alert-success">
-            ${message}
-        </div>
-    </#if>
-    <h1 style="color: white; font-family: 'LEMON MILK'"> <u>Welcome to Meet-n-Game</u> </h1>
-    <p style="color: #45cb85; font-size: 160%; font-family: 'LEMON MILK'">Please create a user name and a password</p>
-    <form action="/register" role="form" method="post">
-        <div class="form-floating" style="margin-left: 400px; margin-right: 400px">
-            <input type="text" class="form-control" id="floatingInput" placeholder="User Name" name="userName" required>
-            <label for="floatingInput">User Name</label>
-        </div>
-        <div class="form-floating" style="margin-left: 400px; margin-right: 400px">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" required>
-            <label for="floatingPassword">Password</label>
-        </div>
+</style>
+<body style="background-color: #272d39">
 
-        <button class="btn btn-lg btn-success" type="submit" style="width: 570px">Sign up</button>
-        <br>
-        <p style="color: white">Already logged in?</p>
-        <button onclick="document.location='/login'" style="background-color: #45cb85; border-color: #45cb85">Log In</button>
-    </form>
-</main>
+<div class="container-fluid h-custom">
+    <div class="row h-100">
+        <div class="col-md-6 py-5 my-5 d-flex align-items-center text-center justify-content-center">
+            <form action="/register" role="form" method="post">
+                <#if message??>
+                    <div class="alert alert-success">
+                        ${message}
+                    </div>
+                </#if>
+                <h1 style="color: antiquewhite; font-family: 'LEMON MILK'"> <u>Welcome to Meet-n-Game</u> </h1>
+                <p style="color: #45cb85; font-size: 160%; font-family: 'LEMON MILK'">Please create a username and password</p>
+                <div class="mb-4">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="User Name" name="userName" style="font-size: 20px; font-family: 'LEMON MILK'" required>
+                </div>
+                <div class="mb-4">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" style="font-size: 20px; font-family: 'LEMON MILK'" required>
+                </div>
+                <div class="mb-4">
+                    <button class="btn btn-lg btn-success" type="submit" style="font-size: 25px; font-family: 'LEMON MILK'">Sign up</button>
+                </div>
+                <p style="color: antiquewhite; font-size: 25px; font-family: 'LEMON MILK'">Already a member?</p>
+                <div>
+                    <button class="btn btn-success" onclick="document.location='/login'" style="font-size: 25px; font-family: 'LEMON MILK'">Log In</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6 d-flex flex-column align-items-center justify-content-center text center">
+            <div>
+                <img src="/img/OnlyLogo.png" class="img-fluid" alt="Sample Image">
+            </div>
+            <div>
+                <p style="color: antiquewhite; font-family: 'LEMON MILK'; font-size: 200%; text-align: center">
+                    Join the biggest online gaming community
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>
