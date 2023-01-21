@@ -48,9 +48,9 @@ public class GamerUserTest {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
-        final GamerUser gamer1 = GamerUser.create("gamer1", "123", new File("Adopt us.jpg"), false);
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", new File("asteroid.png"), false);
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", new File("starship2.png"), false);
+        final GamerUser gamer1 = GamerUser.create("gamer1", "123", "IRMendez@mail.austral.edu.ar", new File("Adopt us.jpg"), false);
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", "ignacio.mendez@ing.austral.edu.ar", new File("asteroid.png"), false);
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", null, new File("starship2.png"), false);
 
         entityManager.persist(gamer1);
         entityManager.persist(gamer2);
@@ -79,9 +79,9 @@ public class GamerUserTest {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
-        final GamerUser gamer1 = GamerUser.create("gamer1", "123", new File("Adopt us.jpg"), false);
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", new File("asteroid.png"), false);
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", new File("starship2.png"), false);
+        final GamerUser gamer1 = GamerUser.create("gamer1", "123", "IRMendez@mail.austral.edu.ar", new File("Adopt us.jpg"), false);
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", "ignacio.mendez@ing.austral.edu.ar", new File("asteroid.png"), false);
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", null,new File("starship2.png"), false);
         entityManager.persist(gamer1);
         entityManager.persist(gamer2);
         entityManager.persist(gamer3);

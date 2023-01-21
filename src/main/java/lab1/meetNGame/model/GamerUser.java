@@ -20,6 +20,8 @@ public class GamerUser {
     private String userName;
 
     private String password;
+
+    private String mail;
     private String image;
 
     private boolean isAdmin;
@@ -27,9 +29,10 @@ public class GamerUser {
     public GamerUser(){
     }
 
-    public GamerUser(String userName, String password, File image, boolean isAdmin) throws IOException {
+    public GamerUser(String userName, String password, String mail, File image, boolean isAdmin) throws IOException {
         this.userName = userName;
         this.password = password;
+        this.mail = mail;
         if (image == null){
             this.image = null;
         }else{
@@ -38,8 +41,8 @@ public class GamerUser {
         this.isAdmin = isAdmin;
     }
 
-    public static GamerUser create(String userName, String password, File image, boolean isAdmin) throws IOException {
-        return new GamerUser(userName, password, image, isAdmin);
+    public static GamerUser create(String userName, String password, String mail, File image, boolean isAdmin) throws IOException {
+        return new GamerUser(userName, password, mail, image, isAdmin);
     }
 
     public String getUserName() {
@@ -56,5 +59,9 @@ public class GamerUser {
 
     public String getImage() {
         return image;
+    }
+
+    public String getMail() {
+        return mail;
     }
 }

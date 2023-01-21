@@ -98,7 +98,9 @@ public class WebRoutes {
                     res.redirect("/login?ok");
                     return halt();
                 } else {
-                    final Map<String, Object> model = Map.of("message", "UserName already exists");
+                    final String message = system.getMessage();
+                    final Map<String, Object> model = Map.of("message", message);
+                    system.setMessage(null);
                     return render(model, SIGN_UP_TEMPLATE);
                 }
             }

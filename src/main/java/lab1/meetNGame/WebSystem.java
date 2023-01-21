@@ -5,6 +5,7 @@ import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.repository.*;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.*;
 
@@ -21,9 +22,17 @@ public class WebSystem {
     private final Notifications notifications = new Notifications();
 
     public GamerUser registerGamer(SignUpForm form) throws IOException {
-        if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()))
+        if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()) || Strings.isNullOrEmpty(form.getMail()))
             return null;
-        return gamers.exists(form.getUserName()) ? null : gamers.createGamer(form);
+        if(gamers.existsName(form.getUserName())){
+            setMessage("UserName already exists.");
+            return null;
+        }else if(gamers.existsMail(form.getMail())){
+            setMessage("Email address already exists.");
+            return null;
+        }else {
+            return gamers.createGamer(form);
+        }
     }
 
     public Optional<GamerUser> findUserByUserName(String userName) {
@@ -121,7 +130,7 @@ public class WebSystem {
         return likes.createLike(gamer, likedDescription);
     }
 
-    public List<Match> createMatch(GamerUser currentUser) {
+    public List<Match> createMatch(GamerUser currentUser) throws MessagingException {
         return matches.match(currentUser, matches.showMatches(currentUser));
     }
 

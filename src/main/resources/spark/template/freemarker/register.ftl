@@ -20,6 +20,8 @@
         <br>
         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" style="font-size: 20px; height: 60px" required>
         <br>
+        <input type="email" class="form-control" id="floatingMail" placeholder="Mail" name="mail" style="font-size: 20px; height: 60px" required>
+        <br>
         <div class="form-group">
             <input type="file" class="form-control" id="img" accept="image/jpg, image/png" style="font-size: 20px; height: 43px" name="image"/>
         </div>

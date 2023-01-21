@@ -30,13 +30,13 @@ public class WebApp {
     }
 
     private void initialData() throws IOException {
-        GamerUser admin = new GamerUser("meetngame", "meetngame123", null,true);
-        GamerUser gamer1 = new GamerUser("gamer1", "123", new File("Adopt us.jpg"),false);
+        GamerUser admin = new GamerUser("meetngame", "meetngame123", "meetNgame@gmail.com",null,true);
+        GamerUser gamer1 = new GamerUser("gamer1", "123", "IRMendez@mail.austral.edu.ar",new File("Adopt us.jpg"),false);
         EntityTransactions.persist(admin);
         EntityTransactions.persist(gamer1);
 
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", new File("asteroid.png"),false);
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", new File("starship2.png"),false);
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", "ignacio.mendez@ing.austral.edu.ar",new File("asteroid.png"),false);
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", null,new File("starship2.png"),false);
         EntityTransactions.persist(gamer2);
         EntityTransactions.persist(gamer3);
 

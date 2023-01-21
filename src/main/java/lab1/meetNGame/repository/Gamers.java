@@ -15,8 +15,12 @@ import static lab1.meetNGame.persistence.EntityTransactions.tx;
 
 public class Gamers{
 
-    public boolean exists(String userName) {
+    public boolean existsName(String userName) {
         return findByUserName(userName).isPresent();
+    }
+
+    public boolean existsMail(String mail) {
+        return findByMail(mail).isPresent();
     }
 
     public Optional<GamerUser> findByUserName(String userName) {
@@ -26,10 +30,18 @@ public class Gamers{
                 .findFirst();
     }
 
-    public GamerUser createGamer(SignUpForm form) throws IOException {
-        final GamerUser newGamer = GamerUser.create(form.getUserName(), form.getPassword(), new File(form.getImage()),false);
+    public Optional<GamerUser> findByMail(String mail) {
+        return tx(() -> currentEntityManager()
+                .createQuery("SELECT u FROM GamerUser u WHERE u.mail LIKE :mail", GamerUser.class)
+                .setParameter("mail", mail).getResultList()).stream()
+                .findFirst();
+    }
 
-        if (exists(newGamer.getUserName())) throw new IllegalStateException("UserName already exists.");
+    public GamerUser createGamer(SignUpForm form) throws IOException {
+        final GamerUser newGamer = GamerUser.create(form.getUserName(), form.getPassword(), form.getMail(), new File(form.getImage()),false);
+
+        if (existsName(newGamer.getUserName())) throw new IllegalStateException("UserName already exists.");
+        if (existsMail(newGamer.getMail())) throw new IllegalStateException("Email address already exists.");
 
         return EntityTransactions.persist(newGamer);
     }

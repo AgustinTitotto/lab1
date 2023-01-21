@@ -14,16 +14,18 @@ public class SignUpForm {
 
     private final String userName;
     private final String password;
+    private final String mail;
     private final String image;
 
-    public SignUpForm(String userName, String password, String image) {
+    public SignUpForm(String userName, String password, String mail, String image) {
         this.userName = userName;
         this.password = password;
+        this.mail = mail;
         this.image = image;
     }
 
-    public static SignUpForm create(List<String> userName, List<String> password, String image) {
-        return new SignUpForm(userName.get(0), password.get(0), image);
+    public static SignUpForm create(List<String> userName, List<String> password, List<String> mail, String image) {
+        return new SignUpForm(userName.get(0), password.get(0), mail.get(0), image);
     }
 
     public static SignUpForm createFromBody(String body) throws IOException {
@@ -32,6 +34,7 @@ public class SignUpForm {
         return SignUpForm.create(
                     params.getValues("userName"),
                     params.getValues("password"),
+                    params.getValues("mail"),
                     String.valueOf(params.getValues("image")).substring(1,String.valueOf(params.getValues("image")).length()-1)
             );
     }
@@ -46,5 +49,9 @@ public class SignUpForm {
 
     public String getImage() {
         return image;
+    }
+
+    public String getMail() {
+        return mail;
     }
 }
