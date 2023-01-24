@@ -37,6 +37,7 @@ public class WebRoutes {
     public static final String CREATE_RANK_TEMPLATE = "createrank.ftl";
     public static final String DELETE_RANK_TEMPLATE = "deleterank.ftl";
     public static final String VIEW_PLAYER_PROFILE = "viewplayerprofile.ftl";
+    public static final String TINDER_SWIPE_TEMPLATE = "tinderswipe.ftl";
 
 
     /**
@@ -65,6 +66,7 @@ public class WebRoutes {
     public static final String CREATE_RANK_ROUTE = "/createrank";
     public static final String DELETE_RANK_ROUTE = "/deleterank";
     public static final String VIEW_PLAYER_ROUTE = "/viewplayerprofile";
+    public static final String TINDER_SWIPE_ROUTE = "/tinderswipe";
 
     final static private WebSystem system = new WebSystem();
 
@@ -73,6 +75,46 @@ public class WebRoutes {
     }
 
     private void webroutes() {
+
+        authenticatedGet(TINDER_SWIPE_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                GamerUser gamerUser = authenticatedGamerUser.get();
+                List<GamerDescription> descriptions = system.getInterestPlayers(gamerUser);
+                if (descriptions !=null && descriptions.size() != 0){
+                    List<String> userNames = userNameQuoted(descriptions);
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("descriptions", descriptions);
+                    model.put("userNames", userNames);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, TINDER_SWIPE_TEMPLATE));
+                }
+                else{
+                    system.setMessage("You have no candidates");
+                    res.redirect("/home?ok");
+                    return halt();
+                }
+            }
+            else {
+                res.redirect(ADMIN_HOME_ROUTE);
+                return halt();
+            }
+        });
+
+        authenticatedPost(TINDER_SWIPE_ROUTE, (req, res) -> {
+            LikeForm likedUser = new LikeForm(req.body());
+            GamerUser gamer = getAuthenticatedGamerUser(req).get();
+            Like like = system.registerLike(likedUser, gamer);
+            system.createMatch(gamer);
+            if (like != null){
+                res.redirect("/home?liked");
+                return halt();
+            }
+            else {
+                final Map<String, Object> model = Map.of("message", "Select a User");
+                return render(model, FIND_PLAYERS_TEMPLATE);
+            }
+        });
+
         get(REGISTER_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.isEmpty()) {
