@@ -69,5 +69,6 @@
              height: 100vh;
          }
      <div id="image-background" class="bg-image">
+        Antes de todo
      </div>
     -->
