@@ -1,4 +1,20 @@
-<!DOCTYPE html>
+<#import "userMasterTemplate.ftl" as layout />
+<@layout.userMasterTemplate title="Profile">
+
+    <h1>
+        <u>Welcome to your profile</u>
+    </h1>
+    <#if message??>
+        <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
+         background-color: lightblue; text-align: center;">
+            ${message}
+        </div>
+    </#if>
+
+</@layout.userMasterTemplate>
+
+
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Welcome!</title>
