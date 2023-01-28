@@ -12,7 +12,7 @@
 
     .navbar{
         padding: 10px;
-        background-color: black;
+        background-color: black/*#1e2124*/;
     }
     .nav-link{
         font-family: 'LEMON MILK';
@@ -44,7 +44,7 @@
         background-size:cover;
         width: 100%;
         height: 100%;
-        filter: brightness(50%);
+        filter: brightness(40%);
     }
 
     .background {

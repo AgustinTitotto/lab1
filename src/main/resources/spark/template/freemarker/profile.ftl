@@ -1,3 +1,7 @@
+<#-- @ftlvariable name="descriptions" type="java.util.List<GamerDescription>" -->
+
+<style>
+</style>
 <#import "userMasterTemplate.ftl" as layout />
 <@layout.userMasterTemplate title="Profile">
 
@@ -10,6 +14,59 @@
             ${message}
         </div>
     </#if>
+
+
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-xs-12 w-50">
+                <div id="media-list" class="row">
+                    <#if descriptions??>
+                        <#list descriptions as description>
+                            <div class="row media-body my-3 position-relative" style="color: white; font-family: 'LEMON MILK'">
+                                <div class="col">
+                                    <h4>Game: ${description.game.gameName}</h4>
+                                    lvl: ${description.lvl}
+                                    <br>
+                                    rank: ${description.rank.rankName}
+                                </div>
+                                <div class="col">
+                                    <div class="position-absolute bottom-0 end-0">
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal">Update
+                                        </button>
+                                        <button>Delete</button>
+
+                                        <form class="container" action="/updatedescription" role="form" method="post">
+                                            <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h2 class="modal-title" id="updateModalLabel" style="color: black">Update Description</h2>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <input type="hidden" name="gameName" id="gameName" value="${description.game.gameName}">
+                                                            <input type="text" min="1" id="newLvlId" name="newLvl" style="font-size: 120%; font-family: 'LEMON MILK'">
+                                                            <input type="text" min="1" id="newRankId" name="newRank" style="font-size: 120%; font-family: 'LEMON MILK'">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="height: 10px; color: white">
+                        </#list>
+                    </#if>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </@layout.userMasterTemplate>
 

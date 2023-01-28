@@ -73,6 +73,7 @@ public class WebRoutes {
     }
 
     private void webroutes() {
+
         get(REGISTER_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.isEmpty()) {
@@ -391,16 +392,7 @@ public class WebRoutes {
             }
         });
 
-        authenticatedGet(PROFILE_ROUTE, (req, res) -> {
-            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if (!authenticatedGamerUser.get().isAdmin()) {  //Revisa que no sea admin
-                return render(PROFILE_TEMPLATE);
-            }else{                                          //Lleva a la pagina del admin
-                final Map<String, Object> model = new HashMap<>();
-                model.put("message", "User is Admin");
-                return render(model, ADMIN_HOME_TEMPLATE);
-            }
-        });
+
 
         authenticatedGet(CREATE_DESCRIPTION_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
@@ -444,6 +436,21 @@ public class WebRoutes {
             else {                                          //Lleva a la pagina del admin
                 final Map<String, Object> model = new HashMap<>();
                 model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+
+        authenticatedGet(PROFILE_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
+                final Map<String, Object> model = new HashMap<>();
+                model.put("descriptions", gamerDescriptions);
+                return new FreeMarkerEngine().render(new ModelAndView(model, PROFILE_TEMPLATE));
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is not Gamer");
                 return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
