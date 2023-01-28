@@ -5,12 +5,18 @@ import lab1.meetNGame.persistence.DataBase;
 import lab1.meetNGame.persistence.EntityManagers;
 import lab1.meetNGame.persistence.EntityTransactions;
 
+import javax.imageio.ImageIO;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.servlet.http.Part;
 
-import java.io.File;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import static spark.Spark.port;
@@ -30,13 +36,27 @@ public class WebApp {
     }
 
     private void initialData() throws IOException {
-        GamerUser admin = new GamerUser("meetngame", "meetngame123", "meetNgame@gmail.com",null,true);
-        GamerUser gamer1 = new GamerUser("gamer1", "123", "IRMendez@mail.austral.edu.ar",new File("Adopt us.jpg"),false);
+        GamerUser admin = new GamerUser("meetngame", "meetngame123", "meetNgame@gmail.com","",true);
         EntityTransactions.persist(admin);
-        EntityTransactions.persist(gamer1);
 
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", "ignacio.mendez@ing.austral.edu.ar",new File("asteroid.png"),false);
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", null,new File("starship2.png"),false);
+        BufferedImage bImage = ImageIO.read(new File("./src/main/resources/public/img/starship2.png"));
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ImageIO.write(bImage, "png", bos );
+        byte [] data = bos.toByteArray();
+        GamerUser gamer1 = new GamerUser("gamer1", "123", "IRMendez@mail.austral.edu.ar",new String(Base64.getEncoder().encode(data)),false);
+
+        BufferedImage bImage2 = ImageIO.read(new File("./src/main/resources/public/img/asteroid.png"));
+        ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
+        ImageIO.write(bImage2, "png", bos2 );
+        byte [] data2 = bos2.toByteArray();
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", "ignacio.mendez@ing.austral.edu.ar",new String(Base64.getEncoder().encode(data2)),false);
+
+        BufferedImage bImage3 = ImageIO.read(new File("./src/main/resources/public/img/spark.png"));
+        ByteArrayOutputStream bos3 = new ByteArrayOutputStream();
+        ImageIO.write(bImage3, "png", bos3 );
+        byte [] data3 = bos3.toByteArray();
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", null,new String(Base64.getEncoder().encode(data3)),false);
+        EntityTransactions.persist(gamer1);
         EntityTransactions.persist(gamer2);
         EntityTransactions.persist(gamer3);
 

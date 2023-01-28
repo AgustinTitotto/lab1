@@ -4,13 +4,17 @@ import lab1.meetNGame.model.*;
 import lab1.meetNGame.persistence.DataBase;
 import org.junit.*;
 
+import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import static lab1.meetNGame.persistence.EntityTransactions.tx;
@@ -48,9 +52,23 @@ public class GamerUserTest {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
-        final GamerUser gamer1 = GamerUser.create("gamer1", "123", "IRMendez@mail.austral.edu.ar", new File("Adopt us.jpg"), false);
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", "ignacio.mendez@ing.austral.edu.ar", new File("asteroid.png"), false);
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", null, new File("starship2.png"), false);
+        BufferedImage bImage = ImageIO.read(new File("./src/main/resources/public/img/starship2.png"));
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ImageIO.write(bImage, "png", bos );
+        byte [] data = bos.toByteArray();
+        GamerUser gamer1 = new GamerUser("gamer1", "123", "IRMendez@mail.austral.edu.ar",new String(Base64.getEncoder().encode(data)),false);
+
+        BufferedImage bImage2 = ImageIO.read(new File("./src/main/resources/public/img/asteroid.png"));
+        ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
+        ImageIO.write(bImage2, "png", bos2 );
+        byte [] data2 = bos2.toByteArray();
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", "ignacio.mendez@ing.austral.edu.ar",new String(Base64.getEncoder().encode(data2)),false);
+
+        BufferedImage bImage3 = ImageIO.read(new File("./src/main/resources/public/img/spark.png"));
+        ByteArrayOutputStream bos3 = new ByteArrayOutputStream();
+        ImageIO.write(bImage3, "png", bos3 );
+        byte [] data3 = bos3.toByteArray();
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", null,new String(Base64.getEncoder().encode(data3)),false);
 
         entityManager.persist(gamer1);
         entityManager.persist(gamer2);
@@ -79,9 +97,23 @@ public class GamerUserTest {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
-        final GamerUser gamer1 = GamerUser.create("gamer1", "123", "IRMendez@mail.austral.edu.ar", new File("Adopt us.jpg"), false);
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", "ignacio.mendez@ing.austral.edu.ar", new File("asteroid.png"), false);
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", null,new File("starship2.png"), false);
+        BufferedImage bImage = ImageIO.read(new File("./src/main/resources/public/img/starship2.png"));
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ImageIO.write(bImage, "png", bos );
+        byte [] data = bos.toByteArray();
+        GamerUser gamer1 = new GamerUser("gamer1", "123", "IRMendez@mail.austral.edu.ar",new String(Base64.getEncoder().encode(data)),false);
+
+        BufferedImage bImage2 = ImageIO.read(new File("./src/main/resources/public/img/asteroid.png"));
+        ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
+        ImageIO.write(bImage2, "png", bos2 );
+        byte [] data2 = bos2.toByteArray();
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", "ignacio.mendez@ing.austral.edu.ar",new String(Base64.getEncoder().encode(data2)),false);
+
+        BufferedImage bImage3 = ImageIO.read(new File("./src/main/resources/public/img/spark.png"));
+        ByteArrayOutputStream bos3 = new ByteArrayOutputStream();
+        ImageIO.write(bImage3, "png", bos3 );
+        byte [] data3 = bos3.toByteArray();
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", null,new String(Base64.getEncoder().encode(data3)),false);
         entityManager.persist(gamer1);
         entityManager.persist(gamer2);
         entityManager.persist(gamer3);

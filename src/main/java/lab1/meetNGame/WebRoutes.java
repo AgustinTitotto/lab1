@@ -4,11 +4,15 @@ import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
 import org.eclipse.jetty.http.MultiPartFormInputStream;
 import spark.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import spark.template.freemarker.FreeMarkerEngine;
-
+import javax.servlet.MultipartConfigElement;
+import java.io.*;
+import java.nio.file.*;
+import static spark.Spark.*;
 import java.io.File;
 import java.util.*;
-
 import static spark.Spark.*;
 
 public class WebRoutes {
@@ -89,10 +93,28 @@ public class WebRoutes {
                 return halt();
             }
         });
+
+        File uploadDir = new File("upload");
+        uploadDir.mkdir(); // create the upload directory if it doesn't exist
+
         post(REGISTER_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.isEmpty()){
-                final SignUpForm form = SignUpForm.createFromBody(req.body());
+
+                Path tempFile = Files.createTempFile(uploadDir.toPath(), "", "");
+                req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+
+                try (InputStream input = req.raw().getPart("image").getInputStream()) { // getPart needs to use same "name" as input field in form
+                    Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
+                }
+                Map<String, String[]> paramMap = req.raw().getParameterMap();
+                Set<String> parameterSet = paramMap.keySet();
+                List<String> elements = new ArrayList<>();
+                parameterSet.stream().forEach(each -> {
+                    String join = String.join(",", paramMap.get(each));
+                    elements.add(join);
+                });
+                final SignUpForm form = SignUpForm.create(elements.get(1),elements.get(2),elements.get(0), new String(Base64.getEncoder().encode(Files.readAllBytes(tempFile))));
                 final GamerUser gamer = system.registerGamer(form);
                 if (gamer != null) {
                     res.redirect("/login?ok");

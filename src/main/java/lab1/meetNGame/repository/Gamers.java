@@ -38,7 +38,7 @@ public class Gamers{
     }
 
     public GamerUser createGamer(SignUpForm form) throws IOException {
-        final GamerUser newGamer = GamerUser.create(form.getUserName(), form.getPassword(), form.getMail(), new File(form.getImage()),false);
+        final GamerUser newGamer = GamerUser.create(form.getUserName(), form.getPassword(), form.getMail(), form.getImage(),false);
 
         if (existsName(newGamer.getUserName())) throw new IllegalStateException("UserName already exists.");
         if (existsMail(newGamer.getMail())) throw new IllegalStateException("Email address already exists.");

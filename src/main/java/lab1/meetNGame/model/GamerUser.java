@@ -22,26 +22,26 @@ public class GamerUser {
     private String password;
 
     private String mail;
-    private String image;
-
     private boolean isAdmin;
+    @Column(length = 1000000000)
+    private String image;
 
     public GamerUser(){
     }
 
-    public GamerUser(String userName, String password, String mail, File image, boolean isAdmin) throws IOException {
+    public GamerUser(String userName, String password, String mail,String image, boolean isAdmin) throws IOException {
         this.userName = userName;
         this.password = password;
         this.mail = mail;
-        if (image == null){
+        if (image.isEmpty()){
             this.image = null;
         }else{
-            this.image = image.getPath();
+            this.image = image;
         }
         this.isAdmin = isAdmin;
     }
 
-    public static GamerUser create(String userName, String password, String mail, File image, boolean isAdmin) throws IOException {
+    public static GamerUser create(String userName, String password, String mail, String image, boolean isAdmin) throws IOException {
         return new GamerUser(userName, password, mail, image, isAdmin);
     }
 

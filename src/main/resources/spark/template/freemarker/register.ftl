@@ -15,7 +15,7 @@
     </#if>
     <h1 class="display-1" style="color: antiquewhite; font-family: 'LEMON MILK'"> <u>Welcome to Meet-n-Game</u> </h1>
     <p class="display-6" style="color: #45cb85; font-family: 'LEMON MILK'">Please create a user name and a password</p>
-    <form action="/register" role="form" method="post" style="alignment: center; margin-left: 400px; margin-right: 400px; font-size: 30px">
+    <form action="/register" role="form" method="post" style="alignment: center; margin-left: 400px; margin-right: 400px; font-size: 30px" enctype="multipart/form-data">
         <input type="text" class="form-control" id="floatingInput" placeholder="User Name" name="userName" style="font-size: 20px; height: 60px" required>
         <br>
         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" style="font-size: 20px; height: 60px" required>

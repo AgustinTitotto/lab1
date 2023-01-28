@@ -111,15 +111,17 @@
     <h1><u>Welcome back</u> <br>
         <u>${myName}</u></h1>
 
+    <#if myImage??>
+        <div class="avatar" style="margin-top: -125px; margin-right: 550px">
+            <img src='data:image/jpeg;base64,${myImage}' alt="avatar" width="80px" height="auto" align="right">
+        </div>
+    </#if>
+
     <#if message??>
         <div class="alert alert-success" style="color: black; font-family: 'LEMON MILK';
          background-color: lightblue; text-align: center; font-size: 150%">
             ${message}
         </div>
-    </#if>
-
-    <#if myImage??>
-        <img alt="avatar" src='${myImage}'>
     </#if>
 
     <#if notifications??>
