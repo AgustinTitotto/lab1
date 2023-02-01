@@ -108,6 +108,13 @@
 </div>
 
 <div class="content">
+    <#if message??>
+        <div class="alert alert-success" style="color: black; font-family: 'LEMON MILK';
+         background-color: lightblue; text-align: center; font-size: 150%">
+            ${message}
+        </div>
+    </#if>
+    <br>
     <h1><u>Welcome back</u> <br>
         <u>${myName}</u></h1>
 
@@ -116,14 +123,7 @@
             <img src='data:image/jpeg;base64,${myImage}' alt="avatar" width="80px" height="auto" align="right">
         </div>
     </#if>
-
-    <#if message??>
-        <div class="alert alert-success" style="color: black; font-family: 'LEMON MILK';
-         background-color: lightblue; text-align: center; font-size: 150%">
-            ${message}
-        </div>
-    </#if>
-
+    <br><br><br><br><br><br>
     <#if notifications??>
         <#list notifications as notif>
             <p>${notif.message}</p>
