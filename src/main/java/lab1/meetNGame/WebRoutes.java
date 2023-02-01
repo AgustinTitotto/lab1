@@ -33,7 +33,7 @@ public class WebRoutes {
     public static final String MANAGE_RANK_TEMPLATE = "/manageranks.ftl";
     public static final String CREATE_RANK_TEMPLATE = "createrank.ftl";
     public static final String DELETE_RANK_TEMPLATE = "deleterank.ftl";
-    public static final String VIEW_PLAYER_PROFILE = "viewplayerprofile.ftl";
+    //public static final String VIEW_PLAYER_PROFILE = "viewplayerprofile.ftl";
 
 
     /**
@@ -61,15 +61,15 @@ public class WebRoutes {
     public static final String MANAGE_RANK_ROUTE = "/manageranks";
     public static final String CREATE_RANK_ROUTE = "/createrank";
     public static final String DELETE_RANK_ROUTE = "/deleterank";
-    public static final String VIEW_PLAYER_ROUTE = "/viewplayerprofile";
+    //public static final String VIEW_PLAYER_ROUTE = "/viewplayerprofile";
 
     final static private WebSystem system = new WebSystem();
 
     public void startRoutes() {
-        webroutes();
+        webRoutes();
     }
 
-    private void webroutes() {
+    private void webRoutes() {
 
         get(REGISTER_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
@@ -389,6 +389,31 @@ public class WebRoutes {
             }
         });
 
+        authenticatedGet(PROFILE_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
+                List<Game> gamesInUse = new ArrayList<>();
+                for (int i = 0; i < gamerDescriptions.size(); i++) {
+                    gamesInUse.add(gamerDescriptions.get(i).getGame());
+                }
+                List<Game> games = system.getLeftGames(gamesInUse);
+                final Map<String, Object> model = new HashMap<>();
+                model.put("games", games);
+                model.put("descriptions", gamerDescriptions);
+                if(system.getMessage() != null) {
+                    model.put("message", system.getMessage());
+                    system.setMessage(null);
+                }
+                return new FreeMarkerEngine().render(new ModelAndView(model, PROFILE_TEMPLATE));
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is not Gamer");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+
         authenticatedPost(CREATE_DESCRIPTION_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()){
@@ -396,7 +421,7 @@ public class WebRoutes {
                 List<GamerDescription> myDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
                 GamerDescription description = system.registerGamerDescription(authenticatedGamerUser.get(), myDescriptions, descriptionForm);
                 if (description != null){
-                    res.redirect("/home?ok");
+                    res.redirect("/profile?ok");
                     return halt();
                 }
                 else {
@@ -414,27 +439,6 @@ public class WebRoutes {
             }
         });
 
-        authenticatedGet(PROFILE_ROUTE, (req, res) -> {
-            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if (!authenticatedGamerUser.get().isAdmin()) {
-                List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
-                List<Game> gamesInUse = new ArrayList<>();
-                for (int i = 0; i < gamerDescriptions.size(); i++) {
-                    gamesInUse.add(gamerDescriptions.get(i).getGame());
-                }
-                List<Game> games = system.getLeftGames(gamesInUse);
-                final Map<String, Object> model = new HashMap<>();
-                model.put("games", games);
-                model.put("descriptions", gamerDescriptions);
-                return new FreeMarkerEngine().render(new ModelAndView(model, PROFILE_TEMPLATE));
-            }
-            else {
-                final Map<String, Object> model = new HashMap<>();
-                model.put("message", "User is not Gamer");
-                return render(model, ADMIN_HOME_TEMPLATE);
-            }
-        });
-
         authenticatedPost(UPDATE_DESCRIPTION_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()) {
@@ -445,10 +449,10 @@ public class WebRoutes {
                 }else if (!updateDescriptionForm.getLvl().equals("") && updateDescriptionForm.getRank().equals("")){
                     if (system.checkNewLevelDescription(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl())) {
                         system.updateDescriptionLvl(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
-                        res.redirect("/home?descriptionUpdated");
+                        res.redirect("/profile?ok");
                         return halt();
                     }
-                    else{
+                    else {
                         List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
                         final Map<String, Object> model = Map.of("message", system.getMessage(), "descriptions", gamerDescriptions);
                         system.setMessage(null);
@@ -459,7 +463,7 @@ public class WebRoutes {
                     Rank newRank = system.getRank(updateDescriptionForm.getRank(), updateDescriptionForm.getGameName());
                     if (newRank.getRankId() != null){
                         system.updateDescriptionRank(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(),newRank);
-                        res.redirect("/home?descriptionUpdated");
+                        res.redirect("/profile?ok");
                         return halt();
                     }
                     else {
@@ -474,7 +478,7 @@ public class WebRoutes {
                     if (system.checkNewLevelDescription(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl()) && (newRank != null)) {
                         system.updateDescriptionLvl(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
                         system.updateDescriptionRank(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(),newRank);
-                        res.redirect("/home?profile");
+                        res.redirect("/profile?ok");
                         return halt();
                     }
                     else {
@@ -495,7 +499,7 @@ public class WebRoutes {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             SingleStringForm description = SingleStringForm.createFromBody(req.body());
             system.deleteDescription(description.getLikedUser(), authenticatedGamerUser.get());
-            res.redirect("/home?ok");
+            res.redirect("/profile?ok");
             return halt();
         });
 
@@ -817,7 +821,6 @@ public class WebRoutes {
     private void authenticatedGet(String route, Route o) {
         get(route, (request, response) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(request);
-
             if (authenticatedGamerUser.isPresent()) {
                 return o.handle(request, response);
             } else {

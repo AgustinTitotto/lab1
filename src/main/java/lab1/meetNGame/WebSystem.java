@@ -53,8 +53,8 @@ public class WebSystem {
             return null;
         }
         else {
-            boolean gamecheck = descriptions.checkGame(myDescriptions, form.getGameName());
-            if (!gamecheck){
+            boolean gameCheck = descriptions.checkGame(myDescriptions, form.getGameName());
+            if (!gameCheck){
                 setMessage("You already have a description for this game");
                 return null;
             }else{
