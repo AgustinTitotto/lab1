@@ -17,10 +17,15 @@ import javax.mail.Session;
 import javax.mail.Transport;
 
 public class Matches {
+    String commonGame = null;
     private String User1 = null;
     String mail1 = null;
+    String level1 = null;
+    String rank1 = null;
     private String User2 = null;
     String mail2 = null;
+    String level2 = null;
+    String rank2 = null;
     String from = "meetNgame@gmail.com";
     String password = "oiozwjnhswsarnws";
     Properties properties = new Properties();
@@ -59,10 +64,17 @@ public class Matches {
                         match.setCommonGame(likedDescriptions.get(j).getLikedUser().getGame());
                         EntityTransactions.persist(match);
                         matches.add(match);
+                        commonGame = user.get(i).getLikedUser().getGame().getGameName();
+
                         User1 = user.get(i).getMainUser().getUserName();
                         mail1 = user.get(i).getMainUser().getMail();
+                        level1 = likedDescriptions.get(j).getLikedUser().getLvl();
+                        rank1 = likedDescriptions.get(j).getLikedUser().getRank().getRankName();
+
                         User2 = likedDescriptions.get(j).getMainUser().getUserName();
                         mail2 = likedDescriptions.get(j).getMainUser().getMail();
+                        level2 = user.get(i).getLikedUser().getLvl();
+                        rank2 = user.get(i).getLikedUser().getRank().getRankName();
                     }else{
                         boolean repeated = false;
                         for (GamerUser userMatch : userMatches) {
@@ -78,10 +90,17 @@ public class Matches {
                             match.setCommonGame(likedDescriptions.get(j).getLikedUser().getGame());
                             EntityTransactions.persist(match);
                             matches.add(match);
+                            commonGame = user.get(i).getLikedUser().getGame().getGameName();
+
                             User1 = user.get(i).getMainUser().getUserName();
                             mail1 = user.get(i).getMainUser().getMail();
+                            level1 = likedDescriptions.get(j).getLikedUser().getLvl();
+                            rank1 = likedDescriptions.get(j).getLikedUser().getRank().getRankName();
+
                             User2 = likedDescriptions.get(j).getMainUser().getUserName();
                             mail2 = likedDescriptions.get(j).getMainUser().getMail();
+                            level2 = user.get(i).getLikedUser().getLvl();
+                            rank2 = user.get(i).getLikedUser().getRank().getRankName();
                         }
                     }
                 }
@@ -92,12 +111,28 @@ public class Matches {
             message1.setFrom(new InternetAddress(from));
             message1.setRecipient(Message.RecipientType.TO, new InternetAddress(mail1));
             message1.setSubject("You have a Match");
-            message1.setText("You and "+User2+" match");
+            message1.setContent("<h1>You just made a match:</h1>" +
+                    "<br>" +
+                    "<p>User Name: "+User2+"</p>" +
+                    "<br>" +
+                    "<p>Common Game: "+commonGame+"</p>"+
+                    "<br>" +
+                    "<p>Level: "+level2+"</p>"+
+                    "<br>" +
+                    "<p>Rank: "+rank2+"</p>","text/html");
             Message message2 = new MimeMessage(session2);
             message2.setFrom(new InternetAddress(from));
             message2.setRecipient(Message.RecipientType.TO, new InternetAddress(mail2));
             message2.setSubject("You have a Match");
-            message2.setText("You and "+User1+" match");
+            message2.setContent("<h1>You just made a match:</h1>" +
+                    "<br>" +
+                    "<p>User Name: "+User1+"</p>" +
+                    "<br>" +
+                    "<p>Common Game: "+commonGame+"</p>"+
+                    "<br>" +
+                    "<p>Level: "+level1+"</p>"+
+                    "<br>" +
+                    "<p>Rank: "+rank1+"</p>","text/html");
             try{
                 Transport.send(message1);
                 System.out.println("Sent message successfully....");
