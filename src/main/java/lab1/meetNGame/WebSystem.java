@@ -5,6 +5,7 @@ import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.repository.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -68,9 +69,10 @@ public class WebSystem {
                         setMessage("This game doesn't have this rank");
                         return null;
                     }
-                    else
+                    else {
                         setMessage("Description created");
                         return descriptions.createDescription(gamer, game1.get(), rankCheck.get(), form.getLvl());
+                    }
                 }
             }
         }
@@ -97,9 +99,10 @@ public class WebSystem {
                     if (rankCheck.isEmpty()) {
                         setMessage("This game doesn't have this rank");
                         return null;
-                    } else
+                    } else {
                         setMessage("Interest created");
                         return interests.createInterest(gamer, game1.get(), rankCheck.get(), form.getLvl());
+                    }
                 }
             }
         }
@@ -113,7 +116,7 @@ public class WebSystem {
         else return null;
     }
 
-    public Like registerLike(LikeForm likedUser, GamerUser gamer) {
+    public Like registerLike(SingleStringForm likedUser, GamerUser gamer) {
         String[] description = likedUser.getLikedUser().split(", ");
         Optional<GamerUser> likedGamer = gamers.findByUserName(description[0]);
         Optional<Game> likedGame = games.findByGameName(description[1]);
@@ -131,6 +134,12 @@ public class WebSystem {
 
     public List<Game> getGames() {
         return games.allGames();
+    }
+
+    public List<Game> getLeftGames(List<Game> gamesInUse){
+        ArrayList<Game> allGames = (ArrayList<Game>) games.allGames();
+        allGames.removeAll(gamesInUse);
+        return allGames; 
     }
 
     public void updateGameLvl(String gameName, String newMaxLvl) {

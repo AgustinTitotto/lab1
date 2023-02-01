@@ -44,7 +44,7 @@
         background-size:cover;
         width: 100%;
         height: 100%;
-        filter: brightness(40%);
+        filter: brightness(20%);
     }
 
     .background {
@@ -62,10 +62,26 @@
         font-family: "LEMON MILK";
     }
 
+    .profileSubT{
+        color: white;
+        text-align: center;
+        font-family: "LEMON MILK";
+    }
+
+    .btn-profile {
+        background-color: #6AA8F5; !important;
+        color: white;
+    }
+
+    .btn-profile:hover {
+        background-color: rgb(79, 126, 183);
+        color: white;
+    }
+
 </style>
 <body>
 
-    <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
+    <nav id="navbar" class="navbar navbar-dark navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand me-4" style="color: white; font-family: 'LEMON MILK'; font-size: 160%">MeetNGame</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
