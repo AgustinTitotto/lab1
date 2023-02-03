@@ -85,8 +85,8 @@ public class WebSystem {
             return null;
         }
         else {
-            boolean gamecheck = interests.checkGame(myInterests, form.getGameName());
-            if (!gamecheck){
+            boolean gameCheck = interests.checkGame(myInterests, form.getGameName());
+            if (!gameCheck){
                 setMessage("You already have an interest for this game");
                 return null;
             }else {
@@ -100,7 +100,7 @@ public class WebSystem {
                         setMessage("This game doesn't have this rank");
                         return null;
                     } else {
-                        setMessage("Interest created");
+                        setMessage("Preference created");
                         return interests.createInterest(gamer, game1.get(), rankCheck.get(), form.getLvl());
                     }
                 }
@@ -211,16 +211,17 @@ public class WebSystem {
     }
 
     public void updateDescriptionRank(GamerUser gamerUser, String gameName, Rank rank) {
-
+        setMessage("Description updated");
         descriptions.updateByRank(gamerUser, gameName, rank);
     }
 
     public void updateInterestLvl(GamerUser gamerUser, String gameName, String newLevel) {
         interests.updateByLvl(gamerUser, gameName, newLevel);
-        setMessage("Interest updated");
+        setMessage("Preference updated");
     }
 
     public void updateInterestRank(GamerUser gamerUser, String gameName, Rank newRank) {
+        setMessage("Preference updated");
         interests.updateByRank(gamerUser, gameName, newRank);
     }
 

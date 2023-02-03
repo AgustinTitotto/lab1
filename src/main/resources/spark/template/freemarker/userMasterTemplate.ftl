@@ -96,7 +96,7 @@
                         <a class="nav-link" href="/profile">Profile</a>
                     </li>
                     <li>
-                        <a class="nav-link" href="/manageinterest">Interests</a>
+                        <a class="nav-link" href="/interests">Interests</a>
                     </li>
                     <li>
                         <a class="nav-link" href="/findplayers">Players</a>
@@ -105,8 +105,18 @@
                         <a class="nav-link" href="/viewmatch">Matches</a>
                     </li>
                 </ul>
-                <div class="d-flex align-items-center">
-                    <a class="nav-link-sign-out" href="/logout">Sign Out</a>
+                <div class="d-flex align-items-center dropdown">
+                    <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="true">
+                        <img src="/img/OnlyLogo.png" alt="User" class="rounded-circle" style="max-height: 36px">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" style="background-color: black; font-family: 'LEMON MILK'">
+                        <li class="dropdown-item">
+                            Change profile picture
+                        </li>
+                        <li class="dropdown-item">
+                            <a class="nav-link-sign-out" href="/logout">Sign Out</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
