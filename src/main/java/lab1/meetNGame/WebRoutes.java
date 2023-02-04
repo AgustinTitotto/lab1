@@ -2,11 +2,16 @@ package lab1.meetNGame;
 
 import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
+import org.hibernate.Hibernate;
 import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
+import javax.persistence.EntityManager;
+import javax.servlet.MultipartConfigElement;
+import java.io.*;
+import java.nio.file.*;
+import java.io.File;
 import java.util.*;
-
 import static spark.Spark.*;
 
 public class WebRoutes {
@@ -21,18 +26,16 @@ public class WebRoutes {
     public static final String HOME_TEMPLATE = "home.ftl";
     public static final String ADMIN_HOME_TEMPLATE = "adminhome.ftl";
     public static final String CREATE_GAME_TEMPLATE = "creategame.ftl";
-    public static final String CREATE_INTEREST_TEMPLATE = "createinterest.ftl";
     public static final String FIND_PLAYERS_TEMPLATE = "findplayers.ftl";
     public static final String VIEW_MATCH_TEMPLATE = "viewmatch.ftl";
     public static final String UPDATE_GAME_TEMPLATE = "updategame.ftl";
     public static final String DELETE_GAME_TEMPLATE = "deletegame.ftl";
     public static final String PROFILE_TEMPLATE = "profile.ftl";
     public static final String MANAGE_INTEREST_TEMPLATE = "interests.ftl";
-    public static final String UPDATE_INTEREST_TEMPLATE = "updateinterest.ftl";
-    public static final String DELETE_INTEREST_TEMPLATE = "deleteinterest.ftl";
-    public static final String MANAGE_RANK_TEMPLATE = "/manageranks.ftl";
+    public static final String MANAGE_RANK_TEMPLATE = "manageranks.ftl";
     public static final String CREATE_RANK_TEMPLATE = "createrank.ftl";
     public static final String DELETE_RANK_TEMPLATE = "deleterank.ftl";
+    public static final String ACCOUNT_SETTINGS_TEMPLATE = "settings.ftl";
     //public static final String VIEW_PLAYER_PROFILE = "viewplayerprofile.ftl";
 
 
@@ -61,6 +64,7 @@ public class WebRoutes {
     public static final String MANAGE_RANK_ROUTE = "/manageranks";
     public static final String CREATE_RANK_ROUTE = "/createrank";
     public static final String DELETE_RANK_ROUTE = "/deleterank";
+    public static final String ACCOUNT_SETTINGS_ROUTE = "/settings";
     //public static final String VIEW_PLAYER_ROUTE = "/viewplayerprofile";
 
     final static private WebSystem system = new WebSystem();
@@ -300,7 +304,6 @@ public class WebRoutes {
                 DeleteGameForm deleteGameForm = DeleteGameForm.createFromBody(req.body());
                 if (!system.gameExists(deleteGameForm.getGame())){ //Revisa que el juego exista
                     res.redirect("/updategame?notGame");
-                    return halt();
                 }
                 else {
                     if (deleteGameForm.getGame().equals("")){   //Revisa que elija un juego
@@ -310,8 +313,8 @@ public class WebRoutes {
                         system.deleteGame(deleteGameForm.getGame());
                         res.redirect("/admin?deletedGame");
                     }
-                    return halt();
                 }
+                return halt();
             }
             else {                                           //Lleva a la pagina del gamer
                 final Map<String, Object> model = new HashMap<>();
@@ -345,12 +348,11 @@ public class WebRoutes {
                 Rank newRank = system.registerRank(rankForm.getGameName(), rankForm.getNewRank());
                 if (newRank != null){                       //Se fija que el rango no exista. Deberia fijarse que el juego existe
                     res.redirect("/admin?updatedRanks");
-                    return halt();
                 }
                 else {                                      //Vuelve al createrank con mensaje
                     res.redirect("/createrank?rankexists");
-                    return halt();
                 }
+                return halt();
             }
             else{                                           //Lleva a la pagina del gamer
                 final Map<String, Object> model = new HashMap<>();
@@ -370,12 +372,11 @@ public class WebRoutes {
                 Rank newRank = system.deleteRank(rankForm.getGameName(), rankForm.getNewRank());
                 if (newRank != null){                       //Se fija que el rango exista
                     res.redirect("/admin?deletedRanks");
-                    return halt();
                 }
                 else {                                      //Vuelve al deleterank con mensaje
                     res.redirect("/deleterank?rankNotExists");
-                    return halt();
                 }
+                return halt();
             }
             else{                                           //Lleva a la pagina del gamer
                 final Map<String, Object> model = new HashMap<>();
@@ -736,19 +737,13 @@ public class WebRoutes {
             if (!currentUser.get().isAdmin()){
                 String username2 = req.params(":username");
                 List<Message> messages = system.getMessages(currentUser.get().getUserName(), username2);
-                if (messages.isEmpty()){
-                    final Map<String, Object> model = new HashMap<>();
-                    model.put("sender", currentUser.get().getUserName());
-                    model.put("receiver", username2);
-                    return new FreeMarkerEngine().render(new ModelAndView(model, "chat.ftl"));
-                }
-                else {
-                    final Map<String, Object> model = new HashMap<>();
+                final Map<String, Object> model = new HashMap<>();
+                if (!messages.isEmpty()) {
                     model.put("messages", messages);
-                    model.put("sender", currentUser.get().getUserName());
-                    model.put("receiver", username2);
-                    return new FreeMarkerEngine().render(new ModelAndView(model, "chat.ftl"));
                 }
+                model.put("sender", currentUser.get().getUserName());
+                model.put("receiver", username2);
+                return new FreeMarkerEngine().render(new ModelAndView(model, "chat.ftl"));
             }
             else {
                 final Map<String, Object> model = new HashMap<>();
@@ -763,6 +758,48 @@ public class WebRoutes {
                 MessageForm message = MessageForm.createFromBody(req.body());
                 system.registerMessage(currentUser.get().getUserName(), receiver, message, new Date());
                 res.redirect("/chat/" + receiver);
+                return halt();
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+
+        authenticatedGet(ACCOUNT_SETTINGS_ROUTE, (req, res) -> {
+            final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
+            if (!currentUser.get().isAdmin()){
+                Optional<GamerUser> a = system.findUserByUserName(currentUser.get().getUserName());
+                String image2 = a.get().getImage();
+                String image = system.getUserImage(currentUser.get());
+                final Map<String, Object> model = new HashMap<>();
+                model.put("image", image);
+                return render(model, ACCOUNT_SETTINGS_TEMPLATE);
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+
+        File uploadDir = new File("upload");
+        uploadDir.mkdir(); // create the upload directory if it doesn't exist
+
+        authenticatedPost(ACCOUNT_SETTINGS_ROUTE, (req, res) -> {
+            final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
+            if (!currentUser.get().isAdmin()){
+
+                Path tempFile = Files.createTempFile(uploadDir.toPath(), "", "");
+                req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+
+                try (InputStream input = req.raw().getPart("image").getInputStream()) { // getPart needs to use same "name" as input field in form
+                    Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
+                }
+                system.updateProfilePicture(currentUser.get(), new String(Base64.getEncoder().encode(Files.readAllBytes(tempFile))));
+
+                res.redirect("/home");
                 return halt();
             }
             else {
@@ -837,7 +874,7 @@ public class WebRoutes {
 
     private Optional<GamerUser> getAuthenticatedGamerUser(Request req) {
         final String userName = req.session().attribute(GAMER_SESSION_ID);
-        return Optional.ofNullable(userName).flatMap(system::findUserByUserName);
+        return system.findUserByUserName(userName);
     }
 
     private Object render(String template) {

@@ -5,11 +5,17 @@ import lab1.meetNGame.persistence.DataBase;
 import lab1.meetNGame.repository.Gamers;
 import org.junit.*;
 
+import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
@@ -42,15 +48,20 @@ public class GamerUserTest {
     }*/
 
     @Test
-    public void getUsers(){
+    public void getUsers() throws IOException {
+        BufferedImage bImage = ImageIO.read(new File("./src/main/resources/public/img/DefaultImage.png"));
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ImageIO.write(bImage, "png", bos);
+        byte[] data = bos.toByteArray();
+
         EntityManagerFactory sessionFactory = Persistence.createEntityManagerFactory("monolithic-db");
         final EntityManager entityManager = sessionFactory.createEntityManager();
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
-        final GamerUser gamer1 = GamerUser.create("gamer1", "123", false);
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false);
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false);
+        final GamerUser gamer1 = GamerUser.create("gamer1", "123", false, new String(Base64.getEncoder().encode(data)));
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false, new String(Base64.getEncoder().encode(data)));
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false, new String(Base64.getEncoder().encode(data)));
 
         entityManager.persist(gamer1);
         entityManager.persist(gamer2);
@@ -73,15 +84,20 @@ public class GamerUserTest {
     }
 
     @Test
-    public void checkInterest(){
+    public void checkInterest() throws IOException {
+        BufferedImage bImage = ImageIO.read(new File("./src/main/resources/public/img/DefaultImage.png"));
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ImageIO.write(bImage, "png", bos);
+        byte[] data = bos.toByteArray();
+
         EntityManagerFactory sessionFactory = Persistence.createEntityManagerFactory("monolithic-db");
         final EntityManager entityManager = sessionFactory.createEntityManager();
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
-        final GamerUser gamer1 = GamerUser.create("gamer1", "123", false);
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false);
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false);
+        final GamerUser gamer1 = GamerUser.create("gamer1", "123", false, new String(Base64.getEncoder().encode(data)));
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false, new String(Base64.getEncoder().encode(data)));
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false, new String(Base64.getEncoder().encode(data)));
         entityManager.persist(gamer1);
         entityManager.persist(gamer2);
         entityManager.persist(gamer3);

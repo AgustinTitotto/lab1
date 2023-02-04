@@ -111,6 +111,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" style="background-color: black; font-family: 'LEMON MILK'">
                         <li class="dropdown-item">
+                            <a class="nav-link" href="/settings">Account settings</a>
                             Change profile picture
                         </li>
                         <li class="dropdown-item">

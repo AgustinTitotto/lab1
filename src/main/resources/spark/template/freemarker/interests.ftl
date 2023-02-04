@@ -1,7 +1,5 @@
 <#-- @ftlvariable name="interests" type="java.util.List<GamerInterest>" -->
 <#-- @ftlvariable name="games" type="java.util.List<Game>" -->
-<style>
-</style>
 <#import "userMasterTemplate.ftl" as layout />
 <@layout.userMasterTemplate title="Interest">
 

@@ -2,8 +2,6 @@ package lab1.meetNGame.model;
 
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "GAMER_USERS")
@@ -17,17 +15,21 @@ public class GamerUser {
 
     private boolean isAdmin;
 
+    @Column(length = 1000000000)
+    private String image;
+
     public GamerUser(){
     }
 
-    public GamerUser(String userName, String password, boolean isAdmin){
+    public GamerUser(String userName, String password, boolean isAdmin, String image){
         this.userName = userName;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.image = image;
     }
 
-    public static GamerUser create(String userName, String password, boolean isAdmin){
-        return new GamerUser(userName, password, isAdmin);
+    public static GamerUser create(String userName, String password, boolean isAdmin, String image){
+        return new GamerUser(userName, password, isAdmin, image);
     }
 
     public String getUserName() {
@@ -40,5 +42,9 @@ public class GamerUser {
 
     public boolean isAdmin() {
         return isAdmin;
+    }
+
+    public String getImage() {
+        return image;
     }
 }

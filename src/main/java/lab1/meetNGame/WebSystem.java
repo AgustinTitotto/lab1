@@ -5,6 +5,7 @@ import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.repository.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ public class WebSystem {
     private final Matches matches = new Matches();
     private final Messages messages = new Messages();
 
-    public GamerUser registerGamer(SignUpForm form) {
+    public GamerUser registerGamer(SignUpForm form) throws IOException {
         if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()))
             return null;
         return gamers.exists(form.getUserName()) ? null : gamers.createGamer(form);
@@ -245,4 +246,13 @@ public class WebSystem {
     public void registerMessage(String userName, String receiver, MessageForm message, Date date) {
         messages.registerMessage(userName, receiver, message, date);
     }
+
+    public void updateProfilePicture(GamerUser gamerUser, String image) {
+        gamers.updateByProfilePicture(gamerUser, image);
+    }
+
+    public String getUserImage(GamerUser gamerUser) {
+        return gamers.getProfilePicture(gamerUser);
+    }
+
 }
