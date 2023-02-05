@@ -15,8 +15,8 @@ public class GamerDescriptions {
 
     public boolean checkGame(List<GamerDescription> myDescriptions, String gameName){
         boolean value = true;
-        for (int i = 0; i < myDescriptions.size(); i++) {
-            if (myDescriptions.get(i).getGame().getGameName().equals(gameName)){
+        for (GamerDescription myDescription : myDescriptions) {
+            if (myDescription.getGame().getGameName().equals(gameName)) {
                 value = false;
                 break;
             }
@@ -24,24 +24,10 @@ public class GamerDescriptions {
         return value;
     }
     public boolean checkLevel(Game game, String userLvl){
+        currentEntityManager().clear();
         String a = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u WHERE u.lvlMAX LIKE: lvlMax",
                 Game.class).setParameter("lvlMax", game.getLvlMAX()).getResultList()).stream().findFirst().get().getLvlMAX();
-        if (Integer.parseInt(a) >= Integer.parseInt(userLvl)){
-            return true;
-        }
-        else return false;
-    }
-
-    public Optional<Rank> checkRank(Game game, String userRank){
-        List<Rank> ranks = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u WHERE u.gameName LIKE: gameName",
-                Game.class).setParameter("gameName", game.getGameName()).getResultList()).stream().findFirst().get().getRanks();
-        Optional<Rank> rank = Optional.empty();
-        for (int i = 0; i < ranks.size(); i++) {
-            if (ranks.get(i).getRankName().equals(userRank)){
-                rank = Optional.ofNullable(ranks.get(i));
-            }
-        }
-        return rank;
+        return Integer.parseInt(a) >= Integer.parseInt(userLvl);
     }
 
     public GamerDescription createDescription(GamerUser gamer, Game game, Rank rank, String gamerLvl){
@@ -53,11 +39,12 @@ public class GamerDescriptions {
     }
 
     public GamerDescription getDescriptionByUserNameAndGame(GamerUser gamerUser, Game game) {
+        currentEntityManager().clear();
         List<GamerDescription> descriptions = currentEntityManager().createQuery("SELECT u FROM GamerDescription u WHERE u.gamerUser.userName LIKE: userName",
                 GamerDescription.class).setParameter("userName", gamerUser.getUserName()).getResultList();
-        for (int i = 0; i < descriptions.size(); i++) {
-            if (descriptions.get(i).getGame().getGameName().equals(game.getGameName())){
-                return descriptions.get(i);
+        for (GamerDescription description : descriptions) {
+            if (description.getGame().getGameName().equals(game.getGameName())) {
+                return description;
             }
         }
         return null;
@@ -67,27 +54,28 @@ public class GamerDescriptions {
         List<GamerDescription> purgedDescriptions = new ArrayList<>();
         List<GamerDescription> finalDescriptions = new ArrayList<>();
         String userName = interestGamers.get(0).getGamerUser().getUserName();
+        currentEntityManager().clear();
         List<GamerDescription> descriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription u",
                 GamerDescription.class).getResultList());
         List<Like> likedGamers = tx(() -> currentEntityManager().createQuery("SELECT u FROM Like u WHERE u.mainUser.userName LIKE: userName",
                 Like.class).setParameter("userName", userName).getResultList());
-        for (int i = 0; i < descriptions.size(); i++) {
-            if (!descriptions.get(i).getGamerUser().getUserName().equals(userName)){
-                purgedDescriptions.add(descriptions.get(i));
+        for (GamerDescription description : descriptions) {
+            if (!description.getGamerUser().getUserName().equals(userName)) {
+                purgedDescriptions.add(description);
             }
         }
-        for (int i = 0; i < interestGamers.size(); i++) {
-            for (int j = 0; j < purgedDescriptions.size(); j++) {
-                if (interestGamers.get(i).getGame().getGameName().equals(purgedDescriptions.get(j).getGame().getGameName())
-                        && Integer.parseInt(interestGamers.get(i).getLvl()) < Integer.parseInt(purgedDescriptions.get(j).getLvl())
-                        && interestGamers.get(i).getRank().getRankName().equals(purgedDescriptions.get(j).getRank().getRankName())){
-                    finalDescriptions.add(purgedDescriptions.get(j));
+        for (GamerInterest interestGamer : interestGamers) {
+            for (GamerDescription purgedDescription : purgedDescriptions) {
+                if (interestGamer.getGame().getGameName().equals(purgedDescription.getGame().getGameName())
+                        && Integer.parseInt(interestGamer.getLvl()) < Integer.parseInt(purgedDescription.getLvl())
+                        && interestGamer.getRank().getRankName().equals(purgedDescription.getRank().getRankName())) {
+                    finalDescriptions.add(purgedDescription);
                 }
             }
         }
-        for (int i = 0; i < likedGamers.size(); i++) {
+        for (Like likedGamer : likedGamers) {
             for (int j = 0; j < finalDescriptions.size(); j++) {
-                if (likedGamers.get(i).getLikedUser().getGamerUser().getUserName().equals(finalDescriptions.get(j).getGamerUser().getUserName())) {
+                if (likedGamer.getLikedUser().getGamerUser().getUserName().equals(finalDescriptions.get(j).getGamerUser().getUserName())) {
                     finalDescriptions.remove(finalDescriptions.get(j));
                 }
             }
@@ -96,6 +84,7 @@ public class GamerDescriptions {
     }
 
     public List<GamerDescription> getUserDescriptions(GamerUser gamerUser) {
+        currentEntityManager().clear();
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription u WHERE u.gamerUser.userName LIKE:userName",
                 GamerDescription.class).setParameter("userName", gamerUser.getUserName()).getResultList());
     }
@@ -106,16 +95,14 @@ public class GamerDescriptions {
     }
 
     public boolean checkNewLvl(String gameName, String newLevel){
+        currentEntityManager().clear();
         String gameLvl = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u " +
                 "WHERE u.gameName LIKE:gameName", Game.class).setParameter("gameName", gameName).getResultList()).stream().findFirst().get().getLvlMAX();
-        if (Integer.parseInt(gameLvl) >= Integer.parseInt(newLevel)){
-            return true;
-        }else{
-            return false;
-        }
+        return Integer.parseInt(gameLvl) >= Integer.parseInt(newLevel);
     }
 
     public void deleteDescription(GamerUser gamerUser, String gameName) {
+        currentEntityManager().clear();
         Optional<GamerDescription> gamerDescription = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription u " +
                 "WHERE u.game.gameName LIKE:gameName and u.gamerUser.userName LIKE:userName", GamerDescription.class)
                 .setParameter("gameName", gameName).setParameter("userName", gamerUser.getUserName()).getResultList().stream().findFirst());

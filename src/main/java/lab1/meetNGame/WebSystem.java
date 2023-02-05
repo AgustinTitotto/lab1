@@ -65,7 +65,7 @@ public class WebSystem {
                     return null;
                 }
                 else {
-                    Optional<Rank> rankCheck = descriptions.checkRank(game1.get(), form.getRank());
+                    Optional<Rank> rankCheck = games.checkRank(game1.get(), form.getRank());
                     if (rankCheck.isEmpty()){
                         setMessage("This game doesn't have this rank");
                         return null;
@@ -96,7 +96,7 @@ public class WebSystem {
                     setMessage("This level is not between the parameters of the game's levels");
                     return null;
                 } else {
-                    Optional<Rank> rankCheck = interests.checkRank(game1.get(), form.getRank());
+                    Optional<Rank> rankCheck = games.checkRank(game1.get(), form.getRank());
                     if (rankCheck.isEmpty()) {
                         setMessage("This game doesn't have this rank");
                         return null;

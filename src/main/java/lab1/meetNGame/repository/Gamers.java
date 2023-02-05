@@ -6,7 +6,6 @@ import lab1.meetNGame.UI.SignUpForm;
 import lab1.meetNGame.persistence.EntityTransactions;
 
 import javax.imageio.ImageIO;
-import javax.management.Query;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,6 +23,7 @@ public class Gamers{
     }
 
     public Optional<GamerUser> findByUserName(String userName) {
+        currentEntityManager().clear();
         return tx(() -> currentEntityManager()
                 .createQuery("SELECT u FROM GamerUser u WHERE u.userName LIKE :userName", GamerUser.class)
                 .setParameter("userName", userName).getResultList()).stream()
@@ -49,6 +49,7 @@ public class Gamers{
     }
 
     public String getProfilePicture(GamerUser gamerUser) {
+        currentEntityManager().clear();
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerUser u WHERE u.userName LIKE:userName", GamerUser.class)
                 .setParameter("userName", gamerUser.getUserName()).getResultList()).stream().findFirst().get().getImage();
     }

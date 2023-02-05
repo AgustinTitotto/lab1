@@ -7,7 +7,6 @@ import lab1.meetNGame.model.Rank;
 import lab1.meetNGame.persistence.EntityTransactions;
 
 import java.util.List;
-import java.util.Optional;
 
 import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
 import static lab1.meetNGame.persistence.EntityTransactions.tx;
@@ -15,24 +14,10 @@ import static lab1.meetNGame.persistence.EntityTransactions.tx;
 public class GamerInterests {
 
     public boolean checkLevel(Game game, String userLvl){
+        currentEntityManager().clear();
         String a = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u WHERE u.lvlMAX LIKE: lvlMax",
                 Game.class).setParameter("lvlMax", game.getLvlMAX()).getResultList()).stream().findFirst().get().getLvlMAX();
-        if (Integer.parseInt(a) >= Integer.parseInt(userLvl)){
-            return true;
-        }
-        else return false;
-    }
-
-    public Optional<Rank> checkRank(Game game, String userRank){
-        List<Rank> ranks = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u WHERE u.gameName LIKE: gameName",
-                Game.class).setParameter("gameName", game.getGameName()).getResultList()).stream().findFirst().get().getRanks();
-        Optional<Rank> rank = Optional.empty();
-        for (int i = 0; i < ranks.size(); i++) {
-            if (ranks.get(i).getRankName().equals(userRank)){
-                rank = Optional.ofNullable(ranks.get(i));
-            }
-        }
-        return rank;
+        return Integer.parseInt(a) >= Integer.parseInt(userLvl);
     }
 
     public GamerInterest createInterest(GamerUser gamer, Game game, Rank rank, String gamerLvl){
@@ -43,6 +28,7 @@ public class GamerInterests {
         return EntityTransactions.persist(interest);
     }
     public List<GamerInterest> gamersInterest(GamerUser gamerUser) {
+        currentEntityManager().clear();
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerInterest u WHERE u.gamerUser.userName LIKE:userName", GamerInterest.class)
                 .setParameter("userName", gamerUser.getUserName()).getResultList());
     }
@@ -53,13 +39,10 @@ public class GamerInterests {
     }
 
     public boolean checkNewLvl(String gameName, String newLevel){
+        currentEntityManager().clear();
         String gameLvl = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u " +
                 "WHERE u.gameName LIKE:gameName", Game.class).setParameter("gameName", gameName).getResultList()).stream().findFirst().get().getLvlMAX();
-        if (Integer.parseInt(gameLvl) >= Integer.parseInt(newLevel)){
-            return true;
-        }else{
-            return false;
-        }
+        return Integer.parseInt(gameLvl) >= Integer.parseInt(newLevel);
     }
 
     public void updateByRank(GamerUser gamerUser, String gameName, Rank rank) {
@@ -74,8 +57,8 @@ public class GamerInterests {
 
     public boolean checkGame(List<GamerInterest> myInterests, String gameName) {
         boolean value = true;
-        for (int i = 0; i < myInterests.size(); i++) {
-            if (myInterests.get(i).getGame().getGameName().equals(gameName)){
+        for (GamerInterest myInterest : myInterests) {
+            if (myInterest.getGame().getGameName().equals(gameName)) {
                 value = false;
                 break;
             }
