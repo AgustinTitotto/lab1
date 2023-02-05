@@ -20,7 +20,6 @@ public class Games {
     }
 
     public Optional<Game> findByGameName(String gameName) {
-        currentEntityManager().clear();
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u WHERE u.gameName LIKE: gameName",
                 Game.class).setParameter("gameName", gameName).getResultList()).stream().findFirst();
     }
@@ -47,7 +46,6 @@ public class Games {
     }
 
     public List<Game> allGames(){
-        currentEntityManager().clear();
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u", Game.class).getResultList());
 
     }
@@ -55,7 +53,6 @@ public class Games {
     public void updateByLvl(String gameName, String newMaxLvl) {
         tx(() -> currentEntityManager().createQuery("UPDATE Game u SET u.lvlMAX = ?1 WHERE u.gameName LIKE: gameName")
                 .setParameter("gameName", gameName).setParameter(1, newMaxLvl).executeUpdate());
-        currentEntityManager().clear();
         List<GamerDescription> gamerDescriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription  u " +
                 "WHERE u.game.gameName LIKE:gameName", GamerDescription.class).setParameter("gameName", gameName).getResultList());
         for (GamerDescription gamerDescription : gamerDescriptions) {
@@ -65,7 +62,6 @@ public class Games {
                         .setParameter("userName", gamer).setParameter("gameName", gameName).setParameter(1, newMaxLvl).executeUpdate());
             }
         }
-        currentEntityManager().clear();
         List<GamerInterest> gamerInterests = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerInterest  u " +
                 "WHERE u.game.gameName LIKE:gameName", GamerInterest.class).setParameter("gameName", gameName).getResultList());
         for (GamerInterest gamerInterest : gamerInterests) {
@@ -83,7 +79,6 @@ public class Games {
     }
 
     public void deleteGame(String game) {
-        currentEntityManager().clear();
         List<GamerDescription> gamerDescription = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription u " +
                 "WHERE u.game.gameName LIKE:gameName", GamerDescription.class).setParameter("gameName", game).getResultList());
         for (GamerDescription description : gamerDescription) {
@@ -145,7 +140,6 @@ public class Games {
         }
         if (rank != null){
             long id = rank.getRankId();
-            currentEntityManager().clear();
             List<GamerDescription> descriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription u " +
                     "WHERE u.rank.rankId = ?1", GamerDescription.class).setParameter(1, id).getResultList());
             for (GamerDescription description : descriptions) {
@@ -171,7 +165,6 @@ public class Games {
     }
 
     public Optional<Rank> checkRank(Game game, String userRank){
-        currentEntityManager().clear();
         List<Rank> ranks = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u WHERE u.gameName LIKE: gameName",
                 Game.class).setParameter("gameName", game.getGameName()).getResultList()).stream().findFirst().get().getRanks();
         Optional<Rank> rank = Optional.empty();

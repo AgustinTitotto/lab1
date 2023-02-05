@@ -49,7 +49,6 @@ public class Gamers{
     }
 
     public String getProfilePicture(GamerUser gamerUser) {
-        currentEntityManager().clear();
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerUser u WHERE u.userName LIKE:userName", GamerUser.class)
                 .setParameter("userName", gamerUser.getUserName()).getResultList()).stream().findFirst().get().getImage();
     }

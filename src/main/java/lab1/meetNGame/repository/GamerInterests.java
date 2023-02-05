@@ -14,7 +14,6 @@ import static lab1.meetNGame.persistence.EntityTransactions.tx;
 public class GamerInterests {
 
     public boolean checkLevel(Game game, String userLvl){
-        currentEntityManager().clear();
         String a = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u WHERE u.lvlMAX LIKE: lvlMax",
                 Game.class).setParameter("lvlMax", game.getLvlMAX()).getResultList()).stream().findFirst().get().getLvlMAX();
         return Integer.parseInt(a) >= Integer.parseInt(userLvl);
@@ -28,7 +27,6 @@ public class GamerInterests {
         return EntityTransactions.persist(interest);
     }
     public List<GamerInterest> gamersInterest(GamerUser gamerUser) {
-        currentEntityManager().clear();
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerInterest u WHERE u.gamerUser.userName LIKE:userName", GamerInterest.class)
                 .setParameter("userName", gamerUser.getUserName()).getResultList());
     }
@@ -39,7 +37,6 @@ public class GamerInterests {
     }
 
     public boolean checkNewLvl(String gameName, String newLevel){
-        currentEntityManager().clear();
         String gameLvl = tx(() -> currentEntityManager().createQuery("SELECT u FROM Game u " +
                 "WHERE u.gameName LIKE:gameName", Game.class).setParameter("gameName", gameName).getResultList()).stream().findFirst().get().getLvlMAX();
         return Integer.parseInt(gameLvl) >= Integer.parseInt(newLevel);

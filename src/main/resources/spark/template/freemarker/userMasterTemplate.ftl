@@ -107,7 +107,7 @@
                 </ul>
                 <div class="d-flex align-items-center dropdown">
                     <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="true">
-                        <img src="/img/OnlyLogo.png" alt="User" class="rounded-circle" style="max-height: 36px">
+                        <img src="data:image/jpeg;base64,${image}" alt="User" class="rounded-circle" style="max-height: 36px">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" style="background-color: black; font-family: 'LEMON MILK'">
                         <li class="dropdown-item">

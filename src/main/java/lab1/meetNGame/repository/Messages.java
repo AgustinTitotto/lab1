@@ -13,7 +13,6 @@ import static lab1.meetNGame.persistence.EntityTransactions.tx;
 public class Messages {
 
     public List<Message> getListMessages(String sender, String receiver){
-        currentEntityManager().clear();
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM Message u WHERE (u.sender " +
                 "LIKE:sender or u.sender LIKE:receiver) and (u.receiver LIKE:receiver or u.receiver LIKE:sender)", Message.class)
                 .setParameter("sender", sender).setParameter("receiver", receiver).getResultList());

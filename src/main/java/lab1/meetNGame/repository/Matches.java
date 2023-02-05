@@ -15,7 +15,6 @@ public class Matches {
 
 
     public List<Match> match(GamerUser mainUser, List<GamerUser> userMatches){
-        currentEntityManager().clear();
         List<Like> likedDescriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM Like u WHERE u.likedUser.gamerUser.userName Like:gamerUser",
                 Like.class).setParameter("gamerUser", mainUser.getUserName()).getResultList());
         List<Like> user = tx(() -> currentEntityManager().createQuery("SELECT u FROM Like u WHERE u.mainUser.userName LIKE: userName",
@@ -58,7 +57,6 @@ public class Matches {
 
     public List<GamerUser> showMatches(GamerUser gamer){
         List<GamerUser> finalList = new ArrayList<>();
-        currentEntityManager().clear();
         List<Match> gamers1 = tx(() -> currentEntityManager().createQuery("SELECT u FROM Match u WHERE u.user1.userName LIKE: userName",
                 Match.class).setParameter("userName", gamer.getUserName()).getResultList());
         List<Match> gamers2 = tx(() -> currentEntityManager().createQuery("SELECT u FROM Match u WHERE u.user2.userName LIKE: userName",

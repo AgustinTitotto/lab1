@@ -2,11 +2,9 @@ package lab1.meetNGame;
 
 import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
-import org.hibernate.Hibernate;
 import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
-import javax.persistence.EntityManager;
 import javax.servlet.MultipartConfigElement;
 import java.io.*;
 import java.nio.file.*;
@@ -166,27 +164,6 @@ public class WebRoutes {
             clearAuthenticatedGamerUser(req);
             res.redirect(LOGIN_ROUTE);
             return halt();
-        });
-
-        authenticatedGet(HOME_ROUTE, (req, res) -> {
-            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if (!authenticatedGamerUser.get().isAdmin()) { //Revisa que no sea admin
-                String name = authenticatedGamerUser.get().getUserName();
-                final Map<String, Object> model = new HashMap<>();
-                model.put("myName", name);
-                if(system.getMessage() != null) {
-                    model.put("message", system.getMessage());
-                    system.setMessage(null);
-                }
-                if (req.queryParams("noGames") != null) model.put("message", "No games created yet");
-                if (req.queryParams("liked") != null) model.put("message", "Liked user");
-
-                return render(model, HOME_TEMPLATE);
-            }else{
-                final Map<String, Object> model = new HashMap<>();
-                model.put("message", "User is Admin");
-                return render(model, ADMIN_HOME_TEMPLATE);
-            }
         });
 
         authenticatedGet(ADMIN_HOME_ROUTE, (req, res) -> {
@@ -387,6 +364,29 @@ public class WebRoutes {
             }
         });
 
+        authenticatedGet(HOME_ROUTE, (req, res) -> {
+            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                String name = authenticatedGamerUser.get().getUserName();
+                String image = system.getUserImage(authenticatedGamerUser.get());
+                final Map<String, Object> model = new HashMap<>();
+                model.put("image", image);
+                model.put("myName", name);
+                if(system.getMessage() != null) {
+                    model.put("message", system.getMessage());
+                    system.setMessage(null);
+                }
+                if (req.queryParams("noGames") != null) model.put("message", "No games created yet");
+                if (req.queryParams("liked") != null) model.put("message", "Liked user");
+
+                return render(model, HOME_TEMPLATE);
+            }else{
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+
         authenticatedGet(PROFILE_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()) {
@@ -394,7 +394,9 @@ public class WebRoutes {
                 if (!games.isEmpty()){
                     List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
                     List<Game> leftGames = system.getLeftGames(getGamesInDescription(gamerDescriptions));
+                    String image = system.getUserImage(authenticatedGamerUser.get());
                     final Map<String, Object> model = new HashMap<>();
+                    model.put("image", image);
                     model.put("games", leftGames);
                     model.put("descriptions", gamerDescriptions);
                     if(system.getMessage() != null) {
@@ -518,7 +520,9 @@ public class WebRoutes {
                 if (!games.isEmpty()){
                     List<GamerInterest> gamerInterests = system.getGamerInterest(authenticatedGamerUser.get());
                     List<Game> leftGames = system.getLeftGames(getGamesInInterest(gamerInterests));
+                    String image = system.getUserImage(authenticatedGamerUser.get());
                     final Map<String, Object> model = new HashMap<>();
+                    model.put("image", image);
                     model.put("games", leftGames);
                     model.put("interests", gamerInterests);
                     if(system.getMessage() != null) {
@@ -770,8 +774,6 @@ public class WebRoutes {
         authenticatedGet(ACCOUNT_SETTINGS_ROUTE, (req, res) -> {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
-                Optional<GamerUser> a = system.findUserByUserName(currentUser.get().getUserName());
-                String image2 = a.get().getImage();
                 String image = system.getUserImage(currentUser.get());
                 final Map<String, Object> model = new HashMap<>();
                 model.put("image", image);
