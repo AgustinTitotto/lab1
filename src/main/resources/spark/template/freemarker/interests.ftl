@@ -153,7 +153,7 @@
                         </#items>
                     <#else>
                         <h4 class="profileSubT">
-                            You have no descriptions
+                            You have no preferences
                         </h4>
                     </#list>
                 </div>

@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row d-flex align-items-center justify-content-center">
             <div class="col-12 d-flex align-items-center justify-content-center my-5">
-                <img src="data:image/jpeg;base64,${image}" alt="User" class="rounded-circle" style="max-height: 250px">
+                <img src="data:image/jpeg;base64,${image}" alt="User" style="border-radius:50%; width:250px; height:250px;">
             </div>
             <div class="col-12 w-75">
                 <form action="/settings" role="form" method="post" enctype="multipart/form-data">

@@ -14,44 +14,44 @@ import static lab1.meetNGame.persistence.EntityTransactions.tx;
 public class Matches {
 
 
-    public List<Match> match(GamerUser mainUser, List<GamerUser> userMatches){
-        List<Like> likedDescriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM Like u WHERE u.likedUser.gamerUser.userName Like:gamerUser",
-                Like.class).setParameter("gamerUser", mainUser.getUserName()).getResultList());
-        List<Like> user = tx(() -> currentEntityManager().createQuery("SELECT u FROM Like u WHERE u.mainUser.userName LIKE: userName",
-                Like.class).setParameter("userName", mainUser.getUserName()).getResultList());
+    public boolean match(GamerUser currentUser, List<GamerUser> currentUserMatches){
+        List<Like> likedDescriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM Like u WHERE u.likedDescription.gamerUser.userName Like:gamerUser",
+                Like.class).setParameter("gamerUser", currentUser.getUserName()).getResultList()); //Donde otro likeo a current user
+        List<Like> likedByUser = tx(() -> currentEntityManager().createQuery("SELECT u FROM Like u WHERE u.mainUser.userName LIKE: userName",
+                Like.class).setParameter("userName", currentUser.getUserName()).getResultList()); // Likeo current user
         List<Match> matches = new ArrayList<>();
-        for (Like like : user) {
+        for (Like like : likedByUser) {
             for (Like likedDescription : likedDescriptions) {
-                if (like.getMainUser().getUserName().equals(likedDescription.getLikedUser().getGamerUser().getUserName())
-                        && like.getLikedUser().getGame().getGameName().equals(likedDescription.getLikedUser().getGame().getGameName())) {
-                    if (userMatches.isEmpty()) {
-                        Match match = Match.createMatch();
-                        match.setUser1(like.getMainUser());
-                        match.setUser2(likedDescription.getMainUser());
-                        match.setCommonGame(likedDescription.getLikedUser().getGame());
-                        EntityTransactions.persist(match);
-                        matches.add(match);
-                    } else {
+                if (like.getMainUser().getUserName().equals(likedDescription.getLikedDescription().getGamerUser().getUserName())
+                        && like.getLikedDescription().getGame().getGameName().equals(likedDescription.getLikedDescription().getGame().getGameName())) {
+                    if (currentUserMatches.isEmpty()) { // Si no tiene match, agregalo
+                        return generateMatch(matches, like, likedDescription);
+                    } else {                            // Fijate que no este repetido
                         boolean repeated = false;
-                        for (GamerUser userMatch : userMatches) {
+                        for (GamerUser userMatch : currentUserMatches) {
                             if (likedDescription.getMainUser().getUserName().equals(userMatch.getUserName())) {
                                 repeated = true;
                                 break;
                             }
                         }
                         if (!repeated) {
-                            Match match = Match.createMatch();
-                            match.setUser1(like.getMainUser());
-                            match.setUser2(likedDescription.getMainUser());
-                            match.setCommonGame(likedDescription.getLikedUser().getGame());
-                            EntityTransactions.persist(match);
-                            matches.add(match);
+                            return generateMatch(matches, like, likedDescription);
                         }
                     }
                 }
             }
         }
-        return matches;
+        return false;
+    }
+
+    private boolean generateMatch(List<Match> matches, Like like, Like likedDescription) {
+        Match match = Match.createMatch();
+        match.setUser1(like.getMainUser());
+        match.setUser2(likedDescription.getMainUser());
+        match.setCommonGame(likedDescription.getLikedDescription().getGame());
+        EntityTransactions.persist(match);
+        matches.add(match);
+        return true;
     }
 
 

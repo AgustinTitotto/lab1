@@ -72,7 +72,7 @@ public class GamerDescriptions {
         }
         for (Like likedGamer : likedGamers) {
             for (int j = 0; j < finalDescriptions.size(); j++) {
-                if (likedGamer.getLikedUser().getGamerUser().getUserName().equals(finalDescriptions.get(j).getGamerUser().getUserName())) {
+                if (likedGamer.getLikedDescription().getGamerUser().getUserName().equals(finalDescriptions.get(j).getGamerUser().getUserName())) {
                     finalDescriptions.remove(finalDescriptions.get(j));
                 }
             }

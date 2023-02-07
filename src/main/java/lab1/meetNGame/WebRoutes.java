@@ -651,35 +651,37 @@ public class WebRoutes {
 
         authenticatedGet(FIND_PLAYERS_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-                if (!authenticatedGamerUser.get().isAdmin()) {
-                    GamerUser gamerUser = authenticatedGamerUser.get();
-                    List<GamerDescription> descriptions = system.getInterestPlayers(gamerUser);
-                    if (descriptions !=null && descriptions.size() != 0){
-                        List<String> userNames = userNameQuoted(descriptions);
-                        final Map<String, Object> model = new HashMap<>();
-                        model.put("descriptions", descriptions);
-                        model.put("userNames", userNames);
-                        return new FreeMarkerEngine().render(new ModelAndView(model, FIND_PLAYERS_TEMPLATE));
-                    }
-                    else{
-                        system.setMessage("You have no candidates");
-                        res.redirect("/home?ok");
-                        return halt();
-                    }
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                GamerUser gamerUser = authenticatedGamerUser.get();
+                List<GamerDescription> descriptions = system.getInterestPlayers(gamerUser);
+                if (descriptions !=null /*&& descriptions.size() != 0*/){
+                    List<String> userNames = userNameQuoted(descriptions);
+                    String image = system.getUserImage(authenticatedGamerUser.get());
+                    final Map<String, Object> model = new HashMap<>();
+                    model.put("image", image);
+                    model.put("descriptions", descriptions);
+                    model.put("userNames", userNames);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, FIND_PLAYERS_TEMPLATE));
                 }
-                else {
-                    res.redirect(ADMIN_HOME_ROUTE);
+                else{
+                    system.setMessage("You have no candidates");
+                    res.redirect("/home?ok");
                     return halt();
                 }
+            }
+            else {
+                res.redirect(ADMIN_HOME_ROUTE);
+                return halt();
+            }
         });
 
         authenticatedPost(FIND_PLAYERS_ROUTE, (req, res) -> {
-            SingleStringForm likedUser = SingleStringForm.createFromBody(req.body());
-            GamerUser gamer = getAuthenticatedGamerUser(req).get();
-            Like like = system.registerLike(likedUser, gamer);
-            system.createMatch(gamer);
+            SingleStringForm likedUser = new SingleStringForm(req.body());
+            GamerUser currentUser = getAuthenticatedGamerUser(req).get();
+            Like like = system.registerLike(likedUser, currentUser);
+            system.createMatch(currentUser);
             if (like != null){
-                res.redirect("/home?liked");
+                res.redirect("/home?ok");
                 return halt();
             }
             else {

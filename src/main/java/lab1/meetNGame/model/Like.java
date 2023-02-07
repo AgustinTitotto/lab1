@@ -15,7 +15,7 @@ public class Like {
     private GamerUser mainUser;
 
     @OneToOne
-    private GamerDescription likedUser;
+    private GamerDescription likedDescription;
 
     public Like(){
     }
@@ -32,12 +32,12 @@ public class Like {
         this.mainUser = mainUser;
     }
 
-    public GamerDescription getLikedUser() {
-        return likedUser;
+    public GamerDescription getLikedDescription() {
+        return likedDescription;
     }
 
     public void setLikedUser(GamerDescription likedUser) {
-        this.likedUser = likedUser;
+        this.likedDescription = likedUser;
     }
 
     public Long getId() {

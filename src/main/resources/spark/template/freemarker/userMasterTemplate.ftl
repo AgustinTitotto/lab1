@@ -78,6 +78,12 @@
         color: white;
     }
 
+    .rounded-circle2 {
+        border-radius:50%;
+        width:50px;
+        height:50px;
+    }
+
 </style>
 <body>
 
@@ -107,12 +113,11 @@
                 </ul>
                 <div class="d-flex align-items-center dropdown">
                     <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="true">
-                        <img src="data:image/jpeg;base64,${image}" alt="User" class="rounded-circle" style="max-height: 36px">
+                        <img src="data:image/jpeg;base64,${image}" alt="User" class="rounded-circle2">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" style="background-color: black; font-family: 'LEMON MILK'">
                         <li class="dropdown-item">
                             <a class="nav-link" href="/settings">Account settings</a>
-                            Change profile picture
                         </li>
                         <li class="dropdown-item">
                             <a class="nav-link-sign-out" href="/logout">Sign Out</a>

@@ -125,7 +125,7 @@ public class WebSystem {
         return likes.createLike(gamer, likedDescription);
     }
 
-    public List<Match> createMatch(GamerUser currentUser) {
+    public boolean createMatch(GamerUser currentUser) {
         return matches.match(currentUser, matches.showMatches(currentUser));
     }
 
