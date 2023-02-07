@@ -25,7 +25,7 @@ public class Messages {
         message1.setMessage(message.getMessageContent());
         int hours = date.getHours();
         int minutes = date.getMinutes();
-        String dateNow = "";
+        String dateNow;
         if (minutes < 10){
             dateNow = hours + "" + ":" + "0" + minutes + "";
         }

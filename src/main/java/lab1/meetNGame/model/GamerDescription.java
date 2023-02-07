@@ -11,16 +11,16 @@ public class GamerDescription {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private String lvl;
+    @ManyToOne
+    GamerUser gamerUser;
 
     @OneToOne
     private Game game;
 
+    private String lvl;
+
     @OneToOne(cascade=CascadeType.ALL)
     private Rank rank;
-
-    @ManyToOne
-    GamerUser gamerUser;
 
     public GamerDescription(){
     }
@@ -37,20 +37,20 @@ public class GamerDescription {
         return id;
     }
 
-    public String getLvl() {
-        return lvl;
+    public GamerUser getGamerUser() {
+        return gamerUser;
     }
 
     public Game getGame() {
         return game;
     }
 
-    public Rank getRank() {
-        return rank;
+    public String getLvl() {
+        return lvl;
     }
 
-    public GamerUser getGamerUser() {
-        return gamerUser;
+    public Rank getRank() {
+        return rank;
     }
 
     public void setGamerUser(GamerUser gamerUser) {

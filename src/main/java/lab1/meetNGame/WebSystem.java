@@ -5,6 +5,8 @@ import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.repository.*;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +22,7 @@ public class WebSystem {
     private final Matches matches = new Matches();
     private final Messages messages = new Messages();
 
-    public GamerUser registerGamer(SignUpForm form) {
+    public GamerUser registerGamer(SignUpForm form) throws IOException {
         if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()))
             return null;
         return gamers.exists(form.getUserName()) ? null : gamers.createGamer(form);
@@ -52,8 +54,8 @@ public class WebSystem {
             return null;
         }
         else {
-            boolean gamecheck = descriptions.checkGame(myDescriptions, form.getGameName());
-            if (!gamecheck){
+            boolean gameCheck = descriptions.checkGame(myDescriptions, form.getGameName());
+            if (!gameCheck){
                 setMessage("You already have a description for this game");
                 return null;
             }else{
@@ -63,14 +65,15 @@ public class WebSystem {
                     return null;
                 }
                 else {
-                    Optional<Rank> rankCheck = descriptions.checkRank(game1.get(), form.getRank());
+                    Optional<Rank> rankCheck = games.checkRank(game1.get(), form.getRank());
                     if (rankCheck.isEmpty()){
                         setMessage("This game doesn't have this rank");
                         return null;
                     }
-                    else
+                    else {
                         setMessage("Description created");
                         return descriptions.createDescription(gamer, game1.get(), rankCheck.get(), form.getLvl());
+                    }
                 }
             }
         }
@@ -83,8 +86,8 @@ public class WebSystem {
             return null;
         }
         else {
-            boolean gamecheck = interests.checkGame(myInterests, form.getGameName());
-            if (!gamecheck){
+            boolean gameCheck = interests.checkGame(myInterests, form.getGameName());
+            if (!gameCheck){
                 setMessage("You already have an interest for this game");
                 return null;
             }else {
@@ -93,13 +96,14 @@ public class WebSystem {
                     setMessage("This level is not between the parameters of the game's levels");
                     return null;
                 } else {
-                    Optional<Rank> rankCheck = interests.checkRank(game1.get(), form.getRank());
+                    Optional<Rank> rankCheck = games.checkRank(game1.get(), form.getRank());
                     if (rankCheck.isEmpty()) {
                         setMessage("This game doesn't have this rank");
                         return null;
-                    } else
-                        setMessage("Interest created");
+                    } else {
+                        setMessage("Preference created");
                         return interests.createInterest(gamer, game1.get(), rankCheck.get(), form.getLvl());
+                    }
                 }
             }
         }
@@ -113,7 +117,7 @@ public class WebSystem {
         else return null;
     }
 
-    public Like registerLike(LikeForm likedUser, GamerUser gamer) {
+    public Like registerLike(SingleStringForm likedUser, GamerUser gamer) {
         String[] description = likedUser.getLikedUser().split(", ");
         Optional<GamerUser> likedGamer = gamers.findByUserName(description[0]);
         Optional<Game> likedGame = games.findByGameName(description[1]);
@@ -121,7 +125,7 @@ public class WebSystem {
         return likes.createLike(gamer, likedDescription);
     }
 
-    public List<Match> createMatch(GamerUser currentUser) {
+    public boolean createMatch(GamerUser currentUser) {
         return matches.match(currentUser, matches.showMatches(currentUser));
     }
 
@@ -131,6 +135,12 @@ public class WebSystem {
 
     public List<Game> getGames() {
         return games.allGames();
+    }
+
+    public List<Game> getLeftGames(List<Game> gamesInUse){
+        ArrayList<Game> allGames = (ArrayList<Game>) games.allGames();
+        allGames.removeAll(gamesInUse);
+        return allGames; 
     }
 
     public void updateGameLvl(String gameName, String newMaxLvl) {
@@ -202,16 +212,17 @@ public class WebSystem {
     }
 
     public void updateDescriptionRank(GamerUser gamerUser, String gameName, Rank rank) {
-
+        setMessage("Description updated");
         descriptions.updateByRank(gamerUser, gameName, rank);
     }
 
     public void updateInterestLvl(GamerUser gamerUser, String gameName, String newLevel) {
         interests.updateByLvl(gamerUser, gameName, newLevel);
-        setMessage("Interest updated");
+        setMessage("Preference updated");
     }
 
     public void updateInterestRank(GamerUser gamerUser, String gameName, Rank newRank) {
+        setMessage("Preference updated");
         interests.updateByRank(gamerUser, gameName, newRank);
     }
 
@@ -235,4 +246,13 @@ public class WebSystem {
     public void registerMessage(String userName, String receiver, MessageForm message, Date date) {
         messages.registerMessage(userName, receiver, message, date);
     }
+
+    public void updateProfilePicture(GamerUser gamerUser, String image) {
+        gamers.updateByProfilePicture(gamerUser, image);
+    }
+
+    public String getUserImage(GamerUser gamerUser) {
+        return gamers.getProfilePicture(gamerUser);
+    }
+
 }
