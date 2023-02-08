@@ -1,8 +1,10 @@
 <#-- @ftlvariable name="descriptions" type="java.util.List<GamerDescription>" -->
 <#-- @ftlvariable name="userNames" type="java.util.List<String>" -->
 <#-- @ftlvariable name="image" type="java.lang.String" -->
+<#-- @ftlvariable name="notifications" type="java.util.List<Notification>" -->
 <#import "userMasterTemplate.ftl" as layout />
 <style>
+
     #board {
         height: 100%;
 
@@ -33,6 +35,14 @@
     <h1>
         <u> Find Players </u>
     </h1>
+    <#if message??>
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </#if>
 
     <div id="board">
 
@@ -44,11 +54,11 @@
     /* LikeCarousel (c) 2019 Simone P.M. github.com/simonepm - Licensed MIT */
     let myCounter = 0
     let fullData = [<#list descriptions as description>"${description.gamerUser.userName}, ${description.game.gameName}, ${description.lvl}, ${description.rank.rankName}", </#list>]
-    let users = [<#list descriptions as description>"${description.gamerUser.userName}"</#list>]
-    let games = [<#list descriptions as description>"${description.game.gameName}"</#list>]
-    let levels = [<#list descriptions as description>"${description.lvl}"</#list>]
-    let ranks = [<#list descriptions as description>"${description.rank.rankName}"</#list>]
-    let images = [<#list descriptions as description>"${description.gamerUser.image}"</#list>]
+    let users = [<#list descriptions as description>"${description.gamerUser.userName}", </#list>]
+    let games = [<#list descriptions as description>"${description.game.gameName}", </#list>]
+    let levels = [<#list descriptions as description>"${description.lvl}", </#list>]
+    let ranks = [<#list descriptions as description>"${description.rank.rankName}", </#list>]
+    let images = [<#list descriptions as description>"${description.gamerUser.image}", </#list>]
     class Carousel {
         constructor(element) {
             this.board = element

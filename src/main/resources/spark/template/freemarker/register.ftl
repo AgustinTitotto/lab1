@@ -32,6 +32,9 @@
                         <h1 style="color: white; font-family: 'LEMON MILK'"> <u>Welcome to Meet-n-Game</u> </h1>
                         <p style="color: #45cb85; font-size: 160%; font-family: 'LEMON MILK'">Please create a username and password</p>
                         <div class="mb-4">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="Email" name="mail" style="font-size: 20px; font-family: 'LEMON MILK'" required>
+                        </div>
+                        <div class="mb-4">
                             <input type="text" class="form-control" id="floatingInput" placeholder="User Name" name="userName" style="font-size: 20px; font-family: 'LEMON MILK'" required>
                         </div>
                         <div class="mb-4">

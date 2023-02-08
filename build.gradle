@@ -18,7 +18,10 @@ dependencies {
     implementation 'org.hibernate:hibernate-core:5.6.5.Final'
     implementation 'com.google.code.gson:gson:2.9.0'
 
+    compile 'javax.mail:mail:1.4.7'
+
     testImplementation 'junit:junit:4.13.2'
+
 }
 
 application {

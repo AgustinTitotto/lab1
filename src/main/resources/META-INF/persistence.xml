@@ -16,6 +16,7 @@
         <class>lab1.meetNGame.model.Like</class>
         <class>lab1.meetNGame.model.Match</class>
         <class>lab1.meetNGame.model.Message</class>
+        <class>lab1.meetNGame.model.Notification</class>
 
 
         <properties>
