@@ -18,18 +18,21 @@ public class GamerUser {
     @Column(length = 1000000000)
     private String image;
 
+    private String mail;
+
     public GamerUser(){
     }
 
-    public GamerUser(String userName, String password, boolean isAdmin, String image){
+    public GamerUser(String userName, String password, boolean isAdmin, String image, String mail){
         this.userName = userName;
         this.password = password;
         this.isAdmin = isAdmin;
         this.image = image;
+        this.mail = mail;
     }
 
-    public static GamerUser create(String userName, String password, boolean isAdmin, String image){
-        return new GamerUser(userName, password, isAdmin, image);
+    public static GamerUser create(String userName, String password, boolean isAdmin, String image, String mail){
+        return new GamerUser(userName, password, isAdmin, image, mail);
     }
 
     public String getUserName() {
@@ -46,5 +49,9 @@ public class GamerUser {
 
     public String getImage() {
         return image;
+    }
+
+    public String getMail() {
+        return mail;
     }
 }

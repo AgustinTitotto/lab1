@@ -9,14 +9,16 @@ public class SignUpForm {
 
     private final String userName;
     private final String password;
+    private final String mail;
 
-    public SignUpForm(String userName, String password) {
+    public SignUpForm(String userName, String password, String mail) {
         this.userName = userName;
         this.password = password;
+        this.mail = mail;
     }
 
-    public static SignUpForm create(List<String> userName, List<String> password) {
-        return new SignUpForm(userName.get(0), password.get(0));
+    public static SignUpForm create(List<String> userName, List<String> password, List<String> mail) {
+        return new SignUpForm(userName.get(0), password.get(0), mail.get(0));
     }
 
     public static SignUpForm createFromBody(String body) {
@@ -25,7 +27,8 @@ public class SignUpForm {
 
         return SignUpForm.create(
                 params.getValues("userName"),
-                params.getValues("password")
+                params.getValues("password"),
+                params.getValues("mail")
         );
     }
 
@@ -37,4 +40,7 @@ public class SignUpForm {
         return password;
     }
 
+    public String getMail() {
+        return mail;
+    }
 }

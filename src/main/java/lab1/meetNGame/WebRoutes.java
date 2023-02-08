@@ -96,7 +96,9 @@ public class WebRoutes {
                     res.redirect("/login?ok");
                     return halt();
                 } else {
-                    final Map<String, Object> model = Map.of("message", "UserName already exists");
+                    final String message = system.getMessage();
+                    final Map<String, Object> model = Map.of("message", message);
+                    system.setMessage(null);
                     return render(model, SIGN_UP_TEMPLATE);
                 }
             }
@@ -369,16 +371,15 @@ public class WebRoutes {
             if (!authenticatedGamerUser.get().isAdmin()) {
                 String name = authenticatedGamerUser.get().getUserName();
                 String image = system.getUserImage(authenticatedGamerUser.get());
+                List<Notification> notifications = system.getUserNotifications(name);
                 final Map<String, Object> model = new HashMap<>();
+                model.put("notifications", notifications);
                 model.put("image", image);
                 model.put("myName", name);
                 if(system.getMessage() != null) {
                     model.put("message", system.getMessage());
                     system.setMessage(null);
                 }
-                if (req.queryParams("noGames") != null) model.put("message", "No games created yet");
-                if (req.queryParams("liked") != null) model.put("message", "Liked user");
-
                 return render(model, HOME_TEMPLATE);
             }else{
                 final Map<String, Object> model = new HashMap<>();
@@ -394,9 +395,8 @@ public class WebRoutes {
                 if (!games.isEmpty()){
                     List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
                     List<Game> leftGames = system.getLeftGames(getGamesInDescription(gamerDescriptions));
-                    String image = system.getUserImage(authenticatedGamerUser.get());
                     final Map<String, Object> model = new HashMap<>();
-                    model.put("image", image);
+                    setImageAndNotif(authenticatedGamerUser, model);
                     model.put("games", leftGames);
                     model.put("descriptions", gamerDescriptions);
                     if(system.getMessage() != null) {
@@ -520,9 +520,8 @@ public class WebRoutes {
                 if (!games.isEmpty()){
                     List<GamerInterest> gamerInterests = system.getGamerInterest(authenticatedGamerUser.get());
                     List<Game> leftGames = system.getLeftGames(getGamesInInterest(gamerInterests));
-                    String image = system.getUserImage(authenticatedGamerUser.get());
                     final Map<String, Object> model = new HashMap<>();
-                    model.put("image", image);
+                    setImageAndNotif(authenticatedGamerUser, model);
                     model.put("games", leftGames);
                     model.put("interests", gamerInterests);
                     if(system.getMessage() != null) {
@@ -628,7 +627,6 @@ public class WebRoutes {
                             List<GamerInterest> gamerInterests = system.getGamerInterest(authenticatedGamerUser.get());
                             List<Game> leftGames = system.getLeftGames(getGamesInInterest(gamerInterests));
                             final Map<String, Object> model = Map.of("message", "Rank doesnt exist/Lvl is higher than lvlMax","interests", gamerInterests, "games", leftGames);
-                            res.redirect("/interests");
                             system.setMessage(null);
                             return render(model, MANAGE_INTEREST_TEMPLATE);
                         }
@@ -656,11 +654,14 @@ public class WebRoutes {
                 List<GamerDescription> descriptions = system.getInterestPlayers(gamerUser);
                 if (descriptions !=null /*&& descriptions.size() != 0*/){
                     List<String> userNames = userNameQuoted(descriptions);
-                    String image = system.getUserImage(authenticatedGamerUser.get());
                     final Map<String, Object> model = new HashMap<>();
-                    model.put("image", image);
+                    setImageAndNotif(authenticatedGamerUser, model);
                     model.put("descriptions", descriptions);
                     model.put("userNames", userNames);
+                    if(system.getMessage() != null) {
+                        model.put("message", system.getMessage());
+                        system.setMessage(null);
+                    }
                     return new FreeMarkerEngine().render(new ModelAndView(model, FIND_PLAYERS_TEMPLATE));
                 }
                 else{
@@ -676,17 +677,30 @@ public class WebRoutes {
         });
 
         authenticatedPost(FIND_PLAYERS_ROUTE, (req, res) -> {
-            SingleStringForm likedUser = new SingleStringForm(req.body());
-            GamerUser currentUser = getAuthenticatedGamerUser(req).get();
-            Like like = system.registerLike(likedUser, currentUser);
-            system.createMatch(currentUser);
-            if (like != null){
-                res.redirect("/home?ok");
-                return halt();
+            final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
+            if (!currentUser.get().isAdmin()) {
+                SingleStringForm likedUser = new SingleStringForm(req.body());
+                Like like = system.registerLike(likedUser, currentUser.get());
+                Game matchedGame = system.createMatch(currentUser.get());
+                if (like != null){
+                    if (matchedGame != null) {
+                        system.setMatchNotification(likedUser, currentUser.get(), matchedGame);
+                        res.redirect("/home?ok");
+                    }
+                    else {
+                        res.redirect("/findplayers?ok");
+                    }
+                    return halt();
+                }
+                else {
+                    final Map<String, Object> model = Map.of("message", "Select a User");
+                    return render(model, FIND_PLAYERS_TEMPLATE);
+                }
             }
             else {
-                final Map<String, Object> model = Map.of("message", "Select a User");
-                return render(model, FIND_PLAYERS_TEMPLATE);
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
 
@@ -776,9 +790,8 @@ public class WebRoutes {
         authenticatedGet(ACCOUNT_SETTINGS_ROUTE, (req, res) -> {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
-                String image = system.getUserImage(currentUser.get());
                 final Map<String, Object> model = new HashMap<>();
-                model.put("image", image);
+                setImageAndNotif(currentUser, model);
                 return render(model, ACCOUNT_SETTINGS_TEMPLATE);
             }
             else {
@@ -812,6 +825,28 @@ public class WebRoutes {
                 return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
+
+        authenticatedPost("/deletenotification", (req, res) -> {
+            final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
+            if (!currentUser.get().isAdmin()){
+                DeleteNotificationForm notificationForm = DeleteNotificationForm.createFromBody(req.body());
+                system.deleteNotification(notificationForm.getId());
+                res.redirect("/" + notificationForm.getRoute());
+                return halt();
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
+        });
+    }
+
+    private static void setImageAndNotif(Optional<GamerUser> currentUser, Map<String, Object> model) {
+        String image = system.getUserImage(currentUser.get());
+        List<Notification> notifications = system.getUserNotifications(currentUser.get().getUserName());
+        model.put("notifications", notifications);
+        model.put("image", image);
     }
 
     private void getGames(String gameRoute, String gameTemplate) {
@@ -894,7 +929,6 @@ public class WebRoutes {
         for (GamerDescription description : descriptions) {
             list.add(description.getGamerUser().getUserName());
         }
-        //list.stream().collect(Collectors.joining("','", "'", "'"));
         return list;
     }
 

@@ -39,13 +39,13 @@ public class WebApp {
         ImageIO.write(bImage, "png", bos);
         byte[] data = bos.toByteArray();
 
-        GamerUser admin = new GamerUser("meetngame", "meetngame123", true, null);
-        GamerUser gamer1 = new GamerUser("gamer1", "123", false, new String(Base64.getEncoder().encode(data)));
+        GamerUser admin = new GamerUser("meetngame", "meetngame123", true, null, null);
+        GamerUser gamer1 = new GamerUser("gamer1", "123", false, new String(Base64.getEncoder().encode(data)), "gamer1@gmail.com");
         EntityTransactions.persist(admin);
         EntityTransactions.persist(gamer1);
 
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false, new String(Base64.getEncoder().encode(data)));
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false, new String(Base64.getEncoder().encode(data)));
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false, new String(Base64.getEncoder().encode(data)), "gamer2@gmail.com");
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false, new String(Base64.getEncoder().encode(data)), "gamer3@gmail.com");
         EntityTransactions.persist(gamer2);
         EntityTransactions.persist(gamer3);
 
