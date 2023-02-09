@@ -20,13 +20,15 @@ import static lab1.meetNGame.persistence.EntityTransactions.tx;
 
 public class Matches {
 
-    String from = "meetNgame@gmail.com";
-    String password = "oiozwjnhswsarnws";
+    String from = System.getenv("MAIL");
+    String password = System.getenv("KEY");
     Properties properties = new Properties();
     Properties properties1 = (Properties) properties.put("mail.smtp.auth","true");
     Properties properties2 = (Properties) properties.put("mail.smtp.starttls.enable","true");
     Properties properties3 = (Properties) properties.setProperty("mail.smtp.host", "smtp.gmail.com");
     Properties properties4 = (Properties) properties.setProperty("mail.smtp.port", "587");
+    Properties properties5 = (Properties) properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+
     Session session1 = Session.getInstance(properties, new Authenticator() {
         @Override
         protected PasswordAuthentication getPasswordAuthentication() {
@@ -64,6 +66,7 @@ public class Matches {
                             }
                         }
                         if (!repeated) {
+                            setMailData(like, likedDescription);
                             return generateMatch(matches, like, likedDescription);
                         }
                     }
@@ -97,9 +100,31 @@ public class Matches {
         String rank2 = like.getLikedDescription().getRank().getRankName();
         if (User1 != null && User2 != null) {
             Message message1 = new MimeMessage(session1);
-            sendMail(commonGame, mail1, User2, level2, rank2, message1);
+            message1.setFrom(new InternetAddress(from));
+            message1.setRecipient(Message.RecipientType.TO, new InternetAddress(mail1));
+            message1.setSubject("You have a Match");
+            message1.setContent("<h1>You just made a match:</h1>" +
+                    "<br>" +
+                    "<p>User Name: "+User2+"</p>" +
+                    "<br>" +
+                    "<p>Common Game: "+commonGame+"</p>"+
+                    "<br>" +
+                    "<p>Level: "+level2+"</p>"+
+                    "<br>" +
+                    "<p>Rank: "+rank2+"</p>","text/html");
             Message message2 = new MimeMessage(session2);
-            sendMail(commonGame, mail2, User1, level1, rank1, message2);
+            message2.setFrom(new InternetAddress(from));
+            message2.setRecipient(Message.RecipientType.TO, new InternetAddress(mail2));
+            message2.setSubject("You have a Match");
+            message2.setContent("<h1>You just made a match:</h1>" +
+                    "<br>" +
+                    "<p>User Name: "+User1+"</p>" +
+                    "<br>" +
+                    "<p>Common Game: "+commonGame+"</p>"+
+                    "<br>" +
+                    "<p>Level: "+level1+"</p>"+
+                    "<br>" +
+                    "<p>Rank: "+rank1+"</p>","text/html");
             try{
                 Transport.send(message1);
                 System.out.println("Sent message successfully....");
@@ -113,21 +138,6 @@ public class Matches {
                 mex.printStackTrace();
             }
         }
-    }
-
-    private void sendMail(String commonGame, String mail1, String User2, String level2, String rank2, Message message1) throws MessagingException {
-        message1.setFrom(new InternetAddress(from));
-        message1.setRecipient(Message.RecipientType.TO, new InternetAddress(mail1));
-        message1.setSubject("You have a Match");
-        message1.setContent("<h1>You just made a match:</h1>" +
-                "<br>" +
-                "<p>User Name: "+ User2 +"</p>" +
-                "<br>" +
-                "<p>Common Game: "+ commonGame +"</p>"+
-                "<br>" +
-                "<p>Level: "+ level2 +"</p>"+
-                "<br>" +
-                "<p>Rank: "+ rank2 +"</p>","text/html");
     }
 
 
