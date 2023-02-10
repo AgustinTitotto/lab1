@@ -60,7 +60,7 @@ public class Matches {
                     } else {                            // Fijate que no este repetido
                         boolean repeated = false;
                         for (GamerUser userMatch : currentUserMatches) {
-                            if (likedDescription.getMainUser().getUserName().equals(userMatch.getUserName())) {
+                            if (like.getLikedDescription().getGamerUser().getUserName().equals(userMatch.getUserName())) {
                                 repeated = true;
                                 break;
                             }
