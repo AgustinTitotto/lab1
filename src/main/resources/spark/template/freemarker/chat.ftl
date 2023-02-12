@@ -1,6 +1,89 @@
 <#-- @ftlvariable name="messages" type="java.util.List<Message>" -->
 <#-- @ftlvariable name="sender" type="java.lang.String" -->
 <#-- @ftlvariable name="receiver" type="java.lang.String" -->
+<style>
+    .form-wrapper {
+        text-align: center;
+        bottom: 0;
+        position: fixed;
+        width: 100vh;
+        font-family: "LEMON MILK";
+    }
+
+    .message{
+        word-break: break-word;
+        border: 2px solid #dedede;
+        border-radius: 5px;
+    }
+
+    br1 {
+        display: block; /* makes it have a width */
+        content: ""; /* clears default height */
+        margin-top: 10px; /* change this to whatever height you want it */
+    }
+
+    .message p{
+        margin: 0;
+        padding: 0;
+        text-align: right;
+        font-family: "LEMON MILK";
+        color: white;
+    }
+
+</style>
+<#import "userMasterTemplate.ftl" as layout />
+
+<@layout.userMasterTemplate title="View match">
+
+    <div class="chat-content">
+        <h1>${receiver}</h1>
+        <div class="container" style="padding-left: 200px; padding-right: 200px">
+            <#if messages??>
+                <#list messages as message>
+                    <#if message.sender == sender>
+                        <div class="message">
+                            <p>${message.sender}</p>
+                            <p>${message.message}</p>
+                            <p>${message.date}</p>
+                        </div>
+                        <br1></br1>
+                        </#if>
+                        <#if message.sender != sender>
+                        <div class="message">
+                            <p style="text-align: left; margin: 0; padding: 0">${message.sender}</p>
+                            <p style="text-align: left; margin: 0; padding: 0">${message.message}</p>
+                            <p style="color: #aaa; text-align: left; margin: 0; padding: 0">${message.date}</p>
+                        </div>
+                        <br1></br1>
+                        </#if>
+                </#list>
+            </#if>
+            <div class="form-wrapper">
+                <form id="message-form" class="message-form" action = "/chat/${receiver}" role="form" method="post">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Send message..." aria-label="Send message" aria-describedby="basic-addon2" id="message" name="message" required>
+                        <div class="input-group-append">
+                            <button class="btn btn-success" type="submit">Button
+                                <a href="/chat/${receiver}" style="text-decoration: none"></a>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+<!--
+<span style="padding: 0 5px; float: left; width: 80%">
+                        <input style="width: 100%" type="text" name="message" placeholder="Send a message..." class="message" id="message" required/>
+                    </span>
+                    <button style="width: 20%;" type="submit" name="send" class="btn btn-success" id="send">
+                        <a href="/chat/${receiver}" style="text-decoration: none"></a>
+                        Send
+                    </button>
+-->
+            </div>
+        </div>
+    </div>
+
+</@layout.userMasterTemplate>
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,7 +205,7 @@
 
 </style>
 <body>
-<!-- <a id="user"></a>-->
+
 <div class="sidebar">
     <a class="active" href="/home">Home</a>
     <a class="active" href="/profile">Profile</a>
@@ -170,6 +253,7 @@
         </div>
     </div>
 </div>
+-->
 <!--
 <div class="content2" style="float: left">
     <form action = "/chat:${sender}" role="form" method="post">
@@ -182,7 +266,8 @@
     </button>
 </div>
 -->
-
+<!--
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>
+-->

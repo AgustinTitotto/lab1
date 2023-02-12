@@ -1,5 +1,61 @@
 <#-- @ftlvariable name="matches" type="java.util.List<GamerUser>" -->
-<!DOCTYPE html>
+<#-- @ftlvariable name="image" type="java.lang.String" -->
+<#-- @ftlvariable name="notifications" type="java.util.List<Notification>" -->
+<#import "userMasterTemplate.ftl" as layout />
+
+<@layout.userMasterTemplate title="View match">
+
+    <h1 class="pb-5">
+        <u>Here are your matches</u>
+    </h1>
+
+    <#if message??>
+        <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
+         background-color: lightblue; text-align: center;">
+            ${message}
+        </div>
+    </#if>
+
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-xs-12 w-50">
+                <div id="media-list" class="row">
+                        <#list matches>
+                            <#items as match>
+                                <div class="row media-body my-3 position-relative" style="color: white; font-family: 'LEMON MILK'">
+                                    <div class="col">
+                                        <h4>Gamer: ${match.userName}</h4>
+                                        Game: Game
+                                    </div>
+                                    <div class="col">
+                                        <div class="position-absolute bottom-0 end-0">
+                                            <a href="/viewplayerprofile/${match.userName}" style="text-decoration: none;">
+                                                <button type="button" class="btn btn-profile" >Profile</button>
+                                            </a>
+                                            <a href="/chat/${match.userName}" style="text-decoration: none;">
+                                                <button type="button" class="btn btn-profile" >Chat </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr style="height: 10px; color: white">
+                            </#items>
+                            <#else >
+                                <h4 class="profileSubT">
+                                    You have no matches
+                                </h4>
+                        </#list>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</@layout.userMasterTemplate>
+
+
+
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Welcome!</title>
@@ -105,7 +161,9 @@
 
 </style>
 <body>
+-->
 <!-- <a id="user"></a>-->
+<!--
 <div class="sidebar">
     <a class="active" href="/home">Home</a>
     <a class="active" href="/profile">Profile</a>
@@ -161,7 +219,7 @@
             </#list>
             </#if>
     </div>
-
+-->
     <!--
     <form action="/viewmatch" role="form" method="post">
         <div class="container">
@@ -190,8 +248,10 @@
         </#if>
     </form>
     -->
+<!--
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>
+-->

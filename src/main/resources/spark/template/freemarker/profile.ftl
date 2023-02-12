@@ -15,7 +15,6 @@
         </div>
     </#if>
 
-
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-xs-12 w-50">
@@ -153,10 +152,10 @@
                                 </div>
                                 <hr style="height: 10px; color: white">
                             </#items>
-                        <#else>
-                            <h4 class="profileSubT">
-                                You have no descriptions
-                            </h4>
+                            <#else>
+                                <h4 class="profileSubT">
+                                    You have no descriptions
+                                </h4>
                         </#list>
                 </div>
             </div>

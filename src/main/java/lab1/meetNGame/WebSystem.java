@@ -23,6 +23,7 @@ public class WebSystem {
     private final Matches matches = new Matches();
     private final Messages messages = new Messages();
     private final Notifications notifications = new Notifications();
+    private final StatsRepo statistics = new StatsRepo();
 
     public GamerUser registerGamer(SignUpForm form) throws IOException {
         if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()) || Strings.isNullOrEmpty(form.getMail()))
@@ -279,5 +280,9 @@ public class WebSystem {
     public void deleteNotification(String notificationId) {
         long notificationID = Long.parseLong(notificationId);
         notifications.deleteNotification(notificationID);
+    }
+
+    public Stats getUserStats(String name) {
+        return statistics.getUserStats(name);
     }
 }

@@ -34,7 +34,7 @@ public class WebRoutes {
     public static final String CREATE_RANK_TEMPLATE = "createrank.ftl";
     public static final String DELETE_RANK_TEMPLATE = "deleterank.ftl";
     public static final String ACCOUNT_SETTINGS_TEMPLATE = "settings.ftl";
-    //public static final String VIEW_PLAYER_PROFILE = "viewplayerprofile.ftl";
+    public static final String VIEW_PLAYER_PROFILE_TEMPLATE = "viewplayerprofile.ftl";
 
 
     /**
@@ -63,7 +63,7 @@ public class WebRoutes {
     public static final String CREATE_RANK_ROUTE = "/createrank";
     public static final String DELETE_RANK_ROUTE = "/deleterank";
     public static final String ACCOUNT_SETTINGS_ROUTE = "/settings";
-    //public static final String VIEW_PLAYER_ROUTE = "/viewplayerprofile";
+    public static final String VIEW_PLAYER_ROUTE = "/viewplayerprofile";
 
     final static private WebSystem system = new WebSystem();
 
@@ -372,7 +372,9 @@ public class WebRoutes {
                 String name = authenticatedGamerUser.get().getUserName();
                 String image = system.getUserImage(authenticatedGamerUser.get());
                 List<Notification> notifications = system.getUserNotifications(name);
+                Stats stats = system.getUserStats(name);
                 final Map<String, Object> model = new HashMap<>();
+                model.put("stats", stats);
                 model.put("notifications", notifications);
                 model.put("image", image);
                 model.put("myName", name);
@@ -710,6 +712,7 @@ public class WebRoutes {
                 List<GamerUser> matches = system.showMatch(currentUser.get());
                 if(!matches.isEmpty()){
                     final Map<String, Object> model = new HashMap<>();
+                    setImageAndNotif(currentUser, model);
                     model.put("matches", matches);
                     return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
                 }
@@ -726,18 +729,21 @@ public class WebRoutes {
             }
         });
 
-        authenticatedGet("/viewmatch/:username", (req, res) -> {
+        authenticatedGet("/viewplayerprofile/:username", (req, res) -> {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
                 String username = req.params(":username");
                 Optional<GamerUser> gamerUser = system.findUserByUserName(username);
-                List<GamerUser> matches = system.showMatch(currentUser.get());
+                //List<GamerUser> matches = system.showMatch(currentUser.get());
                 if (gamerUser.isPresent()){
                     List<GamerDescription> descriptions = system.getUserDescriptions(gamerUser.get());
+                    Stats stats = system.getUserStats(username);
                     final Map<String, Object> model = new HashMap<>();
-                    model.put("matches", matches);
+                    setImageAndNotif(currentUser, model);
                     model.put("descriptions", descriptions);
-                    return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
+                    model.put("stats", stats);
+                    model.put("username", username);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_PLAYER_PROFILE_TEMPLATE));
                 }
                 else {
                     system.setMessage("You have to select a player");
@@ -758,6 +764,7 @@ public class WebRoutes {
                 String username2 = req.params(":username");
                 List<Message> messages = system.getMessages(currentUser.get().getUserName(), username2);
                 final Map<String, Object> model = new HashMap<>();
+                setImageAndNotif(currentUser, model);
                 if (!messages.isEmpty()) {
                     model.put("messages", messages);
                 }
