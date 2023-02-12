@@ -56,4 +56,8 @@ public class Match {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Game getCommonGame() {
+        return commonGame;
+    }
 }

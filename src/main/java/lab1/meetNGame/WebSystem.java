@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.repository.*;
+import org.javatuples.Pair;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -137,11 +138,11 @@ public class WebSystem {
     }
 
     public Game createMatch(GamerUser currentUser) throws MessagingException {
-        return matches.match(currentUser, matches.showMatches(currentUser));
+        return matches.match(currentUser, matches.getMatches(currentUser));
     }
 
-    public List<GamerUser> showMatch(GamerUser gamerUser) {
-        return matches.showMatches(gamerUser);
+    public List<Pair<GamerUser, Game>> getMatches(GamerUser gamerUser) {
+        return matches.getMatches(gamerUser);
     }
 
     public List<Game> getGames() {
@@ -284,5 +285,15 @@ public class WebSystem {
 
     public Stats getUserStats(String name) {
         return statistics.getUserStats(name);
+    }
+
+    public void setMessageNotification(String receiver, GamerUser gamerUser) {
+        Optional<GamerUser> receiverUser = gamers.findByUserName(receiver);
+        if (receiverUser.isPresent()){
+            notifications.registerMessageNotification(receiverUser.get(), gamerUser);
+        }
+        else {
+            setMessage("User not found");
+        }
     }
 }

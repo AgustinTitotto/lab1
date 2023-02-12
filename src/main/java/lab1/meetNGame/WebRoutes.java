@@ -2,6 +2,7 @@ package lab1.meetNGame;
 
 import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
+import org.javatuples.Pair;
 import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
@@ -709,7 +710,7 @@ public class WebRoutes {
         authenticatedGet(VIEW_MATCH_ROUTE, (req, res) -> {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
-                List<GamerUser> matches = system.showMatch(currentUser.get());
+                List<Pair<GamerUser, Game>> matches = system.getMatches(currentUser.get());
                 if(!matches.isEmpty()){
                     final Map<String, Object> model = new HashMap<>();
                     setImageAndNotif(currentUser, model);
@@ -784,6 +785,7 @@ public class WebRoutes {
                 String receiver = req.params(":username");
                 MessageForm message = MessageForm.createFromBody(req.body());
                 system.registerMessage(currentUser.get().getUserName(), receiver, message, new Date());
+                system.setMessageNotification(receiver, currentUser.get());
                 res.redirect("/chat/" + receiver);
                 return halt();
             }

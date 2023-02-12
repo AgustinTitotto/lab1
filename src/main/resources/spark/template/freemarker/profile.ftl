@@ -2,6 +2,14 @@
 <#-- @ftlvariable name="games" type="java.util.List<Game>" -->
 <#-- @ftlvariable name="image" type="java.lang.String" -->
 <#-- @ftlvariable name="notifications" type="java.util.List<Notification>" -->
+<style>
+    
+    @media (min-width: 768px) {
+        .manage {
+            position: absolute;
+        }
+    }
+</style>
 <#import "userMasterTemplate.ftl" as layout />
 <@layout.userMasterTemplate title="Profile">
 
@@ -87,7 +95,7 @@
                                         rank: ${description.rank.rankName}
                                     </div>
                                     <div class="col">
-                                        <div class="position-absolute bottom-0 end-0">
+                                        <div class="manage bottom-0 end-0">
                                             <button type="button" class="btn btn-profile" data-bs-toggle="modal" data-bs-target="#updateModal${description.game.gameName}" onclick="getElements('${description.game.gameName}')">Update</button>
                                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${description.game.gameName}">Delete</button>
 

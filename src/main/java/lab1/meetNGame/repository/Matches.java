@@ -15,6 +15,8 @@ import javax.mail.internet.*;
 import javax.mail.Session;
 import javax.mail.Transport;
 
+import org.javatuples.Pair;
+
 import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
 import static lab1.meetNGame.persistence.EntityTransactions.tx;
 
@@ -44,7 +46,7 @@ public class Matches {
     });
 
 
-    public Game match(GamerUser currentUser, List<GamerUser> currentUserMatches) throws MessagingException {
+    public Game match(GamerUser currentUser, List<Pair<GamerUser, Game>> currentUserMatches) throws MessagingException {
         List<Like> likedDescriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM Like u WHERE u.likedDescription.gamerUser.userName Like:gamerUser",
                 Like.class).setParameter("gamerUser", currentUser.getUserName()).getResultList()); //Donde otro likeo a current user
         List<Like> likedByUser = tx(() -> currentEntityManager().createQuery("SELECT u FROM Like u WHERE u.mainUser.userName LIKE: userName",
@@ -59,8 +61,8 @@ public class Matches {
                         return generateMatch(matches, like, likedDescription);
                     } else {                            // Fijate que no este repetido
                         boolean repeated = false;
-                        for (GamerUser userMatch : currentUserMatches) {
-                            if (like.getLikedDescription().getGamerUser().getUserName().equals(userMatch.getUserName())) {
+                        for (Pair<GamerUser, Game> userMatch : currentUserMatches) {
+                            if (like.getLikedDescription().getGamerUser().getUserName().equals(userMatch.getValue0().getUserName())) {
                                 repeated = true;
                                 break;
                             }
@@ -141,17 +143,17 @@ public class Matches {
     }
 
 
-    public List<GamerUser> showMatches(GamerUser gamer){
-        List<GamerUser> finalList = new ArrayList<>();
+    public List<Pair<GamerUser, Game>> getMatches(GamerUser gamer){
+        List<Pair<GamerUser, Game>> finalList = new ArrayList<>();
         List<Match> gamers1 = tx(() -> currentEntityManager().createQuery("SELECT u FROM Match u WHERE u.user1.userName LIKE: userName",
                 Match.class).setParameter("userName", gamer.getUserName()).getResultList());
         List<Match> gamers2 = tx(() -> currentEntityManager().createQuery("SELECT u FROM Match u WHERE u.user2.userName LIKE: userName",
                 Match.class).setParameter("userName", gamer.getUserName()).getResultList());
         for (Match match : gamers1) {
-            finalList.add(match.getUser2());
+            finalList.add(new Pair<>(match.getUser2(), match.getCommonGame()));
         }
         for (Match match : gamers2) {
-            finalList.add(match.getUser1());
+            finalList.add(new Pair<>(match.getUser1(), match.getCommonGame()));
         }
         return finalList;
     }
