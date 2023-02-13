@@ -25,8 +25,9 @@
                 <div class="mx-5 px-5">
                     <form action="/register" role="form" method="post">
                         <#if message??>
-                            <div class="alert alert-success">
+                            <div class="alert alert-success alert-dismissible"  role="alert" style="color: black; font-size: 150%; font-family: 'LEMON MILK'; text-align: center; background-color: lightblue">
                                 ${message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </#if>
                         <h1 style="color: white; font-family: 'LEMON MILK'"> <u>Welcome to Meet-n-Game</u> </h1>

@@ -16,14 +16,14 @@
     <h1>
         <u>Welcome to your profile</u>
     </h1>
-    <#if message??>
-        <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
-         background-color: lightblue; text-align: center;">
-            ${message}
-        </div>
-    </#if>
 
     <div class="container mt-5">
+        <#if message??>
+            <div class="alert alert-success alert-dismissible"  role="alert" style="color: black; font-size: 150%; font-family: 'LEMON MILK'; text-align: center; background-color: lightblue">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </#if>
         <div class="row d-flex justify-content-center">
             <div class="col-xs-12 w-50">
                 <div id="media-list" class="row">
@@ -43,7 +43,7 @@
                                         </div>
                                         <#list games>
                                         <div class="modal-body">
-                                                <div class="form-floating">
+                                                <div class="form-floating pb-2">
                                                     <select class="form-select" name="gameName" id="gameName" style="font-size: 120%; font-family: 'LEMON MILK'">
                                                         <#items as game>
                                                             <option value="${game.gameName}">${game.gameName}</option>

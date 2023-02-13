@@ -56,7 +56,14 @@ public class WebSystem {
 
 
     public Game registerGame(CreateGameForm form) {
-        return games.gameExists(form.getGameName()) ? null : games.createGame(form);
+        if (games.gameExists(form.getGameName())){
+            setMessage("Game already exists");
+            return null;
+        }
+        else {
+            setMessage("Game created");
+            return games.createGame(form);
+        }
     }
 
     public GamerDescription registerGamerDescription(GamerUser gamer, List<GamerDescription> myDescriptions, CreateDescriptionForm form){
@@ -164,6 +171,7 @@ public class WebSystem {
     }
 
     public void deleteGame(String game) {
+        setMessage("Game deleted");
         games.deleteGame(game);
     }
 

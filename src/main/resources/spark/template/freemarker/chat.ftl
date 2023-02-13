@@ -36,25 +36,31 @@
 
         <div class="container d-flex justify-content-center">
                 <div class="card" style="height: calc(100vh - 125px); background-color: #1b1f26; border-radius: 1em">
-                <div class="card-header">
+                <div class="card-header border-bottom border-white">
                     <h1 style="text-align: left">${receiver}</h1>
                 </div>
                 <div class="card-body overflow-auto" style="position: relative">
                     <#if messages??>
+                        <div class="row">
                         <#list messages as message>
                             <#if message.sender == sender>
-                                <div class="message mb-3">
-                                    <p>${message.message}</p>
-                                    <p>${message.date}</p>
+                                <div class="d-flex justify-content-end">
+                                    <div class="message mb-3 w-75 ">
+                                        <p>${message.message}</p>
+                                        <p>${message.date}</p>
+                                    </div>
                                 </div>
                             </#if>
                             <#if message.sender != sender>
-                                <div class="message mb-3">
-                                    <p style="text-align: left; margin: 0; padding: 0">${message.message}</p>
-                                    <p style="color: #aaa; text-align: left; margin: 0; padding: 0">${message.date}</p>
+                                <div class="d-flex justify-content-start">
+                                    <div class="message mb-3 w-75">
+                                        <p style="text-align: left; margin: 0; padding: 0">${message.message}</p>
+                                        <p style="color: #aaa; text-align: left; margin: 0; padding: 0">${message.date}</p>
+                                    </div>
                                 </div>
                             </#if>
                         </#list>
+                        </div>
                     </#if>
                 </div>
                 <div class="card-footer d-flex align-items-center">

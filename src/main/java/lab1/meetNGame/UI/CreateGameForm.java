@@ -30,7 +30,7 @@ public class CreateGameForm {
         return CreateGameForm.createGameForm(
                 params.getValues("gameName"),
                 params.getValues("gameCategory"),
-                params.getValues("gameLvlMax"),
+                params.getValues("gameMaxLvl"),
                 params.getValues("gameRanks")
         );
     }

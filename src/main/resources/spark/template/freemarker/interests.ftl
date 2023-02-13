@@ -18,9 +18,9 @@
         <u>These are your preferences</u>
     </h1>
     <#if message??>
-        <div class="alert alert-success" style="color: black; font-size: 150%; font-family: 'LEMON MILK';
-         background-color: lightblue; text-align: center;">
+        <div class="alert alert-success alert-dismissible"  role="alert" style="color: black; font-size: 150%; font-family: 'LEMON MILK'; text-align: center; background-color: lightblue">
             ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </#if>
 

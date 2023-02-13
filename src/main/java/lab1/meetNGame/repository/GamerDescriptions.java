@@ -101,7 +101,7 @@ public class GamerDescriptions {
                 "WHERE u.game.gameName LIKE:gameName and u.gamerUser.userName LIKE:userName", GamerDescription.class)
                 .setParameter("gameName", gameName).setParameter("userName", gamerUser.getUserName()).getResultList().stream().findFirst());
         long id = gamerDescription.get().getId();
-        tx(() -> currentEntityManager().createQuery("DELETE FROM Like u WHERE u.likedUser.id = ?1")
+        tx(() -> currentEntityManager().createQuery("DELETE FROM Like u WHERE u.likedDescription.id = ?1")
                     .setParameter(1, id).executeUpdate());
         tx(() -> currentEntityManager().createQuery("DELETE FROM Match u WHERE (u.user1.userName LIKE:userName OR u.user2.userName LIKE:userName) AND " +
                  "u.commonGame.gameName LIKE:gameName").setParameter("userName", gamerUser.getUserName())

@@ -83,7 +83,7 @@ public class Games {
                 "WHERE u.game.gameName LIKE:gameName", GamerDescription.class).setParameter("gameName", game).getResultList());
         for (GamerDescription description : gamerDescription) {
             long id = description.getId();
-            tx(() -> currentEntityManager().createQuery("DELETE FROM Like u WHERE u.likedUser.id = ?1")
+            tx(() -> currentEntityManager().createQuery("DELETE FROM Like u WHERE u.likedDescription.id = ?1")
                     .setParameter(1, id).executeUpdate());
         }
         tx(() -> currentEntityManager().createQuery("DELETE FROM GamerDescription u WHERE u.game.gameName LIKE:gameName")
