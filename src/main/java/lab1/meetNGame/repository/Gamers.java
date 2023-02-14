@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
@@ -63,5 +64,9 @@ public class Gamers{
     public String getProfilePicture(GamerUser gamerUser) {
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerUser u WHERE u.userName LIKE:userName", GamerUser.class)
                 .setParameter("userName", gamerUser.getUserName()).getResultList()).stream().findFirst().get().getImage();
+    }
+
+    public List<GamerUser> getAllGamers() {
+        return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerUser u", GamerUser.class).getResultList());
     }
 }

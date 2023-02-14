@@ -62,7 +62,7 @@ public class WebSystem {
         }
         else {
             setMessage("Game created");
-            return games.createGame(form);
+            return games.createGame(form, gamers.getAllGamers());
         }
     }
 
@@ -183,7 +183,6 @@ public class WebSystem {
         if (descriptions.checkNewLvl(gameName, newLevel)){
             return true;
         }else{
-            setMessage("This level is not within the game's range");
             return false;
         }
     }

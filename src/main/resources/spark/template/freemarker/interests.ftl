@@ -89,7 +89,7 @@
                         </h4>
                         <#items as interest>
                             <div class="row media-body my-3 position-relative" style="color: white; font-family: 'LEMON MILK'">
-                                <div class="col">
+                                <div class="col-9">
                                     <h4>Game: ${interest.game.gameName}</h4>
                                     lvl: ${interest.lvl}
                                     <br>
@@ -97,11 +97,11 @@
                                 </div>
                                 <div class="col">
                                     <div class="manage bottom-0 end-0">
-                                        <button type="button" class="btn btn-profile" data-bs-toggle="modal" data-bs-target="#updateModal${interest.game.gameName}" onclick="getElements('${interest.game.gameName}')">Update</button>
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${interest.game.gameName}">Delete</button>
+                                        <button type="button" class="btn btn-profile" data-bs-toggle="modal" data-bs-target="#updateModal${interest?index}" onclick="getElements('${interest.game.gameName}')">Update</button>
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${interest?index}">Delete</button>
 
                                         <form class="container" action="/updateinterest" role="form" method="post">
-                                            <div class="modal fade" id="updateModal${interest.game.gameName}" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="updateModal${interest?index}" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -134,7 +134,7 @@
                                         </form>
 
                                         <form class="container" action="/deleteinterest" role="form" method="post">
-                                            <div class="modal fade" id="deleteModal${interest.game.gameName}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="deleteModal${interest?index}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -195,7 +195,7 @@
     </#list>
 
     function getElements (gameName) {
-        let level = document.querySelector('#newLvlId' + gameName);
+        let level = document.getElementById('newLvlId' + gameName);
         const levelOutput = levelMap.get(gameName);
         const ranksOutput = gameRanksMap.get(gameName);
         level.value = levelOutput;

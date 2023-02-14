@@ -1,6 +1,7 @@
 <#-- @ftlvariable name="messages" type="java.util.List<Message>" -->
 <#-- @ftlvariable name="sender" type="java.lang.String" -->
 <#-- @ftlvariable name="receiver" type="java.lang.String" -->
+<#-- @ftlvariable name="image2" type="java.lang.String" -->
 <style>
 
     .form-wrapper {
@@ -36,8 +37,8 @@
 
         <div class="container d-flex justify-content-center">
                 <div class="card" style="height: calc(100vh - 125px); background-color: #1b1f26; border-radius: 1em">
-                <div class="card-header border-bottom border-white">
-                    <h1 style="text-align: left">${receiver}</h1>
+                <div class="card-header border-bottom border-white d-flex ">
+                    <h1 class="me-3" style="text-align: left">${receiver}</h1><img src="data:image/jpeg;base64,${image2}" alt="User" class="rounded-circle2 mt-1">
                 </div>
                 <div class="card-body overflow-auto" style="position: relative">
                     <#if messages??>

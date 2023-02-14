@@ -52,7 +52,7 @@
                                                     <label for="gameName" style="color: black; font-family: 'LEMON MILK'">Game</label>
                                                 </div>
                                                 <div class="form-floating pb-2">
-                                                    <input class="form-control" type="text" min="1" name="gamerLvl" id="gamerLvl" style="font-size: 120%; font-family: 'LEMON MILK'">
+                                                    <input class="form-control" type="number" min="1" name="gamerLvl" id="gamerLvl" style="font-size: 120%; font-family: 'LEMON MILK'">
                                                     <label for="gamerLvl" style="color: black; font-family: 'LEMON MILK'">Lvl</label>
                                                 </div>
                                                 <div class="form-floating">
@@ -88,7 +88,7 @@
                             </h4>
                             <#items as description>
                                 <div class="row media-body my-3 position-relative" style="color: white; font-family: 'LEMON MILK'">
-                                    <div class="col">
+                                    <div class="col-9">
                                         <h4>Game: ${description.game.gameName}</h4>
                                         lvl: ${description.lvl}
                                         <br>
@@ -96,11 +96,11 @@
                                     </div>
                                     <div class="col">
                                         <div class="manage bottom-0 end-0">
-                                            <button type="button" class="btn btn-profile" data-bs-toggle="modal" data-bs-target="#updateModal${description.game.gameName}" onclick="getElements('${description.game.gameName}')">Update</button>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${description.game.gameName}">Delete</button>
+                                            <button type="button" class="btn btn-profile" data-bs-toggle="modal" data-bs-target="#updateModal${description?index}" onclick="getElements('${description.game.gameName}')">Update</button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${description?index}">Delete</button>
 
                                             <form class="container" action="/updatedescription" role="form" method="post">
-                                                <div class="modal fade" id="updateModal${description.game.gameName}" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="updateModal${description?index}" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -110,9 +110,8 @@
                                                             <div class="modal-body">
                                                                 <input type="hidden" name="gameName" id="gameName" value="${description.game.gameName}">
                                                                 <div class="form-floating pb-2">
-                                                                    <input class="form-control" type="text" min="1" name="newLvl" id="newLvlId${description.game.gameName}" style="font-size: 120%">
+                                                                    <input class="form-control" type="number" min="1" name="newLvl" id="newLvlId${description.game.gameName}" style="font-size: 120%">
                                                                     <label for="newLvlId${description.game.gameName}" style="color: black">Lvl</label>
-
                                                                 </div>
                                                                 <div class="form-floating">
                                                                     <select class="form-select" name="newRank" id="newRankId${description.game.gameName}" style="font-size: 120%">
@@ -133,7 +132,7 @@
                                             </form>
 
                                             <form class="container" action="/deletedescription" role="form" method="post">
-                                                <div class="modal fade" id="deleteModal${description.game.gameName}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="deleteModal${description?index}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -194,7 +193,7 @@
     </#list>
 
     function getElements (gameName) {
-        let level = document.querySelector('#newLvlId' + gameName);
+        let level = document.getElementById('newLvlId' + gameName);
         const levelOutput = levelMap.get(gameName);
         const ranksOutput = gameRanksMap.get(gameName);
         level.value = levelOutput;

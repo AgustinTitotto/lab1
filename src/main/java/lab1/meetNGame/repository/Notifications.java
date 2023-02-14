@@ -33,8 +33,19 @@ public class Notifications {
     }
 
     public void registerMessageNotification(GamerUser receiver, GamerUser currentUser) {
-        Notification messageNotification = Notification.createNotification("You have a new message from " + currentUser.getUserName());
-        messageNotification.setGamerUser(receiver);
-        EntityTransactions.persist(messageNotification);
+        List<Notification> receiverNotifications = tx(() -> currentEntityManager().createQuery("select u from Notification u where u.gamerUser.userName like: userName", Notification.class)
+                .setParameter("userName", receiver.getUserName()).getResultList());
+        boolean repeatedNotification = false;
+        for (Notification notification: receiverNotifications) {
+            if (notification.getNotification().equalsIgnoreCase("You have a new message from " + currentUser.getUserName())) {
+                repeatedNotification = true;
+                break;
+            }
+        }
+        if (!repeatedNotification){
+            Notification messageNotification = Notification.createNotification("You have a new message from " + currentUser.getUserName());
+            messageNotification.setGamerUser(receiver);
+            EntityTransactions.persist(messageNotification);
+        }
     }
 }

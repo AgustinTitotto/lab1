@@ -1,10 +1,7 @@
 package lab1.meetNGame.repository;
 
 import lab1.meetNGame.UI.CreateGameForm;
-import lab1.meetNGame.model.Game;
-import lab1.meetNGame.model.GamerDescription;
-import lab1.meetNGame.model.GamerInterest;
-import lab1.meetNGame.model.Rank;
+import lab1.meetNGame.model.*;
 import lab1.meetNGame.persistence.EntityTransactions;
 
 import java.util.List;
@@ -24,12 +21,17 @@ public class Games {
                 Game.class).setParameter("gameName", gameName).getResultList()).stream().findFirst();
     }
 
-    public Game createGame(CreateGameForm form){
+    public Game createGame(CreateGameForm form, List<GamerUser> allGamers){
         final Game newGame = Game.createGame(form.getGameName(), form.getCategory(), form.getLvlMax());
         String[] ranks = form.getRanks().split(",");
         for (String s : ranks) {
             Rank rank = Rank.createRank(s);
             newGame.getRanks().add(rank);
+        }
+        for (GamerUser gamerUser : allGamers) {
+            Notification notification = Notification.createNotification("New game added: " + newGame.getGameName() + "!!!!");
+            notification.setGamerUser(gamerUser);
+            EntityTransactions.persist(notification);
         }
         return EntityTransactions.persist(newGame);
     }
@@ -61,6 +63,9 @@ public class Games {
                 tx(() -> currentEntityManager().createQuery("UPDATE GamerDescription u SET u.lvl = ?1 WHERE u.gamerUser.userName LIKE:userName AND u.game.gameName LIKE:gameName")
                         .setParameter("userName", gamer).setParameter("gameName", gameName).setParameter(1, newMaxLvl).executeUpdate());
             }
+            Notification notification = Notification.createNotification("Game " + gameName + " has new Max Lvl: " + newMaxLvl);
+            notification.setGamerUser(gamerDescription.getGamerUser());
+            EntityTransactions.persist(notification);
         }
         List<GamerInterest> gamerInterests = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerInterest  u " +
                 "WHERE u.game.gameName LIKE:gameName", GamerInterest.class).setParameter("gameName", gameName).getResultList());
@@ -85,6 +90,9 @@ public class Games {
             long id = description.getId();
             tx(() -> currentEntityManager().createQuery("DELETE FROM Like u WHERE u.likedDescription.id = ?1")
                     .setParameter(1, id).executeUpdate());
+            Notification notification = Notification.createNotification("Game " + game + " has been deleted");
+            notification.setGamerUser(description.getGamerUser());
+            EntityTransactions.persist(notification);
         }
         tx(() -> currentEntityManager().createQuery("DELETE FROM GamerDescription u WHERE u.game.gameName LIKE:gameName")
                 .setParameter("gameName", game).executeUpdate());
@@ -119,6 +127,13 @@ public class Games {
         if (rank != null){
             rank = Rank.createRank(newRank);
             game1.get().getRanks().add(rank);
+            List<GamerDescription> gamerDescriptions = tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerDescription  u " +
+                    "WHERE u.game.gameName LIKE:gameName", GamerDescription.class).setParameter("gameName", gameName).getResultList());
+            for (GamerDescription gamerDescription : gamerDescriptions) {
+                Notification notification = Notification.createNotification("Game " + gameName + " has new Rank: " + newRank);
+                notification.setGamerUser(gamerDescription.getGamerUser());
+                EntityTransactions.persist(notification);
+            }
             return EntityTransactions.persist(rank);
         }
         else{
@@ -127,13 +142,13 @@ public class Games {
 
     }
 
-    public Rank deleteRank(String gameName, String newRank) {
+    public Rank deleteRank(String gameName, String deletedRank) {
         Rank rank = null;
         Optional<Game> game1 = findByGameName(gameName);
         List<Rank> ranks = game1.get().getRanks();
         for (Rank value : ranks) {
             String name = value.getRankName();
-            if (name.equals(newRank)) {
+            if (name.equals(deletedRank)) {
                 rank = value;
                 break;
             }
@@ -147,8 +162,11 @@ public class Games {
                 String userName = description.getGamerUser().getUserName();
                 tx(() -> currentEntityManager().createQuery("DELETE FROM Match u WHERE u.user1.userName LIKE:userName or u.user2.userName LIKE:userName")
                         .setParameter("userName", userName).executeUpdate());
-                tx(() -> currentEntityManager().createQuery("DELETE FROM Like u WHERE u.likedUser.id = ?1")
+                tx(() -> currentEntityManager().createQuery("DELETE FROM Like u WHERE u.likedDescription.id = ?1")
                         .setParameter(1, gamerDesId).executeUpdate());
+                Notification notification = Notification.createNotification("Rank "+ deletedRank + " was deleted from " + gameName);
+                notification.setGamerUser(description.getGamerUser());
+                EntityTransactions.persist(notification);
             }
             tx(() -> currentEntityManager().createQuery("DELETE FROM GamerInterest u WHERE u.rank.rankId = ?1")
                     .setParameter(1, id).executeUpdate());

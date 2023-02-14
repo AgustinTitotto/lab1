@@ -137,7 +137,7 @@
                                     <li class="dropdown-item">
                                         <form class="container" action="/deletenotification" role="form" method="post">
                                             <input type="hidden" name="notificationId" id="notificationId" value="${notification.id}">${notification.notification}
-                                            <input type="hidden" name="route" id="route">
+                                            <input type="hidden" name="route" id="route${notification?index}">
                                             <button type="submit" class="btn-close btn-close-white position-absolute end-0" aria-label="Close"></button>
                                         </form>
                                     </li>
@@ -180,7 +180,11 @@
 </script>
 <script type="text/javascript">
     let a = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
-    document.getElementById("route").value = a
+    const notifications = [<#list notifications as notification>'${notification?index}',</#list>]
+    for (let i = 0; i < notifications.length; i++) {
+        document.getElementById("route" + notifications.at(i)).value = a
+    }
+
 </script>
 </body>
 </html>

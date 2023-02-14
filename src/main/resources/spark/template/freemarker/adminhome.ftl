@@ -59,6 +59,10 @@
         position: relative;
     }
 
+    .modal-footer {
+        justify-content: space-between;
+    }
+
 </style>
 <body class="background">
 
@@ -124,19 +128,19 @@
                         </h4>
                         <#items as game>
                             <div class="row media-body my-3 position-relative" style="color: white; font-family: 'LEMON MILK'">
-                                <div class="col">
-                                    <h4>Game: ${game.gameName}</h4>
+                                <div class="col-9">
+                                    <h4>game: ${game.gameName}</h4>
                                     category: ${game.category}
                                     <br>
-                                    lvl: ${game.lvlMAX}
+                                    max lvl: ${game.lvlMAX}
                                 </div>
                                 <div class="col">
-                                    <div class="manage bottom-0 end-0">
-                                        <button type="button" class="btn btn-profile" data-bs-toggle="modal" data-bs-target="#updateModal${game.gameName}" onclick="getElements('${game.gameName}')">Update</button>
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${game.gameName}">Delete</button>
+                                    <div class="manage top-0 end-0">
+                                        <button type="button" class="btn btn-profile" data-bs-toggle="modal" data-bs-target="#updateModal${game?index}" style="min-width: 100px">Update</button>
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${game?index}" style="min-width: 100px">Delete</button>
 
                                         <form class="container" action="/updategame" role="form" method="post">
-                                            <div class="modal fade" id="updateModal${game.gameName}" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="updateModal${game?index}" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -164,7 +168,7 @@
                                         </form>
 
                                         <form class="container" action="/deletegame" role="form" method="post">
-                                            <div class="modal fade" id="deleteModal${game.gameName}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="deleteModal${game?index}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -173,9 +177,80 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div style="color: black;">
-                                                                Are you sure you want to delete this description?
+                                                                Are you sure you want to delete this game?
                                                             </div>
                                                             <input type="hidden" name="gameName" id="gameName" value="${game.gameName}">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                    <div class="manage bottom-0 end-0">
+                                        <button type="button" class="btn btn-profile" data-bs-toggle="modal" data-bs-target="#createRank${game?index}" onclick="getElements('${game.gameName}', 'newRankId')" style="min-width: 100px">Add R</button>
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRank${game?index}" onclick="getElements('${game.gameName}', 'newRankId2')" style="min-width: 100px">Delete R</button>
+
+                                        <form class="container" action="/createrank" role="form" method="post">
+                                            <div class="modal fade" id="createRank${game?index}" tabindex="-1" aria-labelledby="createRankModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h2 class="modal-title" id="createRankModalLabel" style="color: black">Add new Rank</h2>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="mb-2" style="color: black;">
+                                                                Current Ranks:
+                                                            </div>
+                                                            <div class="form-floating mb-2">
+                                                                <select class="form-select" name="options" id="newRankId${game.gameName}" style="font-size: 120%">
+                                                                    <option>
+
+                                                                    </option>
+                                                                </select>
+                                                                <label for="newRankId${game.gameName}" style="color: black;">Rank</label>
+                                                            </div>
+                                                            <input type="hidden" name="gameName" id="gameName" value="${game.gameName}">
+                                                            <div class="form-floating pb-2">
+                                                                <input class="form-control" type="text" min="1" name="newRank" id="newRank" style="font-size: 120%">
+                                                                <label for="newCategory" style="color: black">Rank</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-profile">Add</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                        <form class="container" action="/deleterank" role="form" method="post">
+                                            <div class="modal fade" id="deleteRank${game?index}" tabindex="-1" aria-labelledby="deleteRankModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h2 class="modal-title" id="deleteRankModalLabel" style="color: black">Delete Rank</h2>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="mb-2" style="color: black;">
+                                                                Are you sure you want to delete this rank?
+                                                            </div>
+                                                            <input type="hidden" name="gameName" id="gameName" value="${game.gameName}">
+                                                            <div class="form-floating">
+                                                                <select class="form-select" name="newRank" id="newRankId2${game.gameName}" style="font-size: 120%">
+                                                                    <option>
+
+                                                                    </option>
+                                                                </select>
+                                                                <label for="newRankId2${game.gameName}" style="color: black;">Rank</label>
+                                                            </div>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -205,5 +280,38 @@
     </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+    let gameRanksMap = new Map()
+    let gameName;
+    let ranks;
+    <#list games as game>
+    gameName = '${game.gameName}';
+    ranks = [<#list game.ranks as rank>'${rank.rankName}',</#list>]
+    gameRanksMap.set(gameName, ranks)
+    </#list>
+
+    function getElements (gameName, id) {
+        ranks = gameRanksMap.get(gameName);
+        addOptions("newRank", ranks, gameName, id);
+    }
+
+    function addOptions(domElement, array, gameName, id) {
+        const select = document.getElementById(id + gameName)
+        select.length = 0
+        for (const value in array) {
+            const option = document.createElement("option");
+            option.text = array[value];
+            select.add(option);
+        }
+    }
+
+
+</script>
+
+
+
+
 </body>
 </html>
