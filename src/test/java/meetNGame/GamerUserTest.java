@@ -2,7 +2,6 @@ package meetNGame;
 
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.persistence.DataBase;
-import lab1.meetNGame.repository.Gamers;
 import org.junit.*;
 
 import javax.imageio.ImageIO;
@@ -18,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
-import static lab1.meetNGame.persistence.EntityTransactions.tx;
 
 public class GamerUserTest {
 
@@ -59,9 +56,9 @@ public class GamerUserTest {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
-        final GamerUser gamer1 = GamerUser.create("gamer1", "123", false, new String(Base64.getEncoder().encode(data)));
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false, new String(Base64.getEncoder().encode(data)));
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false, new String(Base64.getEncoder().encode(data)));
+        final GamerUser gamer1 = GamerUser.create("gamer1", "123", false, new String(Base64.getEncoder().encode(data)), "gamer1@gmail.com");
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false, new String(Base64.getEncoder().encode(data)), "gamer2@gmail.com");
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false, new String(Base64.getEncoder().encode(data)), "gamer3@gmail.com");
 
         entityManager.persist(gamer1);
         entityManager.persist(gamer2);
@@ -95,9 +92,9 @@ public class GamerUserTest {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
-        final GamerUser gamer1 = GamerUser.create("gamer1", "123", false, new String(Base64.getEncoder().encode(data)));
-        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false, new String(Base64.getEncoder().encode(data)));
-        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false, new String(Base64.getEncoder().encode(data)));
+        final GamerUser gamer1 = GamerUser.create("gamer1", "123", false, new String(Base64.getEncoder().encode(data)), "gamer1@gmail.com");
+        final GamerUser gamer2 = GamerUser.create("gamer2", "456", false, new String(Base64.getEncoder().encode(data)), "gamer2@gmail.com");
+        final GamerUser gamer3 = GamerUser.create("gamer3", "789", false, new String(Base64.getEncoder().encode(data)), "gamer3@gmail.com");
         entityManager.persist(gamer1);
         entityManager.persist(gamer2);
         entityManager.persist(gamer3);
@@ -176,12 +173,12 @@ public class GamerUserTest {
                 descriptions.remove(descriptions.get(i));
             }
         }
-        for (int i = 0; i < interests.size(); i++) {
-            for (int j = 0; j < descriptions.size(); j++) {
-                if (interests.get(i).getGame().getGameName().equals(descriptions.get(j).getGame().getGameName())
-                        && Integer.parseInt(interests.get(i).getLvl()) < Integer.parseInt(descriptions.get(j).getLvl())
-                        && interests.get(i).getRank().getRankName().equals(descriptions.get(j).getRank().getRankName())){
-                    gamers.add(descriptions.get(j).getGamerUser());
+        for (GamerInterest interest : interests) {
+            for (GamerDescription description : descriptions) {
+                if (interest.getGame().getGameName().equals(description.getGame().getGameName())
+                        && Integer.parseInt(interest.getLvl()) < Integer.parseInt(description.getLvl())
+                        && interest.getRank().getRankName().equals(description.getRank().getRankName())) {
+                    gamers.add(description.getGamerUser());
                 }
             }
         }

@@ -25,12 +25,16 @@
                 <div class="mx-5 px-5">
                     <form action="/register" role="form" method="post">
                         <#if message??>
-                            <div class="alert alert-success">
+                            <div class="alert alert-success alert-dismissible"  role="alert" style="color: black; font-size: 150%; font-family: 'LEMON MILK'; text-align: center; background-color: lightblue">
                                 ${message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </#if>
                         <h1 style="color: white; font-family: 'LEMON MILK'"> <u>Welcome to Meet-n-Game</u> </h1>
                         <p style="color: #45cb85; font-size: 160%; font-family: 'LEMON MILK'">Please create a username and password</p>
+                        <div class="mb-4">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="Email" name="mail" style="font-size: 20px; font-family: 'LEMON MILK'" required>
+                        </div>
                         <div class="mb-4">
                             <input type="text" class="form-control" id="floatingInput" placeholder="User Name" name="userName" style="font-size: 20px; font-family: 'LEMON MILK'" required>
                         </div>

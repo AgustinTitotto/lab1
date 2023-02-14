@@ -2,6 +2,7 @@ package lab1.meetNGame;
 
 import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
+import org.javatuples.Pair;
 import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
@@ -21,49 +22,42 @@ public class WebRoutes {
      **/
     public static final String SIGN_UP_TEMPLATE = "register.ftl";
     public static final String LOGIN_TEMPLATE = "login.ftl";
-    public static final String HOME_TEMPLATE = "home.ftl";
     public static final String ADMIN_HOME_TEMPLATE = "adminhome.ftl";
     public static final String CREATE_GAME_TEMPLATE = "creategame.ftl";
-    public static final String FIND_PLAYERS_TEMPLATE = "findplayers.ftl";
-    public static final String VIEW_MATCH_TEMPLATE = "viewmatch.ftl";
-    public static final String UPDATE_GAME_TEMPLATE = "updategame.ftl";
-    public static final String DELETE_GAME_TEMPLATE = "deletegame.ftl";
+    public static final String HOME_TEMPLATE = "home.ftl";
+    public static final String ACCOUNT_SETTINGS_TEMPLATE = "settings.ftl";
     public static final String PROFILE_TEMPLATE = "profile.ftl";
     public static final String MANAGE_INTEREST_TEMPLATE = "interests.ftl";
-    public static final String MANAGE_RANK_TEMPLATE = "manageranks.ftl";
-    public static final String CREATE_RANK_TEMPLATE = "createrank.ftl";
-    public static final String DELETE_RANK_TEMPLATE = "deleterank.ftl";
-    public static final String ACCOUNT_SETTINGS_TEMPLATE = "settings.ftl";
-    //public static final String VIEW_PLAYER_PROFILE = "viewplayerprofile.ftl";
+    public static final String FIND_PLAYERS_TEMPLATE = "findplayers.ftl";
+    public static final String VIEW_MATCH_TEMPLATE = "viewmatch.ftl";
+    public static final String VIEW_PLAYER_PROFILE_TEMPLATE = "viewplayerprofile.ftl";
 
 
     /**
      * ROUTES
      **/
-    //public static final String STATUS_ROUTE = "/status";
-    public static final String HOME_ROUTE = "/home";
     public static final String REGISTER_ROUTE = "/register";
     public static final String LOGIN_ROUTE = "/login";
     public static final String LOGOUT_ROUTE = "/logout";
     public static final String ADMIN_HOME_ROUTE = "/admin";
     public static final String CREATE_GAME_ROUTE = "/creategame";
-    public static final String CREATE_DESCRIPTION_ROUTE = "/createdescription";
-    public static final String CREATE_INTEREST_ROUTE = "/createinterest";
-    public static final String FIND_PLAYERS_ROUTE = "/findplayers";
-    public static final String VIEW_MATCH_ROUTE = "/viewmatch";
     public static final String UPDATE_GAME_ROUTE = "/updategame";
     public static final String DELETE_GAME_ROUTE = "/deletegame";
+    public static final String CREATE_RANK_ROUTE = "/createrank";
+    public static final String DELETE_RANK_ROUTE = "/deleterank";
+    public static final String HOME_ROUTE = "/home";
+    public static final String ACCOUNT_SETTINGS_ROUTE = "/settings";
     public static final String PROFILE_ROUTE = "/profile";
+    public static final String CREATE_DESCRIPTION_ROUTE = "/createdescription";
     public static final String UPDATE_DESCRIPTION_ROUTE = "/updatedescription";
     public static final String DELETE_DESCRIPTION_ROUTE = "/deletedescription";
     public static final String MANAGE_INTEREST_ROUTE = "/interests";
+    public static final String CREATE_INTEREST_ROUTE = "/createinterest";
     public static final String UPDATE_INTEREST_ROUTE = "/updateinterest";
     public static final String DELETE_INTEREST_ROUTE = "/deleteinterest";
-    public static final String MANAGE_RANK_ROUTE = "/manageranks";
-    public static final String CREATE_RANK_ROUTE = "/createrank";
-    public static final String DELETE_RANK_ROUTE = "/deleterank";
-    public static final String ACCOUNT_SETTINGS_ROUTE = "/settings";
-    //public static final String VIEW_PLAYER_ROUTE = "/viewplayerprofile";
+    public static final String FIND_PLAYERS_ROUTE = "/findplayers";
+    public static final String VIEW_MATCH_ROUTE = "/viewmatch";
+    public static final String VIEW_PLAYER_ROUTE = "/viewplayerprofile";
 
     final static private WebSystem system = new WebSystem();
 
@@ -96,7 +90,9 @@ public class WebRoutes {
                     res.redirect("/login?ok");
                     return halt();
                 } else {
-                    final Map<String, Object> model = Map.of("message", "UserName already exists");
+                    final String message = system.getMessage();
+                    final Map<String, Object> model = Map.of("message", message);
+                    system.setMessage(null);
                     return render(model, SIGN_UP_TEMPLATE);
                 }
             }
@@ -146,11 +142,8 @@ public class WebRoutes {
                     model.put("message", "Invalid user or password");
                     return render(model, LOGIN_TEMPLATE);
                 }
-            } /*else {
-                res.redirect(LOGIN_ROUTE);      //Esto vuelve a hacer el get de Login, lleva a home o adminHome.
-                return halt();
-            }*/
-            else if(authenticatedGamerUser.get().isAdmin()){ //si el usuario ya esta logeado, lleva a la pagina correspondiente
+            }
+            else if(authenticatedGamerUser.get().isAdmin()){
                 res.redirect(ADMIN_HOME_ROUTE);
                 return halt();
             }
@@ -169,169 +162,129 @@ public class WebRoutes {
         authenticatedGet(ADMIN_HOME_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (authenticatedGamerUser.get().isAdmin()){ //Revisa que no sea un gamer
-                final Map<String, Object> model = new HashMap<>();
+                List<Game> games = system.getGames();
 
-                if (req.queryParams("gameOk") != null) model.put("message", "Game created");
-                if (req.queryParams("updatedGame") != null) model.put("message", "Game updated");
-                if (req.queryParams("deletedGame") != null) model.put("message", "Game deleted");
-                if (req.queryParams("updatedRanks") != null) model.put("message", "Ranks updated");
+                final Map<String, Object> model = new HashMap<>();
+                model.put("games", games);
+                if(system.getMessage() != null) {
+                    model.put("message", system.getMessage());
+                    system.setMessage(null);
+                }
+
                 if (req.queryParams("deletedRanks") != null) model.put("message", "Rank deleted");
 
 
                 return render(model, ADMIN_HOME_TEMPLATE);
             }
             else {
-                final Map<String, Object> model = new HashMap<>();
-                String name = authenticatedGamerUser.get().getUserName();
+                final Map<String, Object> model = setHomeData(authenticatedGamerUser);
                 model.put("message", "User is not Admin");
-                model.put("myName", name);
-                return render(model, HOME_TEMPLATE);
-            }
-        });
-
-        authenticatedGet(CREATE_GAME_ROUTE, (req, res) -> {
-            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if (authenticatedGamerUser.get().isAdmin()){    //Revisa que no sea un gamer
-                return render(CREATE_GAME_TEMPLATE);
-            }
-            else {                                          //Lleva a la pagina del gamer
-                final Map<String, Object> model = new HashMap<>();
-                String name = authenticatedGamerUser.get().getUserName();
-                model.put("message", "User is not Admin");
-                model.put("myName", name);
                 return render(model, HOME_TEMPLATE);
             }
         });
 
         authenticatedPost(CREATE_GAME_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if (authenticatedGamerUser.get().isAdmin()){    //Revisa que no sea un gamer
+            if (authenticatedGamerUser.get().isAdmin()){                                        //Revisa que no sea un gamer
                 CreateGameForm gameForm = CreateGameForm.createFromBody(req.body());
                 final Game validGame = system.registerGame(gameForm);
-                if (validGame != null){                     //Si el juego no existe lo crea
-                    res.redirect("/admin?gameOk");
+                if (validGame != null){                                                         //Si el juego no existe lo crea
+                    res.redirect("/admin?ok");
                     return halt();
                 }
-                else {                                      //Mensaje por si el juego ya existe
+            else {                                                                              //Mensaje por si el juego ya existe
+                    List<Game> games = system.getGames();
                     final Map<String, Object> model = new HashMap<>();
-                    model.put("message", "GameName already exists");
-                    return render(model, CREATE_GAME_TEMPLATE);
+                    model.put("games", games);
+                    return render(model, ADMIN_HOME_TEMPLATE);
                 }
             }
-            else {                                          //Lleva a la pagina del gamer
-                final Map<String, Object> model = new HashMap<>();
-                String name = authenticatedGamerUser.get().getUserName();
+            else {                                                                              //Lleva a la pagina del gamer
+                final Map<String, Object> model = setHomeData(authenticatedGamerUser);
                 model.put("message", "User is not Admin");
-                model.put("myName", name);
                 return render(model, HOME_TEMPLATE);
             }
         });
-
-        getGames(UPDATE_GAME_ROUTE, UPDATE_GAME_TEMPLATE);
 
         authenticatedPost(UPDATE_GAME_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if (authenticatedGamerUser.get().isAdmin()){            //Revisa que no sea un gamer
+            if (authenticatedGamerUser.get().isAdmin()){                                                    //Revisa que no sea un gamer
                 UpdateGameForm updateGameForm = UpdateGameForm.createFromBody(req.body());
-                if (!system.gameExists(updateGameForm.getGameName())){ //Revisa que el juego exista
-                    res.redirect("/updategame?notGame");
+                if (!system.gameExists(updateGameForm.getGameName())){                                      //Revisa que el juego exista
+                    system.setMessage("Game does not exist");
+                    res.redirect("/admin?ok");
                     return halt();
                 }
                 else {
-                    if (updateGameForm.getGameName().equals("")){   //Revisa que elija un juego
-                        res.redirect("/deletegame?noGameSelected");
+                    if (updateGameForm.getCategory().equals("") && updateGameForm.getLvlMax().equals("")){  //Revisa que por lo menos un atributo este lleno
+                        system.setMessage("Fill at least one field");
+                        res.redirect("/admin?ok");
                         return halt();
                     }
-                    else if (updateGameForm.getCategory().equals("") && updateGameForm.getLvlMax().equals("")){ //Revisa que por lo menos un atributo este lleno
-                        res.redirect("/updategame?notOk");
-                        return halt();
-                    }
-                    else if (updateGameForm.getCategory().equals("")){  //Actualiza por nivel
+                    else if (updateGameForm.getCategory().equals("")){                                      //Actualiza por nivel
                         system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
-                        res.redirect("/admin?updatedGame");
+                        system.setMessage("Level updated");
+                        res.redirect("/admin?ok");
                         return halt();
                     }
-                    else if ((updateGameForm.getLvlMax().equals(""))){  //Actualiza por categoria
+                    else if ((updateGameForm.getLvlMax().equals(""))){                                      //Actualiza por categoria
                         system.updateGameCategory(updateGameForm.getGameName(), updateGameForm.getCategory());
-                        res.redirect("/admin?updatedGame");
+                        system.setMessage("Category updated");
+                        res.redirect("/admin?ok");
                         return halt();
                     }
-                    else {                                              //Actualiza por nivel y categoria
+                    else {                                                                                  //Actualiza por nivel y categoria
                         system.updateGameLvl(updateGameForm.getGameName(), updateGameForm.getLvlMax());
                         system.updateGameCategory(updateGameForm.getGameName(), updateGameForm.getCategory());
-                        res.redirect("/admin?updatedGame");
+                        system.setMessage("Game updated");
+                        res.redirect("/admin?ok");
                         return halt();
                     }
                 }
             }
-            else {                                                  //Lleva a la pagina del gamer
-                final Map<String, Object> model = new HashMap<>();
-                String name = authenticatedGamerUser.get().getUserName();
+            else {                                                                                          //Lleva a la pagina del gamer
+                final Map<String, Object> model = setHomeData(authenticatedGamerUser);
                 model.put("message", "User is not Admin");
-                model.put("myName", name);
                 return render(model, HOME_TEMPLATE);
             }
         });
-
-        getGames(DELETE_GAME_ROUTE, DELETE_GAME_TEMPLATE);
 
         authenticatedPost(DELETE_GAME_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if (authenticatedGamerUser.get().isAdmin()) {   //Revisa que no sea un gamer
+            if (authenticatedGamerUser.get().isAdmin()) {                                                   //Revisa que no sea un gamer
                 DeleteGameForm deleteGameForm = DeleteGameForm.createFromBody(req.body());
-                if (!system.gameExists(deleteGameForm.getGame())){ //Revisa que el juego exista
-                    res.redirect("/updategame?notGame");
+                if (!system.gameExists(deleteGameForm.getGame())){                                          //Revisa que el juego exista
+                    system.setMessage("Game does not exist");
+                    res.redirect("/admin?ok");
                 }
                 else {
-                    if (deleteGameForm.getGame().equals("")){   //Revisa que elija un juego
-                        res.redirect("/deletegame?noGameSelected");
-                    }
-                    else {
-                        system.deleteGame(deleteGameForm.getGame());
-                        res.redirect("/admin?deletedGame");
-                    }
+                    system.deleteGame(deleteGameForm.getGame());
+                    res.redirect("/admin?ok");
                 }
                 return halt();
             }
-            else {                                           //Lleva a la pagina del gamer
-                final Map<String, Object> model = new HashMap<>();
-                String name = authenticatedGamerUser.get().getUserName();
+            else {                                                                                          //Lleva a la pagina del gamer
+                final Map<String, Object> model = setHomeData(authenticatedGamerUser);
                 model.put("message", "User is not Admin");
-                model.put("myName", name);
                 return render(model, HOME_TEMPLATE);
             }
         });
-
-        authenticatedGet(MANAGE_RANK_ROUTE, (req, res) -> {
-            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if(authenticatedGamerUser.get().isAdmin()){     //Se fija que no sea un gamer
-                return render(MANAGE_RANK_TEMPLATE);
-            }
-            else{                                           //Lleva a la pagina del gamer
-                final Map<String, Object> model = new HashMap<>();
-                String name = authenticatedGamerUser.get().getUserName();
-                model.put("message", "User is not Admin");
-                model.put("myName", name);
-                return render(model, HOME_TEMPLATE);
-            }
-        });
-
-        getGames(CREATE_RANK_ROUTE, CREATE_RANK_TEMPLATE);
 
         authenticatedPost(CREATE_RANK_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if(authenticatedGamerUser.get().isAdmin()){     //Se fija que no sea un gamer
+            if(authenticatedGamerUser.get().isAdmin()){                                         //Se fija que no sea un gamer
                 RankForm rankForm = RankForm.createFromBody(req.body());
                 Rank newRank = system.registerRank(rankForm.getGameName(), rankForm.getNewRank());
-                if (newRank != null){                       //Se fija que el rango no exista. Deberia fijarse que el juego existe
-                    res.redirect("/admin?updatedRanks");
+                if (newRank != null){                                                           //Se fija que el rango no exista. Deberia fijarse que el juego existe
+                    system.setMessage("Rank created");
+                    res.redirect("/admin?ok");
                 }
-                else {                                      //Vuelve al createrank con mensaje
+                else {                                                                          //Vuelve al createrank con mensaje
                     res.redirect("/createrank?rankexists");
                 }
                 return halt();
             }
-            else{                                           //Lleva a la pagina del gamer
+            else{                                                                               //Lleva a la pagina del gamer
                 final Map<String, Object> model = new HashMap<>();
                 String name = authenticatedGamerUser.get().getUserName();
                 model.put("message", "User is not Admin");
@@ -340,22 +293,20 @@ public class WebRoutes {
             }
         });
 
-        getGames(DELETE_RANK_ROUTE, DELETE_RANK_TEMPLATE);
-
         authenticatedPost(DELETE_RANK_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if(authenticatedGamerUser.get().isAdmin()){     //Se fija que no sea un gamer
+            if(authenticatedGamerUser.get().isAdmin()){                                         //Se fija que no sea un gamer
                 RankForm rankForm = RankForm.createFromBody(req.body());
                 Rank newRank = system.deleteRank(rankForm.getGameName(), rankForm.getNewRank());
-                if (newRank != null){                       //Se fija que el rango exista
+                if (newRank != null){                                                           //Se fija que el rango exista
                     res.redirect("/admin?deletedRanks");
                 }
-                else {                                      //Vuelve al deleterank con mensaje
+                else {                                                                          //Vuelve al deleterank con mensaje
                     res.redirect("/deleterank?rankNotExists");
                 }
                 return halt();
             }
-            else{                                           //Lleva a la pagina del gamer
+            else{                                                                              //Lleva a la pagina del gamer
                 final Map<String, Object> model = new HashMap<>();
                 String name = authenticatedGamerUser.get().getUserName();
                 model.put("message", "User is not Admin");
@@ -367,18 +318,11 @@ public class WebRoutes {
         authenticatedGet(HOME_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
             if (!authenticatedGamerUser.get().isAdmin()) {
-                String name = authenticatedGamerUser.get().getUserName();
-                String image = system.getUserImage(authenticatedGamerUser.get());
-                final Map<String, Object> model = new HashMap<>();
-                model.put("image", image);
-                model.put("myName", name);
+                final Map<String, Object> model = setHomeData(authenticatedGamerUser);
                 if(system.getMessage() != null) {
                     model.put("message", system.getMessage());
                     system.setMessage(null);
                 }
-                if (req.queryParams("noGames") != null) model.put("message", "No games created yet");
-                if (req.queryParams("liked") != null) model.put("message", "Liked user");
-
                 return render(model, HOME_TEMPLATE);
             }else{
                 final Map<String, Object> model = new HashMap<>();
@@ -394,9 +338,8 @@ public class WebRoutes {
                 if (!games.isEmpty()){
                     List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
                     List<Game> leftGames = system.getLeftGames(getGamesInDescription(gamerDescriptions));
-                    String image = system.getUserImage(authenticatedGamerUser.get());
                     final Map<String, Object> model = new HashMap<>();
-                    model.put("image", image);
+                    setImageAndNotif(authenticatedGamerUser, model);
                     model.put("games", leftGames);
                     model.put("descriptions", gamerDescriptions);
                     if(system.getMessage() != null) {
@@ -425,16 +368,11 @@ public class WebRoutes {
                 GamerDescription description = system.registerGamerDescription(authenticatedGamerUser.get(), myDescriptions, descriptionForm);
                 if (description != null){
                     res.redirect("/profile?ok");
-                    return halt();
                 }
                 else {
-                    List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
-                    List<Game> leftGames = system.getLeftGames(getGamesInDescription(gamerDescriptions));
-                    final String message = system.getMessage();
-                    final Map<String, Object> model = Map.of("message", message, "games", leftGames, "descriptions", gamerDescriptions);
-                    system.setMessage(null);
-                    return render(model, PROFILE_TEMPLATE);
+                    res.redirect("/profile?error");
                 }
+                return halt();
             }
             else {                                          //Lleva a la pagina del admin
                 final Map<String, Object> model = new HashMap<>();
@@ -448,39 +386,32 @@ public class WebRoutes {
             if (!authenticatedGamerUser.get().isAdmin()) {
                 UpdateDescriptionForm updateDescriptionForm = UpdateDescriptionForm.createFromBody(req.body());
                 if (updateDescriptionForm.getLvl().equals("") && updateDescriptionForm.getRank().equals("")) {
-                    List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
-                    List<Game> leftGames = system.getLeftGames(getGamesInDescription(gamerDescriptions));
-                    final Map<String, Object> model = Map.of("message", "You have to complete new lvl or rank", "games", leftGames, "descriptions", gamerDescriptions);
-                    return render(model, PROFILE_TEMPLATE);
+                    system.setMessage("Complete level or rank");
+                    res.redirect("/profile?error");
+                    return halt();
                 }
                 else if (!updateDescriptionForm.getLvl().equals("") && updateDescriptionForm.getRank().equals("")){
                     if (system.checkNewLevelDescription(updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl())) {
                         system.updateDescriptionLvl(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
                         res.redirect("/profile?ok");
-                        return halt();
                     }
                     else {
-                        List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
-                        List<Game> leftGames = system.getLeftGames(getGamesInDescription(gamerDescriptions));
-                        final Map<String, Object> model = Map.of("message", system.getMessage(), "descriptions", gamerDescriptions, "games", leftGames);
-                        system.setMessage(null);
-                        return render(model, PROFILE_TEMPLATE);
+                        system.setMessage("Rank doesnt exist or does not belong to game");
+                        res.redirect("/profile?error");
                     }
+                    return halt();
                 }
                 else if (updateDescriptionForm.getLvl().equals("") && !updateDescriptionForm.getRank().equals("")){
                     Rank newRank = system.getRank(updateDescriptionForm.getRank(), updateDescriptionForm.getGameName());
                     if (newRank.getRankId() != null){
                         system.updateDescriptionRank(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(),newRank);
                         res.redirect("/profile?ok");
-                        return halt();
                     }
                     else {
-                        List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
-                        List<Game> leftGames = system.getLeftGames(getGamesInDescription(gamerDescriptions));
-                        final Map<String, Object> model = Map.of("message","Rank doesnt exist or does not belong to game", "descriptions", gamerDescriptions, "games", leftGames);
-                        system.setMessage(null);
-                        return render(model, PROFILE_TEMPLATE);
+                        system.setMessage("Rank doesnt exist or does not belong to game");
+                        res.redirect("/profile?error");
                     }
+                    return halt();
                 }
                 else {
                     Rank newRank = system.getRank(updateDescriptionForm.getRank(), updateDescriptionForm.getGameName());
@@ -488,15 +419,12 @@ public class WebRoutes {
                         system.updateDescriptionLvl(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(), updateDescriptionForm.getLvl());
                         system.updateDescriptionRank(authenticatedGamerUser.get(), updateDescriptionForm.getGameName(),newRank);
                         res.redirect("/profile?ok");
-                        return halt();
                     }
                     else {
-                        List<GamerDescription> gamerDescriptions = system.getUserDescriptions(authenticatedGamerUser.get());
-                        List<Game> leftGames = system.getLeftGames(getGamesInDescription(gamerDescriptions));
-                        final Map<String, Object> model = Map.of("message","Rank doesnt exist/Lvl is higher than lvlMax", "descriptions", gamerDescriptions, "games", leftGames);
-                        system.setMessage(null);
-                        return render(model, PROFILE_TEMPLATE);
+                        system.setMessage("Rank doesnt exist/Lvl is higher than lvlMax");
+                        res.redirect("/profile?error");
                     }
+                    return halt();
                 }
             } else {
                 final Map<String, Object> model = new HashMap<>();
@@ -507,10 +435,17 @@ public class WebRoutes {
 
         authenticatedPost(DELETE_DESCRIPTION_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            SingleStringForm description = SingleStringForm.createFromBody(req.body());
-            system.deleteDescription(description.getLikedUser(), authenticatedGamerUser.get());
-            res.redirect("/profile?ok");
-            return halt();
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                SingleStringForm description = SingleStringForm.createFromBody(req.body());
+                system.deleteDescription(description.getLikedUser(), authenticatedGamerUser.get());
+                res.redirect("/profile?ok");
+                return halt();
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
         });
 
         authenticatedGet(MANAGE_INTEREST_ROUTE, (req, res) -> {
@@ -520,9 +455,8 @@ public class WebRoutes {
                 if (!games.isEmpty()){
                     List<GamerInterest> gamerInterests = system.getGamerInterest(authenticatedGamerUser.get());
                     List<Game> leftGames = system.getLeftGames(getGamesInInterest(gamerInterests));
-                    String image = system.getUserImage(authenticatedGamerUser.get());
                     final Map<String, Object> model = new HashMap<>();
-                    model.put("image", image);
+                    setImageAndNotif(authenticatedGamerUser, model);
                     model.put("games", leftGames);
                     model.put("interests", gamerInterests);
                     if(system.getMessage() != null) {
@@ -555,12 +489,8 @@ public class WebRoutes {
                     return halt();
                 }
                 else {
-                    List<GamerInterest> gamerInterests = system.getGamerInterest(authenticatedGamerUser.get());
-                    List<Game> leftGames = system.getLeftGames(getGamesInInterest(gamerInterests));
-                    final String message = system.getMessage();
-                    final Map<String, Object> model = Map.of("message", message, "games", leftGames, "interests", gamerInterests);
-                    system.setMessage(null);
-                    return render(model, MANAGE_INTEREST_TEMPLATE);
+                    res.redirect("/interests?error");
+                    return halt();
                 }
             }
             else {
@@ -628,7 +558,6 @@ public class WebRoutes {
                             List<GamerInterest> gamerInterests = system.getGamerInterest(authenticatedGamerUser.get());
                             List<Game> leftGames = system.getLeftGames(getGamesInInterest(gamerInterests));
                             final Map<String, Object> model = Map.of("message", "Rank doesnt exist/Lvl is higher than lvlMax","interests", gamerInterests, "games", leftGames);
-                            res.redirect("/interests");
                             system.setMessage(null);
                             return render(model, MANAGE_INTEREST_TEMPLATE);
                         }
@@ -643,10 +572,17 @@ public class WebRoutes {
 
         authenticatedPost(DELETE_INTEREST_ROUTE, (req, res) -> {
             final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            SingleStringForm description = SingleStringForm.createFromBody(req.body()); //uso LikeForm pq es igual
-            system.deleteInterest(description.getLikedUser(), authenticatedGamerUser.get());
-            res.redirect("/home?ok");
-            return halt();
+            if (!authenticatedGamerUser.get().isAdmin()) {
+                SingleStringForm description = SingleStringForm.createFromBody(req.body()); //uso LikeForm pq es igual
+                system.deleteInterest(description.getLikedUser(), authenticatedGamerUser.get());
+                res.redirect("/interests?ok");
+                return halt();
+            }
+            else {
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
+            }
         });
 
         authenticatedGet(FIND_PLAYERS_ROUTE, (req, res) -> {
@@ -656,11 +592,14 @@ public class WebRoutes {
                 List<GamerDescription> descriptions = system.getInterestPlayers(gamerUser);
                 if (descriptions !=null /*&& descriptions.size() != 0*/){
                     List<String> userNames = userNameQuoted(descriptions);
-                    String image = system.getUserImage(authenticatedGamerUser.get());
                     final Map<String, Object> model = new HashMap<>();
-                    model.put("image", image);
+                    setImageAndNotif(authenticatedGamerUser, model);
                     model.put("descriptions", descriptions);
                     model.put("userNames", userNames);
+                    if(system.getMessage() != null) {
+                        model.put("message", system.getMessage());
+                        system.setMessage(null);
+                    }
                     return new FreeMarkerEngine().render(new ModelAndView(model, FIND_PLAYERS_TEMPLATE));
                 }
                 else{
@@ -676,26 +615,40 @@ public class WebRoutes {
         });
 
         authenticatedPost(FIND_PLAYERS_ROUTE, (req, res) -> {
-            SingleStringForm likedUser = new SingleStringForm(req.body());
-            GamerUser currentUser = getAuthenticatedGamerUser(req).get();
-            Like like = system.registerLike(likedUser, currentUser);
-            system.createMatch(currentUser);
-            if (like != null){
-                res.redirect("/home?ok");
-                return halt();
+            final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
+            if (!currentUser.get().isAdmin()) {
+                SingleStringForm likedUser = new SingleStringForm(req.body());
+                Like like = system.registerLike(likedUser, currentUser.get());
+                Game matchedGame = system.createMatch(currentUser.get());
+                if (like != null){
+                    if (matchedGame != null) {
+                        system.setMatchNotification(likedUser, currentUser.get(), matchedGame);
+                        res.redirect("/home?ok");
+                    }
+                    else {
+                        res.redirect("/findplayers?ok");
+                    }
+                    return halt();
+                }
+                else {
+                    final Map<String, Object> model = Map.of("message", "Select a User");
+                    return render(model, FIND_PLAYERS_TEMPLATE);
+                }
             }
             else {
-                final Map<String, Object> model = Map.of("message", "Select a User");
-                return render(model, FIND_PLAYERS_TEMPLATE);
+                final Map<String, Object> model = new HashMap<>();
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
 
         authenticatedGet(VIEW_MATCH_ROUTE, (req, res) -> {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
-                List<GamerUser> matches = system.showMatch(currentUser.get());
+                List<Pair<GamerUser, Game>> matches = system.getMatches(currentUser.get());
                 if(!matches.isEmpty()){
                     final Map<String, Object> model = new HashMap<>();
+                    setImageAndNotif(currentUser, model);
                     model.put("matches", matches);
                     return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
                 }
@@ -712,18 +665,21 @@ public class WebRoutes {
             }
         });
 
-        authenticatedGet("/viewmatch/:username", (req, res) -> {
+        authenticatedGet("/viewplayerprofile/:username", (req, res) -> {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
                 String username = req.params(":username");
                 Optional<GamerUser> gamerUser = system.findUserByUserName(username);
-                List<GamerUser> matches = system.showMatch(currentUser.get());
+                //List<GamerUser> matches = system.showMatch(currentUser.get());
                 if (gamerUser.isPresent()){
                     List<GamerDescription> descriptions = system.getUserDescriptions(gamerUser.get());
+                    Stats stats = system.getUserStats(username);
                     final Map<String, Object> model = new HashMap<>();
-                    model.put("matches", matches);
+                    setImageAndNotif(currentUser, model);
                     model.put("descriptions", descriptions);
-                    return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_MATCH_TEMPLATE));
+                    model.put("stats", stats);
+                    model.put("username", username);
+                    return new FreeMarkerEngine().render(new ModelAndView(model, VIEW_PLAYER_PROFILE_TEMPLATE));
                 }
                 else {
                     system.setMessage("You have to select a player");
@@ -742,13 +698,16 @@ public class WebRoutes {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
                 String username2 = req.params(":username");
+                String image2 = system.getUserImage(system.findUserByUserName(username2).get());
                 List<Message> messages = system.getMessages(currentUser.get().getUserName(), username2);
                 final Map<String, Object> model = new HashMap<>();
+                setImageAndNotif(currentUser, model);
                 if (!messages.isEmpty()) {
                     model.put("messages", messages);
                 }
                 model.put("sender", currentUser.get().getUserName());
                 model.put("receiver", username2);
+                model.put("image2", image2);
                 return new FreeMarkerEngine().render(new ModelAndView(model, "chat.ftl"));
             }
             else {
@@ -763,6 +722,7 @@ public class WebRoutes {
                 String receiver = req.params(":username");
                 MessageForm message = MessageForm.createFromBody(req.body());
                 system.registerMessage(currentUser.get().getUserName(), receiver, message, new Date());
+                system.setMessageNotification(receiver, currentUser.get());
                 res.redirect("/chat/" + receiver);
                 return halt();
             }
@@ -776,9 +736,8 @@ public class WebRoutes {
         authenticatedGet(ACCOUNT_SETTINGS_ROUTE, (req, res) -> {
             final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
             if (!currentUser.get().isAdmin()){
-                String image = system.getUserImage(currentUser.get());
                 final Map<String, Object> model = new HashMap<>();
-                model.put("image", image);
+                setImageAndNotif(currentUser, model);
                 return render(model, ACCOUNT_SETTINGS_TEMPLATE);
             }
             else {
@@ -812,34 +771,41 @@ public class WebRoutes {
                 return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
-    }
 
-    private void getGames(String gameRoute, String gameTemplate) {
-        authenticatedGet(gameRoute, (req, res) -> {
-            final Optional<GamerUser> authenticatedGamerUser = getAuthenticatedGamerUser(req);
-            if (authenticatedGamerUser.get().isAdmin()) {       //Se fija que no sea un gamer
-                List<Game> games = system.getGames();
+        authenticatedPost("/deletenotification", (req, res) -> {
+            final Optional<GamerUser> currentUser = getAuthenticatedGamerUser(req);
+            if (!currentUser.get().isAdmin()){
+                DeleteNotificationForm notificationForm = DeleteNotificationForm.createFromBody(req.body());
+                system.deleteNotification(notificationForm.getId());
+                res.redirect("/" + notificationForm.getRoute());
+                return halt();
+            }
+            else {
                 final Map<String, Object> model = new HashMap<>();
-                if(!games.isEmpty()) {                          //Se fija que haya juegos creados
-                    model.put("games", games);
-                    if (req.queryParams("notOk") != null) model.put("message", "Fill at least one attribute to update");
-                    if (req.queryParams("noGameSelected") != null) model.put("message", "Choose a game to delete");
-                    if (req.queryParams("notGame") != null) model.put("message", "The game you chose does not exist");
-                    if (req.queryParams("rankexists") != null) model.put("message", "Rank name already exist");
-                    if (req.queryParams("rankNotExists") != null) model.put("message", "Rank name does not exist");
-                    return new FreeMarkerEngine().render(new ModelAndView(model, gameTemplate));
-                }else{                                          //Mensaje y lleva al createGame
-                    model.put("message", "There are no games to update");
-                    return render(model, CREATE_GAME_TEMPLATE);
-                }
-            } else {                                            //Lleva a la pagina del gamer
-                final Map<String, Object> model = new HashMap<>();
-                String name = authenticatedGamerUser.get().getUserName();
-                model.put("message", "User is not Admin");
-                model.put("myName", name);
-                return render(model, HOME_TEMPLATE);
+                model.put("message", "User is Admin");
+                return render(model, ADMIN_HOME_TEMPLATE);
             }
         });
+    }
+
+    private Map<String, Object> setHomeData(Optional<GamerUser> authenticatedGamerUser) {
+        String name = authenticatedGamerUser.get().getUserName();
+        String image = system.getUserImage(authenticatedGamerUser.get());
+        List<Notification> notifications = system.getUserNotifications(name);
+        Stats stats = system.getUserStats(name);
+        final Map<String, Object> model = new HashMap<>();
+        model.put("stats", stats);
+        model.put("notifications", notifications);
+        model.put("image", image);
+        model.put("myName", name);
+        return model;
+    }
+
+    private static void setImageAndNotif(Optional<GamerUser> currentUser, Map<String, Object> model) {
+        String image = system.getUserImage(currentUser.get());
+        List<Notification> notifications = system.getUserNotifications(currentUser.get().getUserName());
+        model.put("notifications", notifications);
+        model.put("image", image);
     }
 
     private void authenticatedGet(String route, Route o) {
@@ -894,7 +860,6 @@ public class WebRoutes {
         for (GamerDescription description : descriptions) {
             list.add(description.getGamerUser().getUserName());
         }
-        //list.stream().collect(Collectors.joining("','", "'", "'"));
         return list;
     }
 

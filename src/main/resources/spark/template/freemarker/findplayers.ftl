@@ -1,16 +1,20 @@
 <#-- @ftlvariable name="descriptions" type="java.util.List<GamerDescription>" -->
 <#-- @ftlvariable name="userNames" type="java.util.List<String>" -->
 <#-- @ftlvariable name="image" type="java.lang.String" -->
+<#-- @ftlvariable name="notifications" type="java.util.List<Notification>" -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <#import "userMasterTemplate.ftl" as layout />
 <style>
+
     #board {
         height: 100%;
 
     }
     .myCard {
         font-family: "LEMON MILK";
-        width: 320px;
-        height: 320px;
+        width: 400px;
+        height: 400px;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -26,6 +30,44 @@
         height:200px;
     }
 
+    .status {
+        position: absolute;
+        top: 50%;
+        margin-top: -30px;
+        z-index: 2;
+        width: 100%;
+        text-align: center;
+        pointer-events: none;
+    }
+
+    .status i {
+        font-size: 100px;
+        opacity: 0;
+        transform: scale(0.3);
+        transition: all 0.2s ease-in-out;
+        position: absolute;
+        width: 100px;
+        margin-left: -50px;
+    }
+
+    .tinder_love .fa-heart {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+
+    .tinder_remove .fa-remove {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+
+    .fa-heart {
+        color: #FFACE4;
+    }
+
+    .fa-remove {
+        color: #CDD6DD;
+    }
+
 
 </style>
 <@layout.userMasterTemplate title="FindPlayers">
@@ -33,9 +75,19 @@
     <h1>
         <u> Find Players </u>
     </h1>
+    <#if message??>
+        <div class="alert alert-success alert-dismissible"  role="alert" style="color: black; font-size: 150%; font-family: 'LEMON MILK'; text-align: center; background-color: lightblue">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </#if>
+
 
     <div id="board">
-
+        <div class="status">
+            <i class="fa fa-heart"></i>
+            <i class="fa fa-remove"></i>
+        </div>
     </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js">
@@ -44,11 +96,14 @@
     /* LikeCarousel (c) 2019 Simone P.M. github.com/simonepm - Licensed MIT */
     let myCounter = 0
     let fullData = [<#list descriptions as description>"${description.gamerUser.userName}, ${description.game.gameName}, ${description.lvl}, ${description.rank.rankName}", </#list>]
-    let users = [<#list descriptions as description>"${description.gamerUser.userName}"</#list>]
-    let games = [<#list descriptions as description>"${description.game.gameName}"</#list>]
-    let levels = [<#list descriptions as description>"${description.lvl}"</#list>]
-    let ranks = [<#list descriptions as description>"${description.rank.rankName}"</#list>]
-    let images = [<#list descriptions as description>"${description.gamerUser.image}"</#list>]
+    let users = [<#list descriptions as description>"${description.gamerUser.userName}", </#list>]
+    let games = [<#list descriptions as description>"${description.game.gameName}", </#list>]
+    let levels = [<#list descriptions as description>"${description.lvl}", </#list>]
+    let ranks = [<#list descriptions as description>"${description.rank.rankName}", </#list>]
+    let images = [<#list descriptions as description>"${description.gamerUser.image}", </#list>]
+
+    var symbolContainer = document.querySelector('.status')
+
     class Carousel {
         constructor(element) {
             this.board = element
@@ -127,6 +182,8 @@
             // get ratio between swiped pixels and the axes
             let propX = e.deltaX / this.board.clientWidth
             let propY = e.deltaY / this.board.clientHeight
+            symbolContainer.classList.toggle('tinder_love', posX > 0 && e.direction == Hammer.DIRECTION_RIGHT);
+            symbolContainer.classList.toggle('tinder_remove', posX < -400 && e.direction == Hammer.DIRECTION_LEFT);
             // get swipe direction, left (-1) or right (1)
             let dirX = e.deltaX < 0 ? -1 : 1
             // get degrees of rotation, between 0 and +/- 45
@@ -163,6 +220,8 @@
                     // throw card in the chosen direction
                     this.topCard.style.transform =
                         'translateX(' + posX + 'px) translateY(' + posY + 'px) rotate(' + deg + 'deg)'
+                    symbolContainer.classList.remove('tinder_love');
+                    symbolContainer.classList.remove('tinder_remove');
                     if (this.startPosX < posX) {
                         let xhr = new XMLHttpRequest();
                         xhr.open('POST', 'http://localhost:4335/findplayers', true)

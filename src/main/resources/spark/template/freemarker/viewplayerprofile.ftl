@@ -1,5 +1,78 @@
 <#-- @ftlvariable name="descriptions" type="java.util.List<GamerDescription>" -->
-<!DOCTYPE html>
+<#-- @ftlvariable name="image" type="java.lang.String" -->
+<#-- @ftlvariable name="notifications" type="java.util.List<Notification>" -->
+<#-- @ftlvariable name="stats" type="lab1.meetNGame.model.Stats" -->
+<#-- @ftlvariable name="username" type="java.lang.String" -->
+<#import "userMasterTemplate.ftl" as layout />
+
+<@layout.userMasterTemplate title="ViewPlayerProfile">
+
+    <h1><u>${username} profile</u></h1>
+
+    <#if message??>
+        <div class="alert alert-success alert-dismissible"  role="alert" style="color: black; font-size: 150%; font-family: 'LEMON MILK'; text-align: center; background-color: lightblue">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </#if>
+
+    <div class="container d-flex justify-content-center align-items-center" style="height: 500px; font-family: 'LEMON MILK'">
+        <div class="row w-100 text-center">
+            <div class="col-12 col-md-6 p-2">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">${username} is currently playing ${stats.descriptions} games </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 p-2">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">${username} has liked ${stats.likes} description from other users </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+            </div>
+            <div class="col-12 col-md-6 p-2">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">${username} has successfully matched with ${stats.matches} other players </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-center">
+        <#list descriptions>
+            <h4 class="profileSubT pb-3">
+                Here are ${username} game descriptions
+            </h4>
+            <#items as description>
+                <div class="row media-body my-3 position-relative" style="color: white; font-family: 'LEMON MILK'">
+                    <div class="col">
+                        <h4>Game: ${description.game.gameName}</h4>
+                        lvl: ${description.lvl}
+                        <br>
+                        rank: ${description.rank.rankName}
+                    </div>
+                </div>
+                <hr style="height: 10px; color: white">
+            </#items>
+        <#else>
+            <h4 class="profileSubT">
+                You have no descriptions
+            </h4>
+        </#list>
+
+    </div>
+
+</@layout.userMasterTemplate>
+
+
+
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Welcome!</title>
@@ -97,7 +170,6 @@
     }
 </style>
 <body>
-<!-- <a id="user"></a>-->
 <div class="sidebar">
     <a class="active" href="/home">Home</a>
     <a class="active" href="/profile">Profile</a>
@@ -120,3 +192,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>
+-->

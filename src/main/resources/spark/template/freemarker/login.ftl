@@ -26,8 +26,9 @@
                         <div class="mb-md-5 mt-md-5 pb-5">
                             <form action="/login" role="form" method="post">
                                 <#if message??>
-                                    <div class="alert alert-success">
+                                    <div class="alert alert-success alert-dismissible"  role="alert" style="color: black; font-size: 150%; font-family: 'LEMON MILK'; text-align: center; background-color: lightblue">
                                         ${message}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
                                 </#if>
                                 <h1 class="mb-2" style="color: antiquewhite; font-family: 'LEMON MILK'"> <u>Log In</u> </h1>

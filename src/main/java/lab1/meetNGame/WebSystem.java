@@ -4,7 +4,9 @@ import com.google.common.base.Strings;
 import lab1.meetNGame.UI.*;
 import lab1.meetNGame.model.*;
 import lab1.meetNGame.repository.*;
+import org.javatuples.Pair;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,11 +23,21 @@ public class WebSystem {
     private final Likes likes = new Likes();
     private final Matches matches = new Matches();
     private final Messages messages = new Messages();
+    private final Notifications notifications = new Notifications();
+    private final StatsRepo statistics = new StatsRepo();
 
     public GamerUser registerGamer(SignUpForm form) throws IOException {
-        if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()))
+        if (Strings.isNullOrEmpty(form.getUserName()) || Strings.isNullOrEmpty(form.getPassword()) || Strings.isNullOrEmpty(form.getMail()))
             return null;
-        return gamers.exists(form.getUserName()) ? null : gamers.createGamer(form);
+        else if (gamers.existsName(form.getUserName())){
+            setMessage("User Name already exists");
+            return null;
+        }
+        else if (gamers.existsMail(form.getMail())) {
+            setMessage("Email already exists");
+            return null;
+        }
+        else return gamers.createGamer(form);
     }
 
     public Optional<GamerUser> findUserByUserName(String userName) {
@@ -33,7 +45,7 @@ public class WebSystem {
     }
 
     public Optional<GamerUser> checkLogin(LogInForm form) {
-        return gamers.findByUserName(form.getUserName())
+        return gamers.findByUserName(form.getUserName().toLowerCase())
                 .filter(foundUser -> validPassword(form, foundUser));
     }
 
@@ -44,7 +56,14 @@ public class WebSystem {
 
 
     public Game registerGame(CreateGameForm form) {
-        return games.gameExists(form.getGameName()) ? null : games.createGame(form);
+        if (games.gameExists(form.getGameName())){
+            setMessage("Game already exists");
+            return null;
+        }
+        else {
+            setMessage("Game created");
+            return games.createGame(form, gamers.getAllGamers());
+        }
     }
 
     public GamerDescription registerGamerDescription(GamerUser gamer, List<GamerDescription> myDescriptions, CreateDescriptionForm form){
@@ -125,12 +144,12 @@ public class WebSystem {
         return likes.createLike(gamer, likedDescription);
     }
 
-    public boolean createMatch(GamerUser currentUser) {
-        return matches.match(currentUser, matches.showMatches(currentUser));
+    public Game createMatch(GamerUser currentUser) throws MessagingException {
+        return matches.match(currentUser, matches.getMatches(currentUser));
     }
 
-    public List<GamerUser> showMatch(GamerUser gamerUser) {
-        return matches.showMatches(gamerUser);
+    public List<Pair<GamerUser, Game>> getMatches(GamerUser gamerUser) {
+        return matches.getMatches(gamerUser);
     }
 
     public List<Game> getGames() {
@@ -152,6 +171,7 @@ public class WebSystem {
     }
 
     public void deleteGame(String game) {
+        setMessage("Game deleted");
         games.deleteGame(game);
     }
 
@@ -163,7 +183,6 @@ public class WebSystem {
         if (descriptions.checkNewLvl(gameName, newLevel)){
             return true;
         }else{
-            setMessage("This level is not within the game's range");
             return false;
         }
     }
@@ -255,4 +274,33 @@ public class WebSystem {
         return gamers.getProfilePicture(gamerUser);
     }
 
+    public void setMatchNotification(SingleStringForm likedUser, GamerUser currentUser, Game matchedGame) {
+        String[] split = likedUser.getLikedUser().split(", ");
+        Optional<GamerUser> likedGamer = gamers.findByUserName(split[0]);
+        notifications.registerMatchNotification(likedGamer.get(), currentUser, matchedGame);
+        setMessage("You have a match !!!");
+    }
+
+    public List<Notification> getUserNotifications(String userName) {
+        return notifications.getUserNotifications(userName);
+    }
+
+    public void deleteNotification(String notificationId) {
+        long notificationID = Long.parseLong(notificationId);
+        notifications.deleteNotification(notificationID);
+    }
+
+    public Stats getUserStats(String name) {
+        return statistics.getUserStats(name);
+    }
+
+    public void setMessageNotification(String receiver, GamerUser gamerUser) {
+        Optional<GamerUser> receiverUser = gamers.findByUserName(receiver);
+        if (receiverUser.isPresent()){
+            notifications.registerMessageNotification(receiverUser.get(), gamerUser);
+        }
+        else {
+            setMessage("User not found");
+        }
+    }
 }

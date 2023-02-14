@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 import static lab1.meetNGame.persistence.EntityManagers.currentEntityManager;
@@ -18,17 +19,28 @@ import static lab1.meetNGame.persistence.EntityTransactions.tx;
 
 public class Gamers{
 
-    public boolean exists(String userName) {
+    public boolean existsName(String userName) {
         return findByUserName(userName).isPresent();
     }
 
     public Optional<GamerUser> findByUserName(String userName) {
         currentEntityManager().clear();
         return tx(() -> currentEntityManager()
-                .createQuery("SELECT u FROM GamerUser u WHERE u.userName LIKE :userName", GamerUser.class)
+                .createQuery("SELECT u FROM GamerUser u WHERE u.userName LIKE:userName", GamerUser.class)
                 .setParameter("userName", userName).getResultList()).stream()
                 .findFirst();
     }
+
+    public boolean existsMail(String mail) {
+        return findByMail(mail).isPresent();
+    }
+
+    private Optional<GamerUser> findByMail(String mail) {
+        return tx(() -> currentEntityManager().createQuery("select u from GamerUser u where u.mail like:mail", GamerUser.class)
+                .setParameter("mail", mail).getResultList()).stream().findFirst();
+    }
+
+
 
     public GamerUser createGamer(SignUpForm form) throws IOException {
         BufferedImage bImage = ImageIO.read(new File("./src/main/resources/public/img/DefaultImage.png"));
@@ -36,9 +48,10 @@ public class Gamers{
         ImageIO.write(bImage, "png", bos);
         byte[] data = bos.toByteArray();
 
-        final GamerUser newGamer = GamerUser.create(form.getUserName(), form.getPassword(), false, new String(Base64.getEncoder().encode(data)));
+        final GamerUser newGamer = GamerUser.create(form.getUserName().toLowerCase(), form.getPassword(), false, new String(Base64.getEncoder().encode(data)), form.getMail());
 
-        if (exists(newGamer.getUserName())) throw new IllegalStateException("UserName already exists.");
+        if (existsName(newGamer.getUserName())) throw new IllegalStateException("UserName already exists.");
+        if (existsMail(newGamer.getMail())) throw new IllegalStateException("Email already exists");
 
         return EntityTransactions.persist(newGamer);
     }
@@ -51,5 +64,9 @@ public class Gamers{
     public String getProfilePicture(GamerUser gamerUser) {
         return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerUser u WHERE u.userName LIKE:userName", GamerUser.class)
                 .setParameter("userName", gamerUser.getUserName()).getResultList()).stream().findFirst().get().getImage();
+    }
+
+    public List<GamerUser> getAllGamers() {
+        return tx(() -> currentEntityManager().createQuery("SELECT u FROM GamerUser u", GamerUser.class).getResultList());
     }
 }
