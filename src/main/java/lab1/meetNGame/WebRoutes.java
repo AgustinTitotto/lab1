@@ -777,7 +777,7 @@ public class WebRoutes {
             if (!currentUser.get().isAdmin()){
                 DeleteNotificationForm notificationForm = DeleteNotificationForm.createFromBody(req.body());
                 system.deleteNotification(notificationForm.getId());
-                res.redirect("/" + notificationForm.getRoute());
+                res.redirect("/");
                 return halt();
             }
             else {
