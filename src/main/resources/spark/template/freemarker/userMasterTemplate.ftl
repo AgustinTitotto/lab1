@@ -135,10 +135,9 @@
                             <#list notifications>
                                 <#items as notification>
                                     <li class="dropdown-item">
-                                        <form class="container" action="/deletenotification" role="form" method="post">
-                                            <input type="hidden" name="notificationId" id="notificationId" value="${notification.id}">${notification.notification}
-                                            <input type="hidden" name="route" id="route${notification?index}">
-                                            <button type="submit" class="btn-close btn-close-white position-absolute end-0" aria-label="Close"></button>
+                                        <form class="container" role="form" id="deleteNotif">
+                                            <input type="hidden" name="notificationId" id="notificationId${notification?index}" value="${notification.id}">${notification.notification}
+                                            <button type="submit" class="btn-close btn-close-white position-absolute end-0" aria-label="Close" onclick="myFunction(${notification?index})"></button>
                                         </form>
                                     </li>
                                 </#items>
@@ -169,6 +168,7 @@
 
     <div class="background">
         <div class="content">
+            <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
             <#nested />
         </div>
     </div>
@@ -179,11 +179,17 @@
 
 </script>
 <script type="text/javascript">
-    let a = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
-    const notifications = [<#list notifications as notification>'${notification?index}',</#list>]
-    for (let i = 0; i < notifications.length; i++) {
-        document.getElementById("route" + notifications.at(i)).value = a
+    const data = "notificationId=" + document.getElementById('notificationId').value
+
+
+    function myFunction (index) {
+        const data = "notificationId=" + document.getElementById('notificationId'+ index).value
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:4335/deletenotification', true)
+        xhr.setRequestHeader("Content-Type", "application/xhtml+xml; charset=utf-8")
+        xhr.send(data)
     }
+
 
 </script>
 </body>

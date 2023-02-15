@@ -8,15 +8,15 @@ import java.util.List;
 public class DeleteNotificationForm {
 
     private final String id;
-    private final String route;
 
-    public DeleteNotificationForm(String id, String route) {
+
+    public DeleteNotificationForm(String id) {
         this.id = id;
-        this.route = route;
+
     }
 
-    public static DeleteNotificationForm createDeleteNotificationForm(List<String> id, List<String> route){
-        return new DeleteNotificationForm(id.get(0), route.get(0));
+    public static DeleteNotificationForm createDeleteNotificationForm(List<String> id){
+        return new DeleteNotificationForm(id.get(0));
     }
 
     public static DeleteNotificationForm createFromBody(String body){
@@ -24,8 +24,7 @@ public class DeleteNotificationForm {
         UrlEncoded.decodeTo(body, params, "UTF-8");
 
         return DeleteNotificationForm.createDeleteNotificationForm(
-                params.getValues("notificationId"),
-                params.getValues("route")
+                params.getValues("notificationId")
         );
     }
 
@@ -33,7 +32,4 @@ public class DeleteNotificationForm {
         return id;
     }
 
-    public String getRoute() {
-        return route;
-    }
 }

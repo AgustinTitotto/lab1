@@ -28,7 +28,7 @@
         color: white;
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 992px) {
         .manage {
             position: absolute;
         }

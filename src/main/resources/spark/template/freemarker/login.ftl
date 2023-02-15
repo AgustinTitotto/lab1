@@ -20,7 +20,7 @@
 <body style="background-color: #272d39;">
     <div class="container-fluid h-custom py-5">
         <div class="row d-flex justify-content-center h-100 ">
-            <div class="col-12 col-md-6 col-lg-4 h-100 d-flex align-items-center">
+            <div class="col-12 col-md-6 col-lg-4 d-flex align-items-center">
                 <div class="card bg-dark" style="border-radius: 2rem">
                     <div class="card-body p-5 text-center">
                         <div class="mb-md-5 mt-md-5 pb-5">
