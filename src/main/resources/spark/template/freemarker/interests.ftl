@@ -44,7 +44,7 @@
                                         </div>
                                         <#list games>
                                             <div class="modal-body">
-                                                <div class="form-floating">
+                                                <div class="form-floating mb-2">
                                                     <select class="form-select" name="gameName" id="gameName" style="font-size: 120%; font-family: 'LEMON MILK'">
                                                         <#items as game>
                                                             <option value="${game.gameName}">${game.gameName}</option>

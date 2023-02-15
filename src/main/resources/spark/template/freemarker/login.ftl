@@ -16,14 +16,29 @@
         height: 100%;
     }
 
+    .background {
+        position: relative;
+    }
+    .background::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url(/img/Background3.png);
+        filter: brightness(50%);
+    }
+
+
 </style>
-<body style="background-color: #272d39;">
+<body class="background">
     <div class="container-fluid h-custom py-5">
         <div class="row d-flex justify-content-center h-100 ">
             <div class="col-12 col-md-6 col-lg-4 d-flex align-items-center">
                 <div class="card bg-dark" style="border-radius: 2rem">
                     <div class="card-body p-5 text-center">
-                        <div class="mb-md-5 mt-md-5 pb-5">
+                        <div class="md-5 mt-md-5 pb-5">
                             <form action="/login" role="form" method="post">
                                 <#if message??>
                                     <div class="alert alert-success alert-dismissible"  role="alert" style="color: black; font-size: 150%; font-family: 'LEMON MILK'; text-align: center; background-color: lightblue">
